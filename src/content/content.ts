@@ -107,7 +107,7 @@ export const tiktokShop = {
     'Integração nativa com o TikTok Shop',
     'Operação pronta para picos de viral',
   ],
-  cta: 'Quero escalar no TikTok Shop',
+  cta: 'Quero escalar agora',
 } as const;
 
 export const benefits = {

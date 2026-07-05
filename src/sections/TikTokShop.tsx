@@ -155,7 +155,7 @@ export function TikTokShop() {
           </div>
 
           {/* Headline */}
-          <h2 className="ea-display mt-5 max-w-[18ch] text-display-md text-ea-petroleo">{tiktokShop.title}</h2>
+          <h2 className="ea-display mt-5 max-w-[20ch] text-display-sm text-ea-petroleo">{tiktokShop.title}</h2>
           <p className="mt-5 max-w-xl text-base leading-relaxed text-ea-petroleo/75 sm:text-lg">{tiktokShop.lead}</p>
 
           {/* Stat gigante + provas + CTA */}
