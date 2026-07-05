@@ -17,7 +17,6 @@ const PETROLEO = '#123336';
 const BELT = '#0d2528';
 const RAIL = '#20494d';
 const NEON = '#c4ff57';
-const KRAFT = '#e3cba7';
 const CREME = '#fefaef';
 
 const LANES = [-4.5, -1.5, 1.5, 4.5];
@@ -80,54 +79,100 @@ function heightToNormal(hc: HTMLCanvasElement, strength: number) {
   return new THREE.CanvasTexture(nc);
 }
 
-/** Texturas da caixa: cor (com AO), normal e roughness. */
+/** Carrega (uma vez) o logo oficial escuro para carimbar nas caixas. */
+let logoPromise: Promise<HTMLImageElement | null> | null = null;
+function getLogo() {
+  if (!logoPromise) {
+    logoPromise = new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => resolve(img);
+      img.onerror = () => resolve(null);
+      img.src = '/brand/logo-oficial-escuro.png';
+    });
+  }
+  return logoPromise;
+}
+
+/**
+ * Texturas da caixa Enviagora (referência real): kraft + FITA NEON com o
+ * wordmark repetido, wordmark grande impresso e tagline. Retorna mapa de cor,
+ * normal (relevo de fita/papel) e roughness. O logo é o PNG oficial, carimbado
+ * no canvas quando carrega → sem aparência de desenho.
+ */
 function useBoxTextures() {
   return useMemo(() => {
-    const S = 256;
+    const S = 512;
+    const TAPE_Y = S * 0.31; // topo da fita
+    const TAPE_H = S * 0.17; // altura da fita
+
     // ---- COR ----
     const cc = document.createElement('canvas');
     cc.width = cc.height = S;
     const ctx = cc.getContext('2d')!;
+    // base kraft
     const g = ctx.createLinearGradient(0, 0, S, S);
-    g.addColorStop(0, '#e0c8a4');
-    g.addColorStop(1, '#c9ac83');
+    g.addColorStop(0, '#d8b585');
+    g.addColorStop(1, '#bb9058');
     ctx.fillStyle = g;
     ctx.fillRect(0, 0, S, S);
-    // mottle / fibras
-    for (let i = 0; i < 4200; i++) {
+    // fibras / mottle
+    for (let i = 0; i < 9000; i++) {
       const a = Math.random() * 0.05;
       ctx.fillStyle = Math.random() > 0.5 ? `rgba(90,60,30,${a})` : `rgba(255,244,220,${a})`;
-      ctx.fillRect(Math.random() * S, Math.random() * S, 1.4, 1.4);
+      ctx.fillRect(Math.random() * S, Math.random() * S, 1.6, 1.6);
     }
     // oclusão nas bordas (AO)
-    const ao = ctx.createRadialGradient(S / 2, S / 2, S * 0.28, S / 2, S / 2, S * 0.72);
+    const ao = ctx.createRadialGradient(S / 2, S / 2, S * 0.3, S / 2, S / 2, S * 0.74);
     ao.addColorStop(0, 'rgba(60,40,20,0)');
-    ao.addColorStop(1, 'rgba(45,30,15,0.4)');
+    ao.addColorStop(1, 'rgba(45,28,12,0.42)');
     ctx.fillStyle = ao;
     ctx.fillRect(0, 0, S, S);
     // vinco central
-    ctx.fillStyle = 'rgba(90,62,32,0.28)';
+    ctx.fillStyle = 'rgba(90,62,32,0.22)';
     ctx.fillRect(S / 2 - 1.5, 0, 3, S);
-    // fita/lacre
-    ctx.fillStyle = 'rgba(205,186,150,0.55)';
-    ctx.fillRect(0, S * 0.42, S, S * 0.16);
-    ctx.fillStyle = 'rgba(60,40,20,0.18)';
-    ctx.fillRect(0, S * 0.42, S, 2);
-    ctx.fillRect(0, S * 0.58 - 2, S, 2);
-    // carimbo de manuseio (setas ↑↑) discreto
-    ctx.strokeStyle = 'rgba(70,45,20,0.22)';
-    ctx.lineWidth = 2;
-    for (const ox of [S * 0.12, S * 0.2]) {
-      ctx.beginPath();
-      ctx.moveTo(ox, S * 0.82);
-      ctx.lineTo(ox + 8, S * 0.72);
-      ctx.lineTo(ox + 16, S * 0.82);
-      ctx.moveTo(ox + 8, S * 0.72);
-      ctx.lineTo(ox + 8, S * 0.9);
-      ctx.stroke();
-    }
+
+    // ---- FITA NEON ----
+    const tg = ctx.createLinearGradient(0, TAPE_Y, 0, TAPE_Y + TAPE_H);
+    tg.addColorStop(0, '#cdff67');
+    tg.addColorStop(0.5, '#bff23f');
+    tg.addColorStop(1, '#ace23a');
+    ctx.fillStyle = tg;
+    ctx.fillRect(0, TAPE_Y, S, TAPE_H);
+    // brilho + bordas da fita
+    ctx.fillStyle = 'rgba(255,255,255,0.18)';
+    ctx.fillRect(0, TAPE_Y + 3, S, 3);
+    ctx.fillStyle = 'rgba(40,70,15,0.22)';
+    ctx.fillRect(0, TAPE_Y, S, 1.5);
+    ctx.fillRect(0, TAPE_Y + TAPE_H - 1.5, S, 1.5);
+
+    // tagline impressa no kraft (serif itálico) + url
+    ctx.fillStyle = 'rgba(18,51,54,0.7)';
+    ctx.font = 'italic 500 21px Georgia, "Times New Roman", serif';
+    ctx.textBaseline = 'alphabetic';
+    ctx.fillText('A única logística que funciona.', S * 0.07, S * 0.6);
+    ctx.fillStyle = 'rgba(18,51,54,0.5)';
+    ctx.font = '600 12px Sora, Arial, sans-serif';
+    ctx.fillText('ENVIAGORA.COM.BR', S * 0.07, S * 0.93);
+
     const map = new THREE.CanvasTexture(cc);
     map.anisotropy = 8;
+
+    // Carimba o logo oficial (fita + wordmark grande) quando carregar.
+    getLogo().then((img) => {
+      if (!img) return;
+      const ar = img.width / img.height;
+      // 1) wordmark repetido na fita neon
+      const lh = TAPE_H * 0.46;
+      const lw = lh * ar;
+      for (let x = S * 0.03; x < S; x += lw + TAPE_H * 0.85) {
+        ctx.drawImage(img, x, TAPE_Y + (TAPE_H - lh) / 2, lw, lh);
+      }
+      // 2) wordmark grande impresso no kraft
+      const bw = S * 0.62;
+      const bh = bw / ar;
+      ctx.drawImage(img, S * 0.07, S * 0.66, bw, bh);
+      map.needsUpdate = true;
+    });
 
     // ---- ALTURA -> NORMAL ----
     const hc = document.createElement('canvas');
@@ -135,62 +180,92 @@ function useBoxTextures() {
     const h = hc.getContext('2d')!;
     h.fillStyle = '#808080';
     h.fillRect(0, 0, S, S);
-    for (let i = 0; i < S * S * 0.4; i++) {
+    for (let i = 0; i < S * S * 0.35; i++) {
       const v = 128 + (Math.random() * 2 - 1) * 9;
       h.fillStyle = `rgb(${v},${v},${v})`;
       h.fillRect(Math.random() * S, Math.random() * S, 1, 1);
     }
     h.fillStyle = '#6a6a6a'; // vinco (baixo)
     h.fillRect(S / 2 - 1.5, 0, 3, S);
-    h.fillStyle = '#a6a6a6'; // fita (alto)
-    h.fillRect(0, S * 0.42, S, S * 0.16);
-    h.fillStyle = '#c0c0c0'; // bordas da fita (mais alto)
-    h.fillRect(0, S * 0.42, S, 3);
-    h.fillRect(0, S * 0.58 - 3, S, 3);
-    const normalMap = heightToNormal(hc, 2.2);
+    h.fillStyle = '#9c9c9c'; // fita levemente elevada
+    h.fillRect(0, TAPE_Y, S, TAPE_H);
+    h.fillStyle = '#b6b6b6'; // bordas da fita (mais altas)
+    h.fillRect(0, TAPE_Y, S, 3);
+    h.fillRect(0, TAPE_Y + TAPE_H - 3, S, 3);
+    const normalMap = heightToNormal(hc, 2.0);
     normalMap.anisotropy = 8;
 
     // ---- ROUGHNESS ----
     const rc = document.createElement('canvas');
     rc.width = rc.height = S;
     const r = rc.getContext('2d')!;
-    r.fillStyle = '#e6e6e6'; // papelão fosco
+    r.fillStyle = '#e8e8e8'; // papelão fosco
     r.fillRect(0, 0, S, S);
-    r.fillStyle = '#8a8a8a'; // fita mais lisa (menos rugosa)
-    r.fillRect(0, S * 0.42, S, S * 0.16);
+    r.fillStyle = '#6f6f6f'; // fita mais lisa (brilhante)
+    r.fillRect(0, TAPE_Y, S, TAPE_H);
     const roughnessMap = new THREE.CanvasTexture(rc);
 
     return { map, normalMap, roughnessMap };
   }, []);
 }
 
+/** Etiqueta de envio (papel branco): cabeçalho, QR, dados e código de barras. */
 function useLabelTexture() {
   return useMemo(() => {
+    const W = 176;
+    const H = 128;
     const c = document.createElement('canvas');
-    c.width = 128;
-    c.height = 96;
+    c.width = W;
+    c.height = H;
     const ctx = c.getContext('2d')!;
-    ctx.fillStyle = '#efe9dc';
-    ctx.fillRect(0, 0, 128, 96);
-    ctx.strokeStyle = 'rgba(18,51,54,0.28)';
-    ctx.strokeRect(2, 2, 124, 92);
+    // papel
+    ctx.fillStyle = '#f4f1e9';
+    ctx.fillRect(0, 0, W, H);
+    ctx.strokeStyle = 'rgba(18,51,54,0.25)';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(1, 1, W - 2, H - 2);
+    // cabeçalho petróleo com marca
     ctx.fillStyle = PETROLEO;
-    ctx.fillRect(2, 2, 124, 15);
+    ctx.fillRect(1, 1, W - 2, 22);
     ctx.fillStyle = NEON;
-    ctx.fillRect(6, 5, 8, 8);
-    ctx.fillStyle = 'rgba(240,240,235,0.85)';
-    ctx.fillRect(20, 7, 38, 4);
-    let x = 10;
-    while (x < 118) {
-      const w = 1 + Math.round(Math.random() * 3);
-      ctx.fillStyle = '#1a1a1a';
-      ctx.fillRect(x, 24, w, 26);
-      x += w + 1 + Math.round(Math.random() * 3);
+    ctx.fillRect(8, 8, 9, 9);
+    ctx.fillStyle = 'rgba(240,240,235,0.92)';
+    ctx.font = '700 11px Sora, Arial, sans-serif';
+    ctx.fillText('ENVIAGORA', 24, 16);
+    // QR fake
+    const qx = 9;
+    const qy = 31;
+    const qs = 42;
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(qx - 2, qy - 2, qs + 4, qs + 4);
+    const cells = 8;
+    const cs = qs / cells;
+    for (let i = 0; i < cells; i++) {
+      for (let j = 0; j < cells; j++) {
+        if (Math.random() > 0.5) {
+          ctx.fillStyle = '#12191a';
+          ctx.fillRect(qx + i * cs, qy + j * cs, cs, cs);
+        }
+      }
+    }
+    // dados à direita do QR
+    ctx.fillStyle = 'rgba(18,51,54,0.55)';
+    for (let k = 0; k < 4; k++) {
+      ctx.fillRect(60, 32 + k * 9, 62 + Math.random() * 40, 3);
+    }
+    // bloco preto (prioridade)
+    ctx.fillStyle = '#12191a';
+    ctx.fillRect(122, 30, 46, 20);
+    // código de barras
+    let x = 9;
+    while (x < W - 12) {
+      const bw = 1 + Math.round(Math.random() * 3);
+      ctx.fillStyle = '#12191a';
+      ctx.fillRect(x, 82, bw, 32);
+      x += bw + 1 + Math.round(Math.random() * 3);
     }
     ctx.fillStyle = 'rgba(18,51,54,0.5)';
-    ctx.fillRect(10, 58, 92, 5);
-    ctx.fillRect(10, 68, 106, 5);
-    ctx.fillRect(10, 78, 64, 5);
+    ctx.fillRect(9, H - 9, W - 70, 4);
     const tex = new THREE.CanvasTexture(c);
     tex.anisotropy = 8;
     return tex;
@@ -258,7 +333,9 @@ function Packages() {
       dummy.scale.set(p.w, p.h, p.d);
       dummy.updateMatrix();
       box.setMatrixAt(i, dummy.matrix);
-      color.setStyle(KRAFT).multiplyScalar(p.shade);
+      // Cor real vem do mapa (kraft + fita neon). Aqui só variamos o brilho por
+      // caixa (branco × shade) — sem tingir, senão a fita neon fica embaçada.
+      color.setStyle('#ffffff').multiplyScalar(p.shade);
       box.setColorAt(i, color);
       const sin = Math.sin(p.yaw);
       const cos = Math.cos(p.yaw);
