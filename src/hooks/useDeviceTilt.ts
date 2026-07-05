@@ -7,10 +7,11 @@ export type Tilt = { x: number; y: number };
  * com a inclinação normalizada em [-1, 1] (x = esquerda/direita, y = cima/baixo),
  * pensada para substituir o mouse no rig da câmera 3D.
  *
- * - iOS 13+ exige permissão via `DeviceOrientationEvent.requestPermission()`
- *   disparada por um gesto do usuário → pedimos no primeiro toque/clique.
+ * - iOS 13+ exige permissão via `DeviceOrientationEvent.requestPermission()`.
+ *   Para não incomodar o usuário final com esse prompt, o efeito é DESLIGADO
+ *   quando a permissão é necessária (a cena mantém o movimento idle).
+ * - Onde a orientação vem sem permissão (Android/Chrome), ativa direto.
  * - Calibra o "neutro" na primeira leitura (como a pessoa estiver segurando).
- * - Respeita `prefers-reduced-motion` e faz fallback silencioso se negado.
  */
 export function useDeviceTilt(enabled: boolean): MutableRefObject<Tilt> {
   const tilt = useRef<Tilt>({ x: 0, y: 0 });
@@ -48,46 +49,18 @@ export function useDeviceTilt(enabled: boolean): MutableRefObject<Tilt> {
       tilt.current.y = clamp(-(gy - base.y) / RANGE); // inverte p/ parallax natural
     };
 
-    let listening = false;
-    const start = () => {
-      if (listening) return;
-      listening = true;
-      window.addEventListener('deviceorientation', onOrient, true);
-    };
-
-    // iOS precisa de permissão sob gesto; Android/desktop escutam direto.
+    // iOS 13+ exige permissão via prompt sob gesto. Para não incomodar o usuário
+    // final com essa autorização, o parallax NÃO é ativado nesses casos — a cena
+    // segue com o movimento idle. Só escutamos onde a orientação vem sem permissão
+    // (ex.: Android/Chrome).
     const DOE = window.DeviceOrientationEvent as
       | (typeof DeviceOrientationEvent & { requestPermission?: () => Promise<string> })
       | undefined;
-    const needsPermission = !!DOE && typeof DOE.requestPermission === 'function';
-    let removeGesture: (() => void) | null = null;
+    if (!DOE || typeof DOE.requestPermission === 'function') return;
 
-    if (needsPermission) {
-      // Tenta em cada gesto até conseguir a permissão (o iOS só concede sob toque).
-      const tryRequest = () => {
-        DOE!
-          .requestPermission!()
-          .then((state) => {
-            if (state === 'granted') {
-              start();
-              removeGesture?.();
-            }
-          })
-          .catch(() => {});
-      };
-      window.addEventListener('touchend', tryRequest, { passive: true, capture: true });
-      window.addEventListener('click', tryRequest, { capture: true });
-      removeGesture = () => {
-        window.removeEventListener('touchend', tryRequest, { capture: true });
-        window.removeEventListener('click', tryRequest, { capture: true });
-      };
-    } else {
-      start();
-    }
-
+    window.addEventListener('deviceorientation', onOrient, true);
     return () => {
       window.removeEventListener('deviceorientation', onOrient, true);
-      removeGesture?.();
     };
   }, [enabled]);
 
