@@ -15,7 +15,7 @@ export const site = {
   url: 'https://enviagora.com.br',
   tagline: 'A única logística que funciona.',
   social: '@enviagora',
-  locais: ['Extrema/MG', 'São Paulo/SP'],
+  locais: ['Extrema/MG', 'Barueri/SP'],
 } as const;
 
 /** Barra fina no topo. */
@@ -42,7 +42,7 @@ export const hero = {
   bullets: [
     'Descontos de até 40% em fretes',
     'Economize até 60% com incentivos fiscais',
-    'Localização: Extrema/MG e São Paulo/SP',
+    'Localização: Extrema/MG e Barueri/SP',
   ],
   cta: 'Falar com um especialista',
 } as const;
@@ -318,7 +318,7 @@ export const footer = {
       title: 'Centros de distribuição',
       links: [
         { label: 'Extrema/MG', href: '#' },
-        { label: 'São Paulo/SP', href: '#' },
+        { label: 'Barueri/SP', href: '#' },
       ],
     },
   ],

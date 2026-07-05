@@ -30,7 +30,7 @@ export const integrationLogos: Record<string, IntegrationLogo> = {
   mercadolivre: { label: 'Mercado Livre', file: `${BASE}/mercadolivre.avif`, bg: '#FFE600' },
   shopee: { label: 'Shopee', file: `${BASE}/shopee.avif` },
   amazon: { label: 'Amazon', file: `${BASE}/amazon.avif` },
-  tiktok: { label: 'TikTok Shop', file: `${BASE}/tiktok.avif`, bg: '#000000' },
+  tiktok: { label: 'TikTok Shop', file: `${BASE}/tiktok.avif`, bg: '#FFFFFF' },
   magalu: { label: 'Magalu', file: `${BASE}/magalu.avif` },
   shein: { label: 'SHEIN', file: `${BASE}/shein.webp`, bg: '#000000' },
 

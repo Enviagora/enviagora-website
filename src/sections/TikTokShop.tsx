@@ -44,10 +44,20 @@ export function TikTokShop() {
             TikTok Shop
           </span>
 
-          {/* Topo: seta + selo de autoridade */}
+          {/* Topo: seta + logo oficial do TikTok Shop (nota é escura → tile branco) */}
           <div className="flex items-start justify-between gap-4">
             <Arrow className="h-8 w-8 text-ea-petroleo sm:h-10 sm:w-10" />
-            <span className="flex items-center gap-2 rounded-pill bg-ea-petroleo px-4 py-2 text-[0.72rem] font-bold uppercase tracking-label text-ea-neon">
+            <span
+              style={{ width: 56, height: 56 }}
+              className="flex shrink-0 items-center justify-center overflow-hidden rounded-[24%] bg-white p-3 shadow-ea ring-1 ring-ea-petroleo/10"
+            >
+              <img src="/brand/integracoes/tiktok.avif" alt="TikTok Shop" className="h-full w-full object-contain" />
+            </span>
+          </div>
+
+          {/* Selo de autoridade */}
+          <div className="mt-8">
+            <span className="inline-flex items-center gap-2 rounded-pill bg-ea-petroleo px-4 py-2 text-[0.72rem] font-bold uppercase tracking-label text-ea-neon">
               <span className="relative flex h-2 w-2">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-ea-neon opacity-70" />
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-ea-neon" />
@@ -57,9 +67,7 @@ export function TikTokShop() {
           </div>
 
           {/* Headline */}
-          <h2 className="ea-display mt-8 max-w-[18ch] text-display-md text-ea-petroleo sm:mt-10">
-            {tiktokShop.title}
-          </h2>
+          <h2 className="ea-display mt-5 max-w-[18ch] text-display-md text-ea-petroleo">{tiktokShop.title}</h2>
           <p className="mt-5 max-w-xl text-base leading-relaxed text-ea-petroleo/75 sm:text-lg">{tiktokShop.lead}</p>
 
           {/* Stat gigante + provas + CTA */}

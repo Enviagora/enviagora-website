@@ -76,7 +76,8 @@ export function Hero() {
 
       {/* Conteúdo (pointer-events-none deixa o mouse chegar na cena p/ parallax) */}
       <div className="ea-container-wide pointer-events-none relative z-10 flex flex-col items-center gap-5 pb-24 pt-[5vh] text-center sm:gap-6 sm:pt-[12vh]">
-        <motion.span {...fade(0.05)} className="ea-kicker inline-flex items-center gap-2 text-ea-neon">
+        {/* Kicker só no desktop — no mobile deixa o hero mais limpo. */}
+        <motion.span {...fade(0.05)} className="ea-kicker hidden items-center gap-2 text-ea-neon sm:inline-flex">
           <Arrow className="h-3.5 w-3.5" />
           {hero.kicker}
         </motion.span>
