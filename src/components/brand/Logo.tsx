@@ -4,10 +4,12 @@ type LogoProps = {
   className?: string;
 };
 
-// Variantes oficiais (Caminho 01): seta neon + wordmark petróleo (claro) ou creme (escuro).
+// Logos OFICIAIS da Enviagora (arquivos da marca).
+// - fundo claro  → wordmark petróleo
+// - fundo escuro → wordmark creme
 const SRC: Record<'light' | 'dark', string> = {
-  light: '/brand/logo-fundo-claro.svg',
-  dark: '/brand/logo-fundo-escuro.svg',
+  light: '/brand/logo-oficial-claro.png',
+  dark: '/brand/logo-oficial-escuro.png',
 };
 
 /**
@@ -21,9 +23,8 @@ export function Logo({ on = 'light', className }: LogoProps) {
       alt="Enviagora"
       className={className}
       draggable={false}
-      width={240}
+      width={235}
       height={40}
-      style={{ height: 'auto' }}
     />
   );
 }
