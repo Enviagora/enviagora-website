@@ -1,0 +1,146 @@
+/* ==========================================================================
+   EnviAgora — Estilos base + Design Tokens (Re-design 2026 · Caminho 01)
+   Fonte da verdade visual: enviagora-branding-caminho01/BRANDING.md
+   Regra: use as variáveis --ea-* e os tokens do Tailwind, nunca hardcode cor.
+   ========================================================================== */
+
+/* Sora self-hosted (sans/wordmark) — garante a marca mesmo sem rede.
+   Fraunces (serif de display) carrega via <link> no index.html. */
+@font-face {
+  font-family: 'Sora';
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url('/fonts/Sora.ttf') format('truetype');
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* --- Cores da marca (HEX oficiais) --- */
+  --ea-petroleo: #123336;
+  --ea-petroleo-2: #1b4145;
+  --ea-neon: #c4ff57;
+  --ea-creme: #fefaef;
+  --ea-creme-wm: #fafaf5;
+  --ea-ceu-azul: #c4dbe0;
+  --ea-lavanda: #c9c2d6;
+  --ea-cool-grey: #dee3e0;
+  --ea-kraft: #ebd9c7;
+  --ea-preto: #000000;
+  --ea-branco: #ffffff;
+
+  /* --- Papéis semânticos (base clara padrão) --- */
+  --ea-bg: var(--ea-creme);
+  --ea-text: var(--ea-petroleo);
+  --ea-text-soft: #3a5457;
+  --ea-accent: var(--ea-neon);
+
+  /* --- Forma --- */
+  --ea-radius: 20px;
+  --ea-radius-sm: 10px;
+}
+
+@layer base {
+  * {
+    /* seleção com a cara da marca */
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  body {
+    background-color: var(--ea-bg);
+    color: var(--ea-text);
+    font-family: theme('fontFamily.sans');
+    font-weight: 400;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: var(--ea-neon);
+    color: var(--ea-petroleo);
+  }
+
+  /* Foco visível e on-brand para acessibilidade (teclado) */
+  :focus-visible {
+    outline: 2px solid var(--ea-petroleo);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+  .ea-on-dark :focus-visible {
+    outline-color: var(--ea-neon);
+  }
+
+  h1, h2, h3, h4 {
+    font-family: theme('fontFamily.serif');
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+  }
+}
+
+@layer components {
+  /* Container padrão do conteúdo */
+  .ea-container {
+    width: 100%;
+    max-width: theme('maxWidth.content');
+    margin-inline: auto;
+    padding-inline: clamp(1.25rem, 5vw, 3rem);
+  }
+  .ea-container-wide {
+    width: 100%;
+    max-width: theme('maxWidth.wide');
+    margin-inline: auto;
+    padding-inline: clamp(1.25rem, 5vw, 3rem);
+  }
+
+  /* Kicker / rótulo em CAIXA ALTA com tracking aberto (assinatura tipográfica) */
+  .ea-kicker {
+    font-family: theme('fontFamily.sans');
+    text-transform: uppercase;
+    letter-spacing: theme('letterSpacing.label');
+    font-weight: 600;
+    font-size: 0.72rem;
+    line-height: 1;
+  }
+
+  /* Título de display em serif (Fraunces) */
+  .ea-display {
+    font-family: theme('fontFamily.serif');
+    font-weight: 500;
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+  }
+}
+
+@layer utilities {
+  /* Máscara de fade nas laterais (usada no marquee de logos) */
+  .ea-edge-fade {
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  }
+
+  /* Números tabulares para stats/preços (evita "pulo" de largura) */
+  .ea-tnum {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum' 1;
+  }
+
+  .ea-balance {
+    text-wrap: balance;
+  }
+}

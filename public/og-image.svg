@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="Enviagora — A única logística que funciona.">
+  <defs>
+    <pattern id="dots" width="26" height="26" patternUnits="userSpaceOnUse">
+      <circle cx="1.5" cy="1.5" r="1.5" fill="#FAFAF5" fill-opacity="0.05" />
+    </pattern>
+  </defs>
+
+  <!-- Fundo -->
+  <rect width="1200" height="630" fill="#123336" />
+  <rect width="1200" height="630" fill="url(#dots)" />
+
+  <!-- Malha de rotas sutil -->
+  <g stroke="#FAFAF5" stroke-opacity="0.14" stroke-width="1.5">
+    <line x1="150" y1="180" x2="760" y2="470" />
+    <line x1="120" y1="470" x2="760" y2="470" />
+    <line x1="1060" y1="150" x2="760" y2="470" />
+    <line x1="1080" y1="470" x2="760" y2="470" />
+    <line x1="980" y1="560" x2="760" y2="470" />
+  </g>
+  <g fill="#FAFAF5" fill-opacity="0.55">
+    <circle cx="150" cy="180" r="5" />
+    <circle cx="120" cy="470" r="5" />
+    <circle cx="1060" cy="150" r="5" />
+    <circle cx="1080" cy="470" r="5" />
+    <circle cx="980" cy="560" r="5" />
+  </g>
+  <circle cx="760" cy="470" r="11" fill="#C4FF57" />
+
+  <!-- Seta grande (marca d'água) -->
+  <g transform="translate(940,360) scale(2.6)" fill="none" stroke="#C4FF57" stroke-opacity="0.12" stroke-width="17" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M27 73 L73 27" />
+    <path d="M41 27 L73 27 L73 59" />
+  </g>
+
+  <!-- Wordmark -->
+  <g transform="translate(80,86)">
+    <g transform="translate(0,2) scale(0.42)" fill="none" stroke="#C4FF57" stroke-width="17" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M27 73 L73 27" />
+      <path d="M41 27 L73 27 L73 59" />
+    </g>
+    <text x="56" y="34" font-family="Georgia, 'Times New Roman', serif" font-size="34" fill="#FAFAF5" font-weight="600" letter-spacing="0.5">enviagora</text>
+  </g>
+
+  <!-- Kicker -->
+  <text x="80" y="250" font-family="Arial, sans-serif" font-size="20" letter-spacing="4" fill="#C4FF57" font-weight="700">FULFILLMENT PREMIUM PARA MARCAS EM ESCALA</text>
+
+  <!-- Título -->
+  <text x="78" y="340" font-family="Georgia, 'Times New Roman', serif" font-size="76" fill="#FAFAF5">A única logística</text>
+  <text x="78" y="424" font-family="Georgia, 'Times New Roman', serif" font-size="76" fill="#FAFAF5">que funciona.</text>
+
+  <!-- Rodapé -->
+  <text x="80" y="560" font-family="Arial, sans-serif" font-size="22" fill="#AEC3C0">Do armazenamento ao envio · Extrema/MG e São Paulo/SP</text>
+  <text x="80" y="592" font-family="Arial, sans-serif" font-size="20" fill="#C4FF57" font-weight="700">enviagora.com.br</text>
+</svg>
