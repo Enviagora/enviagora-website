@@ -155,7 +155,7 @@ export function TikTokShop() {
           </div>
 
           {/* Headline */}
-          <h2 className="ea-display mt-5 max-w-[20ch] text-display-sm text-ea-petroleo">{tiktokShop.title}</h2>
+          <h2 className="ea-display mt-5 max-w-[18ch] text-display-md text-ea-petroleo">{tiktokShop.title}</h2>
           <p className="mt-5 max-w-xl text-base leading-relaxed text-ea-petroleo/75 sm:text-lg">{tiktokShop.lead}</p>
 
           {/* Stat gigante + provas + CTA */}
@@ -185,9 +185,9 @@ export function TikTokShop() {
             <div className="flex flex-col gap-6">
               <ul className="flex flex-col gap-3">
                 {tiktokShop.points.map((p) => (
-                  <li key={p} className="flex items-center gap-3 text-base font-medium text-ea-petroleo">
-                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-ea-petroleo">
-                      <Check className="h-3.5 w-3.5 text-ea-neon" strokeWidth={3} aria-hidden />
+                  <li key={p} className="flex items-center gap-2.5 text-sm font-medium text-ea-petroleo">
+                    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-ea-petroleo">
+                      <Check className="h-3 w-3 text-ea-neon" strokeWidth={3} aria-hidden />
                     </span>
                     {p}
                   </li>
