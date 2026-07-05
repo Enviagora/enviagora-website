@@ -323,8 +323,9 @@ function Rig({ tiltRef }: { tiltRef: MutableRefObject<Tilt> }) {
   useFrame((state) => {
     const t = state.clock.elapsedTime;
     // Mouse (desktop) OU giroscópio (mobile) — só um dos dois é diferente de zero.
-    const px = state.pointer.x + tiltRef.current.x;
-    const py = state.pointer.y + tiltRef.current.y;
+    // O tilt entra amplificado para o parallax ser claramente perceptível ao inclinar.
+    const px = state.pointer.x + tiltRef.current.x * 1.5;
+    const py = state.pointer.y + tiltRef.current.y * 1.4;
     camera.position.x += (0.6 + px * 0.85 + Math.sin(t * 0.15) * 0.32 - camera.position.x) * 0.025;
     camera.position.y += (2.7 + py * 0.35 + Math.sin(t * 0.22) * 0.1 - camera.position.y) * 0.025;
     camera.lookAt(target);

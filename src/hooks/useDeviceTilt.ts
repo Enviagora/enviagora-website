@@ -17,10 +17,9 @@ export function useDeviceTilt(enabled: boolean): MutableRefObject<Tilt> {
 
   useEffect(() => {
     if (!enabled || typeof window === 'undefined') return;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
     const clamp = (v: number) => Math.max(-1, Math.min(1, v));
-    const RANGE = 26; // graus de inclinação p/ amplitude total
+    const RANGE = 20; // graus de inclinação p/ amplitude total (menor = mais sensível)
     let base: { x: number; y: number } | null = null;
 
     const onOrient = (e: DeviceOrientationEvent) => {
@@ -64,20 +63,23 @@ export function useDeviceTilt(enabled: boolean): MutableRefObject<Tilt> {
     let removeGesture: (() => void) | null = null;
 
     if (needsPermission) {
-      const requestOnce = () => {
+      // Tenta em cada gesto até conseguir a permissão (o iOS só concede sob toque).
+      const tryRequest = () => {
         DOE!
           .requestPermission!()
           .then((state) => {
-            if (state === 'granted') start();
+            if (state === 'granted') {
+              start();
+              removeGesture?.();
+            }
           })
           .catch(() => {});
-        removeGesture?.();
       };
-      window.addEventListener('touchend', requestOnce, { once: true, passive: true });
-      window.addEventListener('click', requestOnce, { once: true });
+      window.addEventListener('touchend', tryRequest, { passive: true, capture: true });
+      window.addEventListener('click', tryRequest, { capture: true });
       removeGesture = () => {
-        window.removeEventListener('touchend', requestOnce);
-        window.removeEventListener('click', requestOnce);
+        window.removeEventListener('touchend', tryRequest, { capture: true });
+        window.removeEventListener('click', tryRequest, { capture: true });
       };
     } else {
       start();
