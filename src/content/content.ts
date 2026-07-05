@@ -89,16 +89,12 @@ export const process = {
 
 export const logAlliance = {
   title: 'Tenha acesso as melhores transportadoras',
-  subtitle: 'A LogAlliance é formada por uma rede exclusiva de transportadoras selecionadas.',
+  subtitle: 'Uma rede exclusiva de transportadoras selecionadas.',
   brand: 'LogAlliance',
-  body: 'As transportadoras que integram essa aliança operam com altos padrões de eficiência e comprometimento, garantindo um serviço ágil e confiável para todos os clientes da Enviagora.',
-  howTitle: 'Como funciona?',
-  howBody:
-    'A Enviagora negocia uma tabela de fretes com preços otimizados a partir do volume total da base de clientes. Não há taxas escondidas e os valores são cobrados diretamente pelas transportadoras.',
+  intro:
+    'Para cada envio, cotamos o frete em várias transportadoras da rede e usamos sempre a mais barata da região. Sem taxas escondidas.',
   cta: CTA_ESPECIALISTA,
   savingBadge: { label: 'Economia no frete', value: '+40%' },
-  // Valores de frete exibidos no mapa do Brasil (referência visual).
-  mapValues: ['R$ 12,56', 'R$ 11,92', 'R$ 8,92', 'R$ 8,12', 'R$ 5,58', 'R$ 7,94'],
 } as const;
 
 export const benefits = {
