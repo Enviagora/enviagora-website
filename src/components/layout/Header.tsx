@@ -25,10 +25,14 @@ export function Header() {
     };
   }, [open]);
 
+  // No topo o header está sobre o hero ESCURO → conteúdo claro.
+  // Ao rolar, ganha fundo creme → conteúdo escuro.
+  const dark = !scrolled;
+
   return (
     <header
       className={cn(
-        'sticky top-0 z-50 transition-all duration-300 ease-ea',
+        'ea-on-dark sticky top-0 z-50 transition-all duration-300 ease-ea',
         scrolled
           ? 'border-b border-ea-petroleo/10 bg-ea-creme/85 backdrop-blur-md'
           : 'border-b border-transparent bg-transparent',
@@ -36,7 +40,7 @@ export function Header() {
     >
       <div className="ea-container-wide flex h-16 items-center justify-between gap-4 sm:h-[70px]">
         <a href="#top" aria-label="Enviagora — início" className="shrink-0">
-          <Logo on="light" className="h-6 w-auto sm:h-7" />
+          <Logo on={dark ? 'dark' : 'light'} className="h-6 w-auto sm:h-7" />
         </a>
 
         {/* Nav desktop */}
@@ -45,7 +49,12 @@ export function Header() {
             <a
               key={item.href}
               href={item.href}
-              className="relative text-sm font-medium text-ea-soft transition-colors duration-200 hover:text-ea-petroleo after:absolute after:-bottom-1.5 after:left-0 after:h-px after:w-0 after:bg-ea-petroleo after:transition-all after:duration-300 hover:after:w-full"
+              className={cn(
+                'relative text-sm font-medium transition-colors duration-200 after:absolute after:-bottom-1.5 after:left-0 after:h-px after:w-0 after:transition-all after:duration-300 hover:after:w-full',
+                dark
+                  ? 'text-ea-cremewm/75 hover:text-ea-cremewm after:bg-ea-neon'
+                  : 'text-ea-soft hover:text-ea-petroleo after:bg-ea-petroleo',
+              )}
             >
               {item.label}
             </a>
@@ -59,7 +68,10 @@ export function Header() {
           <button
             type="button"
             onClick={() => setOpen(true)}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-ea-sm text-ea-petroleo lg:hidden"
+            className={cn(
+              'inline-flex h-10 w-10 items-center justify-center rounded-ea-sm lg:hidden',
+              dark ? 'text-ea-cremewm' : 'text-ea-petroleo',
+            )}
             aria-label="Abrir menu"
           >
             <Menu className="h-6 w-6" />
@@ -71,7 +83,7 @@ export function Header() {
       <AnimatePresence>
         {open && (
           <motion.div
-            className="ea-on-dark fixed inset-0 z-[60] flex flex-col bg-ea-petroleo text-ea-cremewm lg:hidden"
+            className="fixed inset-0 z-[60] flex flex-col bg-ea-petroleo text-ea-cremewm lg:hidden"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}

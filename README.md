@@ -12,7 +12,8 @@ preservando 100% do copywriting original.
 
 - **[Vite](https://vitejs.dev/)** + **React 18** + **TypeScript**
 - **[Tailwind CSS](https://tailwindcss.com/)** (tema da marca em `tailwind.config.js`)
-- **[Framer Motion](https://www.framer.com/motion/)** — reveals no scroll, micro-interações, orquestração do hero
+- **[React Three Fiber](https://r3f.docs.pmnd.rs/) + [three.js](https://threejs.org/) + drei + postprocessing** — cena 3D "cinema" do hero (esteira de pacotes + hub neon com bloom)
+- **[Framer Motion](https://www.framer.com/motion/)** — reveals no scroll, micro-interações, reveal cinematográfico do título
 - **[GSAP](https://gsap.com/) + ScrollTrigger** — parallax scrubado (elementos decorativos)
 - **[Lucide](https://lucide.dev/)** — ícones vetoriais
 - **Fontes:** [Sora](https://fonts.google.com/specimen/Sora) (self-hosted) + [Fraunces](https://fonts.google.com/specimen/Fraunces) (Google Fonts, fallback Georgia)
@@ -67,7 +68,8 @@ enviagora-website/
     │   ├── brand/              # Logo · Arrow (seta) · Chevron
     │   ├── layout/             # TopBanner · Header · Footer · Section
     │   ├── ui/                 # Button · Pill · SectionHeading · Marquee
-    │   └── motion/             # RouteNetwork (hero) · Reveal · CountUp
+    │   ├── hero3d/             # PackageScene (cena 3D) · StaticBackdrop · SceneErrorBoundary
+    │   └── motion/             # Reveal · CountUp
     ├── hooks/useParallax.ts    # parallax GSAP + ScrollTrigger (respeita reduced-motion)
     ├── lib/                    # cn (classnames) · motion (presets Framer)
     └── sections/               # as 13 seções do one-pager (ver App.tsx)
@@ -105,6 +107,7 @@ enviagora-website/
 - **`prefers-reduced-motion` respeitado** em todas as animações (fallback estático).
 - Mobile-first, responsivo (mobile → ultrawide), sem scroll horizontal.
 - Fontes com `display: swap`; libs de animação em chunks separados para não travar o first paint.
+- **Hero 3D** carrega em chunk próprio **depois do first paint** (`requestIdleCallback`), com **fallback estático** (`StaticBackdrop`) enquanto carrega, sem WebGL ou com **`prefers-reduced-motion`**. Menos caixas no mobile para manter 60fps.
 
 ---
 

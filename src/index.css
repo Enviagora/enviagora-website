@@ -143,4 +143,9 @@
   .ea-balance {
     text-wrap: balance;
   }
+
+  /* Halo escuro sutil p/ legibilidade de texto sobre a cena 3D luminosa do hero */
+  .ea-hero-shadow {
+    text-shadow: 0 2px 24px rgba(18, 51, 54, 0.6), 0 1px 3px rgba(18, 51, 54, 0.45);
+  }
 }

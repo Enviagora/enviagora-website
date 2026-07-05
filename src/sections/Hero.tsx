@@ -1,114 +1,155 @@
-import { motion, useReducedMotion, type Variants } from 'framer-motion';
+import { lazy, Suspense, useEffect, useState, type ReactNode } from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
+import { ChevronDown } from 'lucide-react';
 import { hero, site } from '@/content/content';
 import { EASE_EA } from '@/lib/motion';
 import { Button } from '@/components/ui/Button';
 import { Arrow } from '@/components/brand/Arrow';
-import { Logo } from '@/components/brand/Logo';
-import { RouteNetwork } from '@/components/motion/RouteNetwork';
-import { useParallax } from '@/hooks/useParallax';
+import { StaticBackdrop } from '@/components/hero3d/StaticBackdrop';
+import { SceneErrorBoundary } from '@/components/hero3d/SceneErrorBoundary';
+
+// A cena 3D é pesada → carrega em chunk separado, depois do first paint.
+const PackageScene = lazy(() => import('@/components/hero3d/PackageScene'));
 
 export function Hero() {
   const reduce = useReducedMotion();
-  const gradientRef = useParallax<HTMLDivElement>(80);
+  const [enable3d, setEnable3d] = useState(false);
 
-  // Orquestração de entrada (acima da dobra → dispara no load).
-  // Com reduced-motion, zera deslocamentos e durações (aparece instantâneo).
-  const container: Variants = {
-    hidden: {},
-    show: { transition: { staggerChildren: reduce ? 0 : 0.1, delayChildren: reduce ? 0 : 0.1 } },
+  // Só monta o WebGL depois que a página pintou (protege o first paint).
+  useEffect(() => {
+    if (reduce) return;
+    let idle: number;
+    const w = window as Window & {
+      requestIdleCallback?: (cb: () => void) => number;
+      cancelIdleCallback?: (id: number) => void;
+    };
+    if (w.requestIdleCallback) {
+      idle = w.requestIdleCallback(() => setEnable3d(true));
+      return () => w.cancelIdleCallback?.(idle);
+    }
+    const t = window.setTimeout(() => setEnable3d(true), 250);
+    return () => window.clearTimeout(t);
+  }, [reduce]);
+
+  // Reveal em cortina (linha mascarada). Respeita reduced-motion.
+  const Line = ({ children, delay = 0 }: { children: ReactNode; delay?: number }) => {
+    if (reduce) return <span className="block">{children}</span>;
+    return (
+      <span className="block overflow-hidden pb-[0.08em]">
+        <motion.span
+          className="block"
+          initial={{ y: '115%' }}
+          animate={{ y: 0 }}
+          transition={{ duration: 0.95, ease: EASE_EA, delay }}
+        >
+          {children}
+        </motion.span>
+      </span>
+    );
   };
-  const item: Variants = {
-    hidden: { opacity: reduce ? 1 : 0, y: reduce ? 0 : 22 },
-    show: { opacity: 1, y: 0, transition: { duration: reduce ? 0 : 0.7, ease: EASE_EA } },
-  };
+
+  const fade = (delay: number) =>
+    reduce
+      ? { initial: undefined, animate: undefined }
+      : {
+          initial: { opacity: 0, y: 18 },
+          animate: { opacity: 1, y: 0 },
+          transition: { duration: 0.8, ease: EASE_EA, delay },
+        };
 
   return (
-    <section id="top" className="relative overflow-hidden bg-ea-creme">
-      {/* Gradiente ambiente sutil (creme → céu-azul) para dar profundidade. */}
+    <section
+      id="top"
+      className="ea-on-dark relative -mt-16 flex min-h-[100svh] items-center overflow-hidden bg-ea-petroleo pt-16 text-ea-cremewm sm:-mt-[70px] sm:pt-[70px]"
+    >
+      {/* Cena 3D / fallback estático */}
+      <div className="absolute inset-0">
+        {enable3d ? (
+          <SceneErrorBoundary fallback={<StaticBackdrop />}>
+            <Suspense fallback={<StaticBackdrop />}>
+              <PackageScene />
+            </Suspense>
+          </SceneErrorBoundary>
+        ) : (
+          <StaticBackdrop />
+        )}
+      </div>
+
+      {/* Scrim para legibilidade do texto sobre a cena */}
       <div
-        ref={gradientRef}
-        className="pointer-events-none absolute inset-0 opacity-70"
+        className="pointer-events-none absolute inset-0"
         aria-hidden
         style={{
           background:
-            'radial-gradient(60% 55% at 85% 15%, rgba(196,219,224,0.55), transparent 60%), radial-gradient(50% 50% at 5% 90%, rgba(201,194,214,0.35), transparent 55%)',
+            'radial-gradient(120% 85% at 50% 42%, transparent 34%, rgba(18,51,54,0.55) 78%), linear-gradient(180deg, rgba(18,51,54,0.55) 0%, transparent 24%, transparent 58%, rgba(18,51,54,0.85) 100%)',
         }}
       />
 
-      <div className="ea-container-wide relative grid items-center gap-12 py-14 sm:py-20 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16 lg:py-24">
-        {/* Coluna de texto */}
-        <motion.div variants={container} initial="hidden" animate="show" className="flex flex-col items-start gap-7">
-          <motion.span variants={item} className="ea-kicker inline-flex items-center gap-2 text-ea-petroleo">
-            <Arrow className="h-3.5 w-3.5 text-ea-neon" />
-            {site.locais[0]} · {site.locais[1]}
-          </motion.span>
+      {/* Conteúdo (pointer-events-none deixa o mouse chegar na cena p/ parallax) */}
+      <div className="ea-container-wide pointer-events-none relative z-10 flex flex-col items-center gap-6 py-28 text-center sm:gap-7">
+        <motion.span {...fade(0.05)} className="ea-kicker inline-flex items-center gap-2 text-ea-neon">
+          <Arrow className="h-3.5 w-3.5" />
+          {site.locais[0]} · {site.locais[1]}
+        </motion.span>
 
-          <motion.h1 variants={item} className="ea-display text-display-lg text-ea-petroleo ea-balance">
+        <h1 className="ea-display ea-hero-shadow text-display-xl text-ea-cremewm">
+          <Line delay={0.15}>
             {hero.titlePre}
             <span className="relative inline-block">
               <span className="relative z-10">{hero.titleHighlight}</span>
-              <span
-                className="absolute inset-x-[-0.05em] bottom-[0.06em] z-0 h-[0.32em] rounded-sm bg-ea-neon"
+              <motion.span
+                className="absolute inset-x-[-0.05em] bottom-[0.08em] z-0 h-[0.3em] origin-left rounded-sm bg-ea-neon"
                 aria-hidden
+                initial={reduce ? undefined : { scaleX: 0 }}
+                animate={reduce ? undefined : { scaleX: 1 }}
+                transition={{ duration: 0.7, ease: EASE_EA, delay: 0.9 }}
               />
             </span>
-            {hero.titlePos}
-          </motion.h1>
+          </Line>
+          <Line delay={0.28}>{hero.titlePos.trim()}</Line>
+        </h1>
 
-          <motion.p variants={item} className="max-w-xl text-lg leading-relaxed text-ea-soft">
-            {hero.subtitle}
-          </motion.p>
+        <motion.p {...fade(0.5)} className="ea-hero-shadow max-w-2xl text-lg text-ea-cremewm/85 sm:text-xl">
+          {hero.subtitle}
+        </motion.p>
 
-          <motion.ul variants={item} className="flex flex-col gap-3">
-            {hero.bullets.map((b) => (
-              <li key={b} className="flex items-center gap-3 text-ea-petroleo">
-                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-ea-sm bg-ea-neon">
-                  <Arrow className="h-4 w-4 text-ea-petroleo" />
-                </span>
-                <span className="font-medium">{b}</span>
-              </li>
-            ))}
-          </motion.ul>
+        <motion.ul {...fade(0.62)} className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
+          {hero.bullets.map((b) => (
+            <li key={b} className="flex items-center gap-2 text-sm font-medium text-ea-cremewm sm:text-[0.95rem]">
+              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-ea-sm bg-ea-neon">
+                <Arrow className="h-3.5 w-3.5 text-ea-petroleo" />
+              </span>
+              {b}
+            </li>
+          ))}
+        </motion.ul>
 
-          <motion.div variants={item} className="pt-1">
-            <Button href="#contato" size="lg">
-              {hero.cta}
-            </Button>
-          </motion.div>
-        </motion.div>
-
-        {/* Painel visual (assinatura) */}
-        <motion.div
-          initial={reduce ? undefined : { opacity: 0, scale: 0.96 }}
-          animate={reduce ? undefined : { opacity: 1, scale: 1 }}
-          transition={{ duration: 0.9, ease: EASE_EA, delay: 0.15 }}
-          className="ea-on-dark relative aspect-[4/3.4] w-full overflow-hidden rounded-ea-lg bg-ea-petroleo shadow-ea-lg sm:aspect-[4/3]"
-        >
-          <RouteNetwork className="absolute inset-0 h-full w-full" />
-
-          {/* Logo pequeno no topo do painel */}
-          <div className="absolute left-5 top-5">
-            <Logo on="dark" className="h-5 w-auto opacity-90" />
-          </div>
-
-          {/* Chip de operação (dashboard flavor) */}
-          <div className="absolute bottom-5 left-5 rounded-ea bg-ea-petroleo-2/80 px-4 py-3 backdrop-blur-sm">
-            <span className="ea-kicker text-ea-neon">Hoje</span>
-            <p className="ea-tnum mt-1 font-serif text-2xl leading-none text-ea-cremewm">12.480</p>
-            <span className="text-xs text-ea-soft-dark">envios</span>
-          </div>
-
-          {/* Card flutuante de assertividade */}
-          <motion.div
-            className="absolute bottom-6 right-5 flex items-center gap-2.5 rounded-pill bg-ea-cremewm px-4 py-2.5 shadow-ea"
-            animate={reduce ? undefined : { y: [0, -7, 0] }}
-            transition={{ duration: 5, ease: 'easeInOut', repeat: Infinity }}
-          >
-            <span className="h-2.5 w-2.5 rounded-full bg-ea-neon" aria-hidden />
-            <span className="ea-tnum text-sm font-semibold text-ea-petroleo">99,6% assertividade</span>
-          </motion.div>
+        <motion.div {...fade(0.74)} className="pointer-events-auto flex flex-wrap items-center justify-center gap-3 pt-3">
+          <Button href="#contato" size="lg">
+            {hero.cta}
+          </Button>
+          <Button href="#como-funciona" variant="ghost-dark" size="lg" withArrow={false}>
+            Como funciona
+          </Button>
         </motion.div>
       </div>
+
+      {/* Indicador de scroll */}
+      {!reduce && (
+        <motion.a
+          href="#operacao"
+          aria-label="Rolar para explorar"
+          className="pointer-events-auto absolute bottom-6 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-1 text-ea-soft-dark transition-colors hover:text-ea-cremewm"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.4, duration: 0.8 }}
+        >
+          <span className="ea-kicker text-[0.62rem]">Explorar</span>
+          <motion.span animate={{ y: [0, 6, 0] }} transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}>
+            <ChevronDown className="h-5 w-5" />
+          </motion.span>
+        </motion.a>
+      )}
     </section>
   );
 }

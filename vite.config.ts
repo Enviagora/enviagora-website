@@ -12,6 +12,8 @@ export default defineConfig({
   },
   build: {
     target: 'es2020',
+    // A cena 3D (three/r3f) é lazy-loaded em chunk próprio — o tamanho é esperado.
+    chunkSizeWarningLimit: 1200,
     // Separa libs de animação em chunks próprios para não travar o first paint.
     rollupOptions: {
       output: {
