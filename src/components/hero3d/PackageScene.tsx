@@ -1,8 +1,9 @@
-import { useMemo, useRef } from 'react';
+import { useMemo, useRef, type MutableRefObject } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Environment, Lightformer } from '@react-three/drei';
 import { RoundedBoxGeometry } from 'three-stdlib';
 import * as THREE from 'three';
+import { useDeviceTilt, type Tilt } from '@/hooks/useDeviceTilt';
 
 /* ==========================================================================
    PackageScene — hero 3D: esteira/sorter com CAIXAS realistas.
@@ -316,13 +317,14 @@ function Belts({ beltTex }: { beltTex: THREE.Texture }) {
   );
 }
 
-function Rig() {
+function Rig({ tiltRef }: { tiltRef: MutableRefObject<Tilt> }) {
   const { camera } = useThree();
   const target = useMemo(() => new THREE.Vector3(0, 2.4, -22), []);
   useFrame((state) => {
     const t = state.clock.elapsedTime;
-    const px = state.pointer.x;
-    const py = state.pointer.y;
+    // Mouse (desktop) OU giroscópio (mobile) — só um dos dois é diferente de zero.
+    const px = state.pointer.x + tiltRef.current.x;
+    const py = state.pointer.y + tiltRef.current.y;
     camera.position.x += (0.6 + px * 0.85 + Math.sin(t * 0.15) * 0.32 - camera.position.x) * 0.025;
     camera.position.y += (2.7 + py * 0.35 + Math.sin(t * 0.22) * 0.1 - camera.position.y) * 0.025;
     camera.lookAt(target);
@@ -333,6 +335,8 @@ function Rig() {
 export default function PackageScene() {
   const beltTex = useBeltTexture();
   const mobile = isMobile();
+  // No mobile não há mouse → usa o giroscópio para o mesmo parallax da câmera.
+  const tilt = useDeviceTilt(mobile);
 
   return (
     <Canvas
@@ -377,7 +381,7 @@ export default function PackageScene() {
         <meshStandardMaterial color={PETROLEO} roughness={1} metalness={0} />
       </mesh>
 
-      <Rig />
+      <Rig tiltRef={tilt} />
     </Canvas>
   );
 }
