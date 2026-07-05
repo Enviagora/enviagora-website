@@ -94,16 +94,14 @@ function getLogo() {
 }
 
 /**
- * Texturas da caixa Enviagora (referência real): kraft + FITA NEON com o
- * wordmark repetido, wordmark grande impresso e tagline. Retorna mapa de cor,
- * normal (relevo de fita/papel) e roughness. O logo é o PNG oficial, carimbado
- * no canvas quando carrega → sem aparência de desenho.
+ * Texturas da caixa Enviagora (kraft): base de papelão com fibras, desgaste nas
+ * bordas, riscos e manchas, wordmark grande impresso (PNG oficial) e tagline.
+ * A FITA neon NÃO é pintada aqui — é uma tira 3D separada sobre o topo (evita o
+ * bug da fita nas faces e dá brilho de fita de verdade). Retorna cor/normal/rough.
  */
 function useBoxTextures() {
   return useMemo(() => {
     const S = 512;
-    const TAPE_Y = S * 0.31; // topo da fita
-    const TAPE_H = S * 0.17; // altura da fita
 
     // ---- COR ----
     const cc = document.createElement('canvas');
@@ -111,98 +109,118 @@ function useBoxTextures() {
     const ctx = cc.getContext('2d')!;
     // base kraft
     const g = ctx.createLinearGradient(0, 0, S, S);
-    g.addColorStop(0, '#d8b585');
-    g.addColorStop(1, '#bb9058');
+    g.addColorStop(0, '#d7b482');
+    g.addColorStop(1, '#b98f56');
     ctx.fillStyle = g;
     ctx.fillRect(0, 0, S, S);
-    // fibras / mottle
-    for (let i = 0; i < 9000; i++) {
-      const a = Math.random() * 0.05;
-      ctx.fillStyle = Math.random() > 0.5 ? `rgba(90,60,30,${a})` : `rgba(255,244,220,${a})`;
-      ctx.fillRect(Math.random() * S, Math.random() * S, 1.6, 1.6);
+    // fibras / mottle (denso e fino)
+    for (let i = 0; i < 14000; i++) {
+      const a = Math.random() * 0.06;
+      ctx.fillStyle = Math.random() > 0.5 ? `rgba(85,55,25,${a})` : `rgba(255,246,224,${a})`;
+      ctx.fillRect(Math.random() * S, Math.random() * S, 1.3, 1.3);
     }
-    // oclusão nas bordas (AO)
-    const ao = ctx.createRadialGradient(S / 2, S / 2, S * 0.3, S / 2, S / 2, S * 0.74);
-    ao.addColorStop(0, 'rgba(60,40,20,0)');
-    ao.addColorStop(1, 'rgba(45,28,12,0.42)');
+    // manchas / amassados suaves
+    for (let i = 0; i < 5; i++) {
+      const dx = Math.random() * S;
+      const dy = Math.random() * S;
+      const dr = 20 + Math.random() * 60;
+      const dg = ctx.createRadialGradient(dx, dy, 0, dx, dy, dr);
+      dg.addColorStop(0, `rgba(70,45,20,${0.05 + Math.random() * 0.06})`);
+      dg.addColorStop(1, 'rgba(70,45,20,0)');
+      ctx.fillStyle = dg;
+      ctx.fillRect(dx - dr, dy - dr, dr * 2, dr * 2);
+    }
+    // riscos finos
+    ctx.strokeStyle = 'rgba(255,248,230,0.10)';
+    ctx.lineWidth = 1;
+    for (let i = 0; i < 8; i++) {
+      const yy = Math.random() * S;
+      ctx.beginPath();
+      ctx.moveTo(Math.random() * S * 0.3, yy);
+      ctx.lineTo(Math.random() * S * 0.3 + S * 0.5, yy + (Math.random() - 0.5) * 20);
+      ctx.stroke();
+    }
+    // desgaste/sujeira nas bordas (moldura escura em cada lado)
+    const edge = 46;
+    const paintEdge = (gx0: number, gy0: number, gx1: number, gy1: number, rx: number, ry: number, rw: number, rh: number) => {
+      const lg = ctx.createLinearGradient(gx0, gy0, gx1, gy1);
+      lg.addColorStop(0, 'rgba(40,26,10,0.5)');
+      lg.addColorStop(1, 'rgba(40,26,10,0)');
+      ctx.fillStyle = lg;
+      ctx.fillRect(rx, ry, rw, rh);
+    };
+    paintEdge(0, 0, 0, edge, 0, 0, S, edge);
+    paintEdge(0, S, 0, S - edge, 0, S - edge, S, edge);
+    paintEdge(0, 0, edge, 0, 0, 0, edge, S);
+    paintEdge(S, 0, S - edge, 0, S - edge, 0, edge, S);
+    // AO central sutil
+    const ao = ctx.createRadialGradient(S / 2, S / 2, S * 0.32, S / 2, S / 2, S * 0.78);
+    ao.addColorStop(0, 'rgba(50,32,14,0)');
+    ao.addColorStop(1, 'rgba(45,28,12,0.28)');
     ctx.fillStyle = ao;
     ctx.fillRect(0, 0, S, S);
-    // vinco central
-    ctx.fillStyle = 'rgba(90,62,32,0.22)';
+    // vinco central (dobra dos flaps) com quina clara
+    ctx.fillStyle = 'rgba(80,54,26,0.3)';
     ctx.fillRect(S / 2 - 1.5, 0, 3, S);
+    ctx.fillStyle = 'rgba(255,248,228,0.08)';
+    ctx.fillRect(S / 2 + 1.5, 0, 1, S);
 
-    // ---- FITA NEON ----
-    const tg = ctx.createLinearGradient(0, TAPE_Y, 0, TAPE_Y + TAPE_H);
-    tg.addColorStop(0, '#cdff67');
-    tg.addColorStop(0.5, '#bff23f');
-    tg.addColorStop(1, '#ace23a');
-    ctx.fillStyle = tg;
-    ctx.fillRect(0, TAPE_Y, S, TAPE_H);
-    // brilho + bordas da fita
-    ctx.fillStyle = 'rgba(255,255,255,0.18)';
-    ctx.fillRect(0, TAPE_Y + 3, S, 3);
-    ctx.fillStyle = 'rgba(40,70,15,0.22)';
-    ctx.fillRect(0, TAPE_Y, S, 1.5);
-    ctx.fillRect(0, TAPE_Y + TAPE_H - 1.5, S, 1.5);
-
-    // tagline impressa no kraft (serif itálico) + url
-    ctx.fillStyle = 'rgba(18,51,54,0.7)';
-    ctx.font = 'italic 500 21px Georgia, "Times New Roman", serif';
+    // tagline + url impressos (petróleo)
+    ctx.fillStyle = 'rgba(18,51,54,0.66)';
+    ctx.font = 'italic 500 20px Georgia, "Times New Roman", serif';
     ctx.textBaseline = 'alphabetic';
-    ctx.fillText('A única logística que funciona.', S * 0.07, S * 0.6);
-    ctx.fillStyle = 'rgba(18,51,54,0.5)';
-    ctx.font = '600 12px Sora, Arial, sans-serif';
-    ctx.fillText('ENVIAGORA.COM.BR', S * 0.07, S * 0.93);
+    ctx.fillText('A única logística que funciona.', S * 0.09, S * 0.2);
+    ctx.fillStyle = 'rgba(18,51,54,0.42)';
+    ctx.font = '600 11px Sora, Arial, sans-serif';
+    ctx.fillText('ENVIAGORA.COM.BR', S * 0.09, S * 0.9);
 
     const map = new THREE.CanvasTexture(cc);
     map.anisotropy = 8;
 
-    // Carimba o logo oficial (fita + wordmark grande) quando carregar.
+    // wordmark grande impresso quando o logo oficial carregar
     getLogo().then((img) => {
       if (!img) return;
       const ar = img.width / img.height;
-      // 1) wordmark repetido na fita neon
-      const lh = TAPE_H * 0.46;
-      const lw = lh * ar;
-      for (let x = S * 0.03; x < S; x += lw + TAPE_H * 0.85) {
-        ctx.drawImage(img, x, TAPE_Y + (TAPE_H - lh) / 2, lw, lh);
-      }
-      // 2) wordmark grande impresso no kraft
-      const bw = S * 0.62;
+      const bw = S * 0.64;
       const bh = bw / ar;
-      ctx.drawImage(img, S * 0.07, S * 0.66, bw, bh);
+      ctx.drawImage(img, S * 0.09, S * 0.44, bw, bh);
       map.needsUpdate = true;
     });
 
-    // ---- ALTURA -> NORMAL ----
+    // ---- NORMAL (grão de papel + vinco) ----
     const hc = document.createElement('canvas');
     hc.width = hc.height = S;
     const h = hc.getContext('2d')!;
     h.fillStyle = '#808080';
     h.fillRect(0, 0, S, S);
-    for (let i = 0; i < S * S * 0.35; i++) {
-      const v = 128 + (Math.random() * 2 - 1) * 9;
+    for (let i = 0; i < S * S * 0.45; i++) {
+      const v = 128 + (Math.random() * 2 - 1) * 11;
       h.fillStyle = `rgb(${v},${v},${v})`;
       h.fillRect(Math.random() * S, Math.random() * S, 1, 1);
     }
-    h.fillStyle = '#6a6a6a'; // vinco (baixo)
+    h.fillStyle = '#6a6a6a';
     h.fillRect(S / 2 - 1.5, 0, 3, S);
-    h.fillStyle = '#9c9c9c'; // fita levemente elevada
-    h.fillRect(0, TAPE_Y, S, TAPE_H);
-    h.fillStyle = '#b6b6b6'; // bordas da fita (mais altas)
-    h.fillRect(0, TAPE_Y, S, 3);
-    h.fillRect(0, TAPE_Y + TAPE_H - 3, S, 3);
-    const normalMap = heightToNormal(hc, 2.0);
+    h.fillStyle = '#9a9a9a';
+    h.fillRect(S / 2 + 1.5, 0, 1, S);
+    const normalMap = heightToNormal(hc, 2.2);
     normalMap.anisotropy = 8;
 
-    // ---- ROUGHNESS ----
+    // ---- ROUGHNESS (fosco com manchas levemente mais lisas) ----
     const rc = document.createElement('canvas');
     rc.width = rc.height = S;
     const r = rc.getContext('2d')!;
-    r.fillStyle = '#e8e8e8'; // papelão fosco
+    r.fillStyle = '#e9e9e9';
     r.fillRect(0, 0, S, S);
-    r.fillStyle = '#6f6f6f'; // fita mais lisa (brilhante)
-    r.fillRect(0, TAPE_Y, S, TAPE_H);
+    for (let i = 0; i < 40; i++) {
+      const rx = Math.random() * S;
+      const ry = Math.random() * S;
+      const rr = 10 + Math.random() * 40;
+      const rgd = r.createRadialGradient(rx, ry, 0, rx, ry, rr);
+      rgd.addColorStop(0, 'rgba(150,150,150,0.5)');
+      rgd.addColorStop(1, 'rgba(150,150,150,0)');
+      r.fillStyle = rgd;
+      r.fillRect(rx - rr, ry - rr, rr * 2, rr * 2);
+    }
     const roughnessMap = new THREE.CanvasTexture(rc);
 
     return { map, normalMap, roughnessMap };
@@ -272,6 +290,50 @@ function useLabelTexture() {
   }, []);
 }
 
+/** Fita de vedação neon (tira 3D sobre o topo) com o wordmark repetido ao longo. */
+function useTapeTexture() {
+  return useMemo(() => {
+    const Wt = 128;
+    const Ht = 512;
+    const c = document.createElement('canvas');
+    c.width = Wt;
+    c.height = Ht;
+    const ctx = c.getContext('2d')!;
+    // neon com centro mais claro (leve volume)
+    const g = ctx.createLinearGradient(0, 0, Wt, 0);
+    g.addColorStop(0, '#a9df3a');
+    g.addColorStop(0.5, '#cbff62');
+    g.addColorStop(1, '#a9df3a');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, Wt, Ht);
+    // bordas da fita levemente escuras
+    ctx.fillStyle = 'rgba(40,70,15,0.28)';
+    ctx.fillRect(0, 0, 4, Ht);
+    ctx.fillRect(Wt - 4, 0, 4, Ht);
+    // brilho especular (faixa clara translúcida)
+    ctx.fillStyle = 'rgba(255,255,255,0.16)';
+    ctx.fillRect(Wt * 0.24, 0, Wt * 0.12, Ht);
+    const tex = new THREE.CanvasTexture(c);
+    tex.anisotropy = 8;
+    // wordmark rotacionado, repetido ao longo do comprimento da fita
+    getLogo().then((img) => {
+      if (!img) return;
+      const ar = img.width / img.height;
+      const lh = Wt * 0.6; // altura do logo cruzando a fita
+      const lw = lh * ar; // comprimento do logo ao longo da fita
+      for (let y = lw * 0.6; y < Ht; y += lw + Wt * 0.55) {
+        ctx.save();
+        ctx.translate(Wt / 2, y);
+        ctx.rotate(-Math.PI / 2);
+        ctx.drawImage(img, -lw / 2, -lh / 2, lw, lh);
+        ctx.restore();
+      }
+      tex.needsUpdate = true;
+    });
+    return tex;
+  }, []);
+}
+
 type Pkg = { lane: number; z: number; speed: number; w: number; h: number; d: number; yaw: number; shade: number };
 
 function makePkg(lane: number, z: number): Pkg {
@@ -300,11 +362,18 @@ function makePkg(lane: number, z: number): Pkg {
 function Packages() {
   const boxRef = useRef<THREE.InstancedMesh>(null);
   const labelRef = useRef<THREE.InstancedMesh>(null);
+  const tapeRef = useRef<THREE.InstancedMesh>(null);
   const dummy = useMemo(() => new THREE.Object3D(), []);
   const color = useMemo(() => new THREE.Color(), []);
   const geom = useMemo(() => new RoundedBoxGeometry(1, 1, 1, 4, 0.08), []);
   const { map, normalMap, roughnessMap } = useBoxTextures();
   const labelTex = useLabelTexture();
+  const tapeTex = useTapeTexture();
+  // deitar o plano da fita (normal p/ cima) e depois girar pelo yaw da caixa
+  const UP = useMemo(() => new THREE.Vector3(0, 1, 0), []);
+  const qFlat = useMemo(() => new THREE.Quaternion().setFromEuler(new THREE.Euler(-Math.PI / 2, 0, 0)), []);
+  const qYaw = useMemo(() => new THREE.Quaternion(), []);
+  const normalScale = useMemo(() => new THREE.Vector2(1.4, 1.4), []);
   const perLane = isMobile() ? 6 : 10;
   const count = LANES.length * perLane;
 
@@ -321,7 +390,8 @@ function Packages() {
   useFrame((_, delta) => {
     const box = boxRef.current;
     const label = labelRef.current;
-    if (!box || !label) return;
+    const tape = tapeRef.current;
+    if (!box || !label || !tape) return;
     const dt = Math.min(delta, 0.05);
     for (let i = 0; i < pkgs.length; i++) {
       const p = pkgs[i];
@@ -333,10 +403,11 @@ function Packages() {
       dummy.scale.set(p.w, p.h, p.d);
       dummy.updateMatrix();
       box.setMatrixAt(i, dummy.matrix);
-      // Cor real vem do mapa (kraft + fita neon). Aqui só variamos o brilho por
-      // caixa (branco × shade) — sem tingir, senão a fita neon fica embaçada.
+      // Cor real vem do mapa (kraft). Aqui só variamos o brilho por caixa.
       color.setStyle('#ffffff').multiplyScalar(p.shade);
       box.setColorAt(i, color);
+
+      // Etiqueta na face frontal.
       const sin = Math.sin(p.yaw);
       const cos = Math.cos(p.yaw);
       const off = p.d / 2 + 0.012;
@@ -345,20 +416,40 @@ function Packages() {
       dummy.scale.set(Math.min(p.w * 0.66, 0.56), Math.min(p.h * 0.58, 0.4), 1);
       dummy.updateMatrix();
       label.setMatrixAt(i, dummy.matrix);
+
+      // Fita 3D deitada sobre o topo, correndo ao longo do comprimento (z).
+      dummy.position.set(p.lane, p.h + 0.032, p.z);
+      qYaw.setFromAxisAngle(UP, p.yaw);
+      dummy.quaternion.copy(qYaw).multiply(qFlat);
+      dummy.scale.set(Math.min(p.w * 0.4, 0.62), p.d * 1.04, 1);
+      dummy.updateMatrix();
+      tape.setMatrixAt(i, dummy.matrix);
     }
     box.instanceMatrix.needsUpdate = true;
     label.instanceMatrix.needsUpdate = true;
+    tape.instanceMatrix.needsUpdate = true;
     if (box.instanceColor) box.instanceColor.needsUpdate = true;
   });
 
   return (
     <>
       <instancedMesh ref={boxRef} args={[geom, undefined, count]} castShadow receiveShadow>
-        <meshStandardMaterial map={map} normalMap={normalMap} roughnessMap={roughnessMap} metalness={0.04} envMapIntensity={0.5} />
+        <meshStandardMaterial
+          map={map}
+          normalMap={normalMap}
+          normalScale={normalScale}
+          roughnessMap={roughnessMap}
+          metalness={0.02}
+          envMapIntensity={0.4}
+        />
       </instancedMesh>
       <instancedMesh ref={labelRef} args={[undefined, undefined, count]}>
         <planeGeometry args={[1, 1]} />
-        <meshStandardMaterial map={labelTex} roughness={0.85} metalness={0} />
+        <meshStandardMaterial map={labelTex} roughness={0.82} metalness={0} />
+      </instancedMesh>
+      <instancedMesh ref={tapeRef} args={[undefined, undefined, count]} castShadow>
+        <planeGeometry args={[1, 1]} />
+        <meshStandardMaterial map={tapeTex} roughness={0.34} metalness={0} side={THREE.DoubleSide} />
       </instancedMesh>
     </>
   );
@@ -426,11 +517,11 @@ export default function PackageScene() {
       <color attach="background" args={[PETROLEO]} />
       <fog attach="fog" args={[PETROLEO, 12, 42]} />
 
-      <ambientLight color={CREME} intensity={0.5} />
+      <ambientLight color={CREME} intensity={0.38} />
       <directionalLight
         position={[5, 14, 6]}
         color={CREME}
-        intensity={1.5}
+        intensity={2.0}
         castShadow={!mobile}
         shadow-mapSize-width={1024}
         shadow-mapSize-height={1024}
