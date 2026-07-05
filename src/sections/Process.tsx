@@ -21,12 +21,12 @@ const NEON_GLOW = '0 12px 40px rgba(196, 255, 87, 0.32)';
 const DIM_RING = 'inset 0 0 0 1.5px rgba(196, 255, 87, 0.28)';
 
 /** Caixa da marca que percorre o trilho (eco dos doodles: caixa + seta ↗). */
-function TravelingPackage() {
+function TravelingPackage({ bob }: { bob: boolean }) {
   return (
     <motion.div
       className="relative flex h-11 w-11 items-center justify-center rounded-[26%] bg-ea-neon text-ea-petroleo ring-1 ring-ea-petroleo/10"
       style={{ boxShadow: '0 10px 30px rgba(196,255,87,0.5)' }}
-      animate={{ y: [0, -3, 0] }}
+      animate={bob ? { y: [0, -3, 0] } : undefined}
       transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
     >
       <Arrow className="h-5 w-5" />
@@ -44,14 +44,16 @@ export function Process() {
   const wrapRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: wrapRef, offset: ['start 0.85', 'end 0.45'] });
   const fillPct = useTransform(scrollYProgress, [0, 1], ['0%', '100%']);
-  const [reached, setReached] = useState(reduce ? 3 : 1);
+  // O preenchimento é dirigido pelo scroll para TODOS (inclusive reduce-motion),
+  // senão a seção carrega "cheia" e parece que não é interativa. Só o "flutuar"
+  // decorativo da caixinha é desligado no reduce.
+  const [reached, setReached] = useState(1);
 
   useMotionValueEvent(scrollYProgress, 'change', (v) => {
-    if (reduce) return;
     setReached(v >= 0.9 ? 3 : v >= 0.5 ? 2 : 1);
   });
 
-  const isActive = (i: number) => !!reduce || reached >= i + 1;
+  const isActive = (i: number) => reached >= i + 1;
 
   return (
     <Section tone="petroleo">
@@ -75,14 +77,12 @@ export function Process() {
             {/* Preenchimento neon que acompanha o scroll. */}
             <motion.div
               className="absolute left-0 top-0 h-[3px] -translate-y-1/2 rounded-full bg-ea-neon"
-              style={{ width: reduce ? '100%' : fillPct }}
+              style={{ width: fillPct }}
             />
             {/* Pacote viajando (fica atrás dos ícones por causa do z-index da lista). */}
-            {!reduce && (
-              <motion.div className="absolute top-0 z-20 -translate-x-1/2 -translate-y-1/2" style={{ left: fillPct }}>
-                <TravelingPackage />
-              </motion.div>
-            )}
+            <motion.div className="absolute top-0 z-20 -translate-x-1/2 -translate-y-1/2" style={{ left: fillPct }}>
+              <TravelingPackage bob={!reduce} />
+            </motion.div>
           </div>
 
           <ol className="relative z-10 grid grid-cols-3 gap-8">
@@ -120,7 +120,7 @@ export function Process() {
           {process.steps.map((step, i) => {
             const Icon = icons[i];
             const active = isActive(i);
-            const segActive = !!reduce || reached >= i + 2; // conector até o próximo nó
+            const segActive = reached >= i + 2; // conector até o próximo nó
             const last = i === process.steps.length - 1;
             return (
               <li key={step.title} className="flex gap-5">
