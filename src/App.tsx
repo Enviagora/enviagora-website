@@ -1,6 +1,7 @@
 import { TopBanner } from '@/components/layout/TopBanner';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
+import { ScrollProgress } from '@/components/layout/ScrollProgress';
 
 import { Hero } from '@/sections/Hero';
 import { SocialProof } from '@/sections/SocialProof';
@@ -27,6 +28,7 @@ export default function App() {
         Pular para o conteúdo
       </a>
 
+      <ScrollProgress />
       <TopBanner />
       <Header />
 
