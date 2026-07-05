@@ -290,43 +290,39 @@ function useLabelTexture() {
   }, []);
 }
 
-/** Fita de vedação neon (tira 3D sobre o topo) com o wordmark repetido ao longo. */
+/** Fita de vedação neon (cinta 3D que dá a volta na caixa) com o wordmark. */
 function useTapeTexture() {
   return useMemo(() => {
-    const Wt = 128;
-    const Ht = 512;
+    const W = 512;
+    const H = 128;
     const c = document.createElement('canvas');
-    c.width = Wt;
-    c.height = Ht;
+    c.width = W;
+    c.height = H;
     const ctx = c.getContext('2d')!;
-    // neon com centro mais claro (leve volume)
-    const g = ctx.createLinearGradient(0, 0, Wt, 0);
-    g.addColorStop(0, '#a9df3a');
+    // neon com centro mais claro (volume da fita)
+    const g = ctx.createLinearGradient(0, 0, 0, H);
+    g.addColorStop(0, '#a3d836');
     g.addColorStop(0.5, '#cbff62');
-    g.addColorStop(1, '#a9df3a');
+    g.addColorStop(1, '#a3d836');
     ctx.fillStyle = g;
-    ctx.fillRect(0, 0, Wt, Ht);
-    // bordas da fita levemente escuras
-    ctx.fillStyle = 'rgba(40,70,15,0.28)';
-    ctx.fillRect(0, 0, 4, Ht);
-    ctx.fillRect(Wt - 4, 0, 4, Ht);
-    // brilho especular (faixa clara translúcida)
+    ctx.fillRect(0, 0, W, H);
+    // brilho especular (faixa clara ao longo da fita)
     ctx.fillStyle = 'rgba(255,255,255,0.16)';
-    ctx.fillRect(Wt * 0.24, 0, Wt * 0.12, Ht);
+    ctx.fillRect(0, H * 0.26, W, H * 0.12);
+    // bordas da fita levemente escuras
+    ctx.fillStyle = 'rgba(40,70,15,0.26)';
+    ctx.fillRect(0, 0, W, 3);
+    ctx.fillRect(0, H - 3, W, 3);
     const tex = new THREE.CanvasTexture(c);
     tex.anisotropy = 8;
-    // wordmark rotacionado, repetido ao longo do comprimento da fita
+    // wordmark repetido ao longo da fita
     getLogo().then((img) => {
       if (!img) return;
       const ar = img.width / img.height;
-      const lh = Wt * 0.6; // altura do logo cruzando a fita
-      const lw = lh * ar; // comprimento do logo ao longo da fita
-      for (let y = lw * 0.6; y < Ht; y += lw + Wt * 0.55) {
-        ctx.save();
-        ctx.translate(Wt / 2, y);
-        ctx.rotate(-Math.PI / 2);
-        ctx.drawImage(img, -lw / 2, -lh / 2, lw, lh);
-        ctx.restore();
+      const lh = H * 0.5;
+      const lw = lh * ar;
+      for (let x = W * 0.02; x < W; x += lw + H * 0.5) {
+        ctx.drawImage(img, x, (H - lh) / 2, lw, lh);
       }
       tex.needsUpdate = true;
     });
@@ -365,14 +361,11 @@ function Packages() {
   const tapeRef = useRef<THREE.InstancedMesh>(null);
   const dummy = useMemo(() => new THREE.Object3D(), []);
   const color = useMemo(() => new THREE.Color(), []);
-  const geom = useMemo(() => new RoundedBoxGeometry(1, 1, 1, 4, 0.08), []);
+  // Quinas mais secas (menos arredondadas) → leitura de papelão, menos CG.
+  const geom = useMemo(() => new RoundedBoxGeometry(1, 1, 1, 3, 0.05), []);
   const { map, normalMap, roughnessMap } = useBoxTextures();
   const labelTex = useLabelTexture();
   const tapeTex = useTapeTexture();
-  // deitar o plano da fita (normal p/ cima) e depois girar pelo yaw da caixa
-  const UP = useMemo(() => new THREE.Vector3(0, 1, 0), []);
-  const qFlat = useMemo(() => new THREE.Quaternion().setFromEuler(new THREE.Euler(-Math.PI / 2, 0, 0)), []);
-  const qYaw = useMemo(() => new THREE.Quaternion(), []);
   const normalScale = useMemo(() => new THREE.Vector2(1.4, 1.4), []);
   const perLane = isMobile() ? 6 : 10;
   const count = LANES.length * perLane;
@@ -417,11 +410,11 @@ function Packages() {
       dummy.updateMatrix();
       label.setMatrixAt(i, dummy.matrix);
 
-      // Fita 3D deitada sobre o topo, correndo ao longo do comprimento (z).
-      dummy.position.set(p.lane, p.h + 0.032, p.z);
-      qYaw.setFromAxisAngle(UP, p.yaw);
-      dummy.quaternion.copy(qYaw).multiply(qFlat);
-      dummy.scale.set(Math.min(p.w * 0.4, 0.62), p.d * 1.04, 1);
+      // Fita 3D como CINTA: passa por cima e desce pelas laterais (esq/dir),
+      // encostada na caixa (levemente proeminente). Deixa a frente livre p/ etiqueta.
+      dummy.position.set(p.lane, cy, p.z);
+      dummy.rotation.set(0, p.yaw, 0);
+      dummy.scale.set(p.w + 0.02, p.h + 0.02, Math.min(p.d * 0.32, 0.5));
       dummy.updateMatrix();
       tape.setMatrixAt(i, dummy.matrix);
     }
@@ -440,16 +433,16 @@ function Packages() {
           normalScale={normalScale}
           roughnessMap={roughnessMap}
           metalness={0.02}
-          envMapIntensity={0.4}
+          envMapIntensity={0.28}
         />
       </instancedMesh>
       <instancedMesh ref={labelRef} args={[undefined, undefined, count]}>
         <planeGeometry args={[1, 1]} />
         <meshStandardMaterial map={labelTex} roughness={0.82} metalness={0} />
       </instancedMesh>
-      <instancedMesh ref={tapeRef} args={[undefined, undefined, count]} castShadow>
-        <planeGeometry args={[1, 1]} />
-        <meshStandardMaterial map={tapeTex} roughness={0.34} metalness={0} side={THREE.DoubleSide} />
+      <instancedMesh ref={tapeRef} args={[undefined, undefined, count]}>
+        <boxGeometry args={[1, 1, 1]} />
+        <meshStandardMaterial map={tapeTex} roughness={0.33} metalness={0} envMapIntensity={0.5} />
       </instancedMesh>
     </>
   );
@@ -517,7 +510,9 @@ export default function PackageScene() {
       <color attach="background" args={[PETROLEO]} />
       <fog attach="fog" args={[PETROLEO, 12, 42]} />
 
-      <ambientLight color={CREME} intensity={0.38} />
+      <ambientLight color={CREME} intensity={0.44} />
+      {/* Fill quente pela frente (lado da câmera) → kraft menos esverdeado. */}
+      <directionalLight position={[0, 4, 14]} color="#ffe7c4" intensity={0.6} />
       <directionalLight
         position={[5, 14, 6]}
         color={CREME}
