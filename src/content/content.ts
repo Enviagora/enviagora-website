@@ -149,17 +149,17 @@ export const integrations = {
     {
       title: 'Plataformas de vendas',
       body: 'Sincronize pedidos e estoques em tempo real com sua loja online, sem complicações.',
-      logos: ['Shopify', 'Nuvemshop', 'Yampi', 'Payt', 'Loja Integrada', 'Cartpanda'],
+      logos: ['shopify', 'nuvemshop', 'yampi', 'payt', 'b4you', 'baggy', 'youshop', 'vtext'],
     },
     {
       title: 'Marketplaces',
       body: 'Venda em grandes canais como Mercado Livre, Amazon e Shopee com logística conectada.',
-      logos: ['Mercado Livre', 'Shopee', 'Amazon', 'TikTok Shop', 'Magalu', 'SHEIN'],
+      logos: ['mercadolivre', 'shopee', 'amazon', 'tiktok', 'magalu', 'shein'],
     },
     {
       title: 'ERPs',
       body: 'Conecte sistemas como Bling, Tiny e Omie para automatizar sua operação do pedido e geração da nota fiscal ao envio.',
-      logos: ['Bling', 'Tiny', 'Omie', 'SAP'],
+      logos: ['bling', 'tiny', 'omie', 'sap', 'totvs', 'linx'],
     },
   ],
   cta: CTA_ESPECIALISTA,
