@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Boxes, Bell, Check } from 'lucide-react';
 import { realTime } from '@/content/content';
@@ -5,18 +6,50 @@ import { Section } from '@/components/layout/Section';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { Reveal } from '@/components/motion/Reveal';
 import { VIEWPORT } from '@/lib/motion';
+import { cn } from '@/lib/cn';
 
-// Linhas do inventário (estados de UI ilustrativos — não são copy do site).
+// Estados de UI ilustrativos (não são copy do site) — dão a sensação de "ao vivo".
 const rows = [
-  { w: '62%', status: 'Enviado', tone: 'bg-ea-neon' },
-  { w: '48%', status: 'Em separação', tone: 'bg-ea-ceu' },
-  { w: '70%', status: 'Em trânsito', tone: 'bg-ea-lavanda' },
-  { w: '54%', status: 'Conferência', tone: 'bg-ea-kraft' },
+  { status: 'Enviado', tone: 'bg-ea-neon', w: 62 },
+  { status: 'Em separação', tone: 'bg-ea-ceu', w: 48 },
+  { status: 'Em trânsito', tone: 'bg-ea-lavanda', w: 70 },
+  { status: 'Conferência', tone: 'bg-ea-kraft', w: 54 },
 ];
-const timeline = ['Enviado', 'Aguardando transportadora', 'Em conferência', 'Em processamento'];
+const timeline = ['Pedido recebido', 'Em separação', 'Coletado', 'Em trânsito'];
+
+const nf = new Intl.NumberFormat('pt-BR');
+
+/** Números e estados que se atualizam sozinhos → o painel parece vivo. */
+function useLiveDashboard() {
+  const [s, setS] = useState({ enviados: 328, estoque: 12480, repo: 24, step: 0, flash: 0 });
+  useEffect(() => {
+    const t1 = window.setInterval(() => {
+      setS((p) => ({
+        ...p,
+        enviados: p.enviados + 1 + Math.floor(Math.random() * 3),
+        estoque: Math.max(0, p.estoque + Math.floor(Math.random() * 7) - 3),
+        repo: Math.max(6, p.repo + Math.floor(Math.random() * 3) - 1),
+        flash: Math.floor(Math.random() * rows.length),
+      }));
+    }, 1900);
+    const t2 = window.setInterval(() => setS((p) => ({ ...p, step: (p.step + 1) % timeline.length })), 1500);
+    return () => {
+      window.clearInterval(t1);
+      window.clearInterval(t2);
+    };
+  }, []);
+  return s;
+}
 
 function MockDashboard() {
   const reduce = useReducedMotion();
+  const live = useLiveDashboard();
+  const miniStats = [
+    { k: 'Em estoque', tone: 'bg-ea-ceu', v: nf.format(live.estoque) },
+    { k: 'Enviados hoje', tone: 'bg-ea-neon', v: nf.format(live.enviados) },
+    { k: 'Reposição', tone: 'bg-ea-lavanda', v: nf.format(live.repo) },
+  ];
+
   return (
     <div className="relative">
       {/* Janela do painel */}
@@ -28,38 +61,46 @@ function MockDashboard() {
           <span className="ml-3 flex items-center gap-1.5 text-xs font-semibold text-ea-soft">
             <Boxes className="h-3.5 w-3.5" aria-hidden /> Inventário
           </span>
+          {/* Indicador "ao vivo" */}
+          <span className="ml-auto flex items-center gap-1.5 text-[0.62rem] font-semibold uppercase tracking-label text-ea-soft">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-ea-neon opacity-70" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-ea-neon" />
+            </span>
+            ao vivo
+          </span>
         </div>
 
         <div className="p-5">
-          {/* Mini stats */}
+          {/* Mini stats com números que atualizam */}
           <div className="mb-5 grid grid-cols-3 gap-3">
-            {[
-              { k: 'Em estoque', tone: 'bg-ea-ceu' },
-              { k: 'Enviados', tone: 'bg-ea-neon' },
-              { k: 'Reposição', tone: 'bg-ea-lavanda' },
-            ].map((t) => (
+            {miniStats.map((t) => (
               <div key={t.k} className="rounded-ea-sm bg-ea-creme p-3">
-                <span className={`mb-2 block h-5 w-5 rounded ${t.tone}`} />
-                <span className="text-[0.65rem] text-ea-soft">{t.k}</span>
+                <span className={cn('mb-2 block h-4 w-4 rounded', t.tone)} />
+                <span className="ea-tnum block font-serif text-lg leading-none text-ea-petroleo">{t.v}</span>
+                <span className="mt-1 block text-[0.6rem] text-ea-soft">{t.k}</span>
               </div>
             ))}
           </div>
 
-          {/* Tabela */}
+          {/* Tabela — a linha "atualizada" acende */}
           <div className="flex flex-col gap-3">
             {rows.map((r, i) => (
               <motion.div
                 key={i}
-                className="flex items-center gap-3"
+                className={cn(
+                  'flex items-center gap-3 rounded-ea-sm px-2 py-1.5 transition-colors duration-500',
+                  live.flash === i ? 'bg-ea-neon/10 ring-1 ring-ea-neon/30' : 'ring-1 ring-transparent',
+                )}
                 initial={reduce ? undefined : { opacity: 0, x: -12 }}
                 whileInView={reduce ? undefined : { opacity: 1, x: 0 }}
                 viewport={VIEWPORT}
                 transition={{ duration: 0.5, delay: 0.2 + i * 0.12 }}
               >
                 <span className="h-8 w-8 shrink-0 rounded-ea-sm bg-ea-coolgrey" />
-                <span className="h-2.5 rounded-full bg-ea-petroleo/10" style={{ width: r.w }} />
+                <span className="h-2.5 rounded-full bg-ea-petroleo/10" style={{ width: `${r.w}%` }} />
                 <span className="ml-auto flex items-center gap-1.5 rounded-pill bg-ea-creme px-2.5 py-1 text-[0.65rem] font-medium text-ea-petroleo">
-                  <span className={`h-2 w-2 rounded-full ${r.tone}`} />
+                  <span className={cn('h-2 w-2 rounded-full', r.tone)} />
                   {r.status}
                 </span>
               </motion.div>
@@ -68,7 +109,7 @@ function MockDashboard() {
         </div>
       </div>
 
-      {/* Card flutuante: linha do tempo do pedido */}
+      {/* Card flutuante: pedido percorrendo a linha do tempo */}
       <motion.div
         className="absolute -bottom-8 -right-4 w-56 rounded-ea border border-ea-petroleo/10 bg-white p-4 shadow-ea-lg sm:-right-8"
         initial={reduce ? undefined : { opacity: 0, y: 16 }}
@@ -81,20 +122,26 @@ function MockDashboard() {
           <span className="text-xs font-semibold text-ea-petroleo">Pedido de venda</span>
         </div>
         <ol className="flex flex-col gap-2.5">
-          {timeline.map((t, i) => (
-            <li key={t} className="flex items-center gap-2">
-              <span
-                className={`flex h-4 w-4 items-center justify-center rounded-full ${
-                  i === 0 ? 'bg-ea-neon' : 'bg-ea-coolgrey'
-                }`}
-              >
-                {i === 0 ? <Check className="h-2.5 w-2.5 text-ea-petroleo" strokeWidth={3} /> : null}
-              </span>
-              <span className={`text-[0.68rem] ${i === 0 ? 'font-semibold text-ea-petroleo' : 'text-ea-soft'}`}>
-                {t}
-              </span>
-            </li>
-          ))}
+          {timeline.map((t, i) => {
+            const done = i < live.step;
+            const current = i === live.step;
+            return (
+              <li key={t} className="flex items-center gap-2">
+                <span
+                  className={cn(
+                    'relative flex h-4 w-4 items-center justify-center rounded-full transition-colors duration-500',
+                    done || current ? 'bg-ea-neon' : 'bg-ea-coolgrey',
+                  )}
+                >
+                  {done && <Check className="h-2.5 w-2.5 text-ea-petroleo" strokeWidth={3} />}
+                  {current && <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-ea-neon opacity-60" />}
+                </span>
+                <span className={cn('text-[0.68rem] transition-colors duration-500', done || current ? 'font-semibold text-ea-petroleo' : 'text-ea-soft')}>
+                  {t}
+                </span>
+              </li>
+            );
+          })}
         </ol>
       </motion.div>
     </div>
@@ -110,11 +157,7 @@ export function RealTime() {
         </Reveal>
 
         <div className="order-1 flex flex-col gap-6 lg:order-2">
-          <SectionHeading
-            kicker="Visibilidade total"
-            title={realTime.title}
-            align="left"
-          />
+          <SectionHeading kicker="Visibilidade total" title={realTime.title} align="left" />
           <Reveal delay={0.05}>
             <p className="max-w-xl text-base leading-relaxed text-ea-soft">{realTime.body}</p>
           </Reveal>
