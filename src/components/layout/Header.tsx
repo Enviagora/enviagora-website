@@ -17,7 +17,6 @@ export function Header() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // Trava o scroll do body quando o menu mobile está aberto.
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : '';
     return () => {
@@ -25,57 +24,57 @@ export function Header() {
     };
   }, [open]);
 
-  // No topo o header está sobre o hero ESCURO → conteúdo claro.
-  // Ao rolar, ganha fundo creme → conteúdo escuro.
+  // Barra flutua sobre o hero escuro → conteúdo claro no topo; escuro ao rolar.
   const dark = !scrolled;
 
   return (
-    <header
-      className={cn(
-        'ea-on-dark sticky top-0 z-50 transition-all duration-300 ease-ea',
-        scrolled
-          ? 'border-b border-ea-petroleo/10 bg-ea-creme/85 backdrop-blur-md'
-          : 'border-b border-transparent bg-transparent',
-      )}
-    >
-      <div className="ea-container-wide flex h-16 items-center justify-between gap-4 sm:h-[70px]">
-        <a href="#top" aria-label="Enviagora — início" className="shrink-0">
-          <Logo on={dark ? 'dark' : 'light'} className="h-6 w-auto sm:h-7" />
-        </a>
+    <header className="ea-on-dark sticky top-0 z-50 pt-2 sm:pt-3">
+      <div className="ea-container-wide">
+        <div
+          className={cn(
+            'flex h-14 items-center justify-between gap-4 rounded-pill border pl-4 pr-2 transition-all duration-300 ease-ea sm:pl-6 sm:pr-3',
+            scrolled
+              ? 'border-ea-petroleo/10 bg-ea-creme/90 shadow-ea backdrop-blur-md'
+              : 'border-ea-cremewm/12 bg-ea-petroleo/35 backdrop-blur-md',
+          )}
+        >
+          <a href="#top" aria-label="Enviagora — início" className="shrink-0">
+            <Logo on={dark ? 'dark' : 'light'} className="h-6 w-auto" />
+          </a>
 
-        {/* Nav desktop */}
-        <nav className="hidden items-center gap-8 lg:flex" aria-label="Navegação principal">
-          {nav.map((item) => (
-            <a
-              key={item.href}
-              href={item.href}
+          <nav className="hidden items-center gap-8 lg:flex" aria-label="Navegação principal">
+            {nav.map((item) => (
+              <a
+                key={item.href}
+                href={item.href}
+                className={cn(
+                  'relative text-sm font-medium transition-colors duration-200 after:absolute after:-bottom-1.5 after:left-0 after:h-px after:w-0 after:transition-all after:duration-300 hover:after:w-full',
+                  dark
+                    ? 'text-ea-cremewm/80 hover:text-ea-cremewm after:bg-ea-neon'
+                    : 'text-ea-soft hover:text-ea-petroleo after:bg-ea-petroleo',
+                )}
+              >
+                {item.label}
+              </a>
+            ))}
+          </nav>
+
+          <div className="flex items-center gap-2">
+            <Button href="#contato" size="md" className="hidden sm:inline-flex">
+              {hero.cta}
+            </Button>
+            <button
+              type="button"
+              onClick={() => setOpen(true)}
               className={cn(
-                'relative text-sm font-medium transition-colors duration-200 after:absolute after:-bottom-1.5 after:left-0 after:h-px after:w-0 after:transition-all after:duration-300 hover:after:w-full',
-                dark
-                  ? 'text-ea-cremewm/75 hover:text-ea-cremewm after:bg-ea-neon'
-                  : 'text-ea-soft hover:text-ea-petroleo after:bg-ea-petroleo',
+                'inline-flex h-10 w-10 items-center justify-center rounded-pill lg:hidden',
+                dark ? 'text-ea-cremewm' : 'text-ea-petroleo',
               )}
+              aria-label="Abrir menu"
             >
-              {item.label}
-            </a>
-          ))}
-        </nav>
-
-        <div className="flex items-center gap-2">
-          <Button href="#contato" size="md" className="hidden sm:inline-flex">
-            {hero.cta}
-          </Button>
-          <button
-            type="button"
-            onClick={() => setOpen(true)}
-            className={cn(
-              'inline-flex h-10 w-10 items-center justify-center rounded-ea-sm lg:hidden',
-              dark ? 'text-ea-cremewm' : 'text-ea-petroleo',
-            )}
-            aria-label="Abrir menu"
-          >
-            <Menu className="h-6 w-6" />
-          </button>
+              <Menu className="h-6 w-6" />
+            </button>
+          </div>
         </div>
       </div>
 
@@ -89,12 +88,12 @@ export function Header() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
           >
-            <div className="ea-container-wide flex h-16 items-center justify-between">
+            <div className="ea-container-wide flex h-16 items-center justify-between pt-2">
               <Logo on="dark" className="h-6 w-auto" />
               <button
                 type="button"
                 onClick={() => setOpen(false)}
-                className="inline-flex h-10 w-10 items-center justify-center rounded-ea-sm text-ea-cremewm"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-pill text-ea-cremewm"
                 aria-label="Fechar menu"
               >
                 <X className="h-6 w-6" />
