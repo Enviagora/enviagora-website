@@ -1,4 +1,4 @@
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Check, Heart, Music2, Package } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { tiktokShop } from '@/content/content';
@@ -16,10 +16,11 @@ import { CountUp } from '@/components/motion/CountUp';
    gradiente verde→lilás, headline em Fraunces, seta e wordmark. Destaca a
    autoridade (Nº 1 em TikTok Shop na América Latina · +1 milhão de pacotes/mês).
 
-   Animação "viral": curva de crescimento que se desenha sozinha (efeito
-   hockey-stick), partículas de engajamento subindo (corações, notas, pacotes)
-   e um halo neon pulsando atrás do número gigante. Tudo decorativo e atrás do
-   conteúdo; some por completo em prefers-reduced-motion.
+   Animação "viral" (roda no desktop e no mobile, como as demais seções):
+   curva de crescimento sutil que se desenha sozinha, partículas de engajamento
+   subindo (corações, notas, pacotes) e um halo neon pulsando atrás do número.
+   Tudo é decorativo, atrás do conteúdo e propositalmente suave para não
+   competir com o texto.
    ========================================================================== */
 
 // Gradiente da marca (verde neon → creme → lilás), como no material impresso.
@@ -48,8 +49,6 @@ const PARTICLES: Particle[] = [
 ];
 
 export function TikTokShop() {
-  const reduce = useReducedMotion();
-
   return (
     <Section id="tiktok-shop" tone="creme">
       <Reveal>
@@ -58,17 +57,15 @@ export function TikTokShop() {
           style={{ background: GRADIENT }}
         >
           {/* Brilho suave em movimento (vida no gradiente) */}
-          {!reduce && (
-            <motion.div
-              aria-hidden
-              className="pointer-events-none absolute -z-10 h-[60%] w-[60%] rounded-full opacity-60 blur-2xl"
-              style={{ background: 'radial-gradient(circle, rgba(255,255,255,0.6), transparent 70%)' }}
-              animate={{ x: ['-10%', '60%', '-10%'], y: ['-20%', '80%', '-20%'] }}
-              transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
-            />
-          )}
+          <motion.div
+            aria-hidden
+            className="pointer-events-none absolute -z-10 h-[60%] w-[60%] rounded-full opacity-60 blur-2xl"
+            style={{ background: 'radial-gradient(circle, rgba(255,255,255,0.6), transparent 70%)' }}
+            animate={{ x: ['-10%', '60%', '-10%'], y: ['-20%', '80%', '-20%'] }}
+            transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
+          />
 
-          {/* Curva de crescimento viral que se desenha sozinha ao entrar na tela */}
+          {/* Curva de crescimento viral — bem sutil, como marca-d'água atrás do texto */}
           <svg
             aria-hidden
             viewBox="0 0 400 160"
@@ -77,15 +74,15 @@ export function TikTokShop() {
           >
             <defs>
               <linearGradient id="tt-area" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#123336" stopOpacity="0.16" />
+                <stop offset="0%" stopColor="#123336" stopOpacity="0.09" />
                 <stop offset="100%" stopColor="#123336" stopOpacity="0" />
               </linearGradient>
             </defs>
             <motion.path
               d={CURVE_AREA}
               fill="url(#tt-area)"
-              initial={reduce ? undefined : { opacity: 0 }}
-              whileInView={reduce ? undefined : { opacity: 1 }}
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
               viewport={{ once: true, margin: '0px 0px -15% 0px' }}
               transition={{ duration: 1.2, delay: 0.7, ease: EASE_EA }}
             />
@@ -93,42 +90,40 @@ export function TikTokShop() {
               d={CURVE}
               fill="none"
               stroke="#123336"
-              strokeOpacity={0.4}
-              strokeWidth={2}
+              strokeOpacity={0.14}
+              strokeWidth={1.25}
               strokeLinecap="round"
               vectorEffect="non-scaling-stroke"
-              initial={reduce ? undefined : { pathLength: 0 }}
-              whileInView={reduce ? undefined : { pathLength: 1 }}
+              initial={{ pathLength: 0 }}
+              whileInView={{ pathLength: 1 }}
               viewport={{ once: true, margin: '0px 0px -15% 0px' }}
               transition={{ duration: 1.8, delay: 0.35, ease: EASE_EA }}
             />
           </svg>
 
           {/* Partículas de engajamento subindo (energia viral do TikTok) */}
-          {!reduce && (
-            <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-              {PARTICLES.map((p, i) => {
-                const Icon = p.Icon;
-                return (
-                  <motion.span
-                    key={i}
-                    className="absolute text-ea-petroleo/25"
-                    style={{ left: p.left, top: '100%' }}
-                    initial={{ top: '108%', opacity: 0 }}
-                    animate={{
-                      top: '-12%',
-                      x: [0, p.drift, 0],
-                      opacity: [0, 0.4, 0.4, 0],
-                      rotate: [0, p.drift > 0 ? 12 : -12, 0],
-                    }}
-                    transition={{ duration: p.dur, delay: p.delay, repeat: Infinity, ease: 'easeInOut' }}
-                  >
-                    <Icon size={p.size} strokeWidth={2} />
-                  </motion.span>
-                );
-              })}
-            </div>
-          )}
+          <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+            {PARTICLES.map((p, i) => {
+              const Icon = p.Icon;
+              return (
+                <motion.span
+                  key={i}
+                  className="absolute text-ea-petroleo/30"
+                  style={{ left: p.left }}
+                  initial={{ top: '108%', opacity: 0 }}
+                  animate={{
+                    top: '-12%',
+                    x: [0, p.drift, 0],
+                    opacity: [0, 0.5, 0.5, 0],
+                    rotate: [0, p.drift > 0 ? 12 : -12, 0],
+                  }}
+                  transition={{ duration: p.dur, delay: p.delay, repeat: Infinity, ease: 'easeInOut' }}
+                >
+                  <Icon size={p.size} strokeWidth={2} />
+                </motion.span>
+              );
+            })}
+          </div>
 
           {/* Aba lateral (nod ao material de marca) */}
           <span className="pointer-events-none absolute right-0 top-1/2 hidden -translate-y-1/2 translate-x-1/2 rotate-90 text-[0.7rem] font-bold uppercase tracking-[0.35em] text-ea-petroleo/40 lg:block">
@@ -141,8 +136,8 @@ export function TikTokShop() {
             <motion.span
               style={{ width: 56, height: 56 }}
               className="flex shrink-0 items-center justify-center overflow-hidden rounded-[24%] bg-[#010101] p-3 shadow-ea ring-1 ring-black/10"
-              animate={reduce ? undefined : { y: [0, -6, 0], rotate: [0, -4, 0] }}
-              transition={reduce ? undefined : { duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+              animate={{ y: [0, -6, 0], rotate: [0, -4, 0] }}
+              transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
             >
               <TikTokGlyph className="h-full w-full" />
             </motion.span>
@@ -168,18 +163,16 @@ export function TikTokShop() {
             <div className="flex flex-col">
               <span className="relative inline-flex w-fit">
                 {/* Halo neon pulsando atrás do número */}
-                {!reduce && (
-                  <motion.span
-                    aria-hidden
-                    className="pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[130%] w-[125%] -translate-x-1/2 -translate-y-1/2 rounded-full"
-                    style={{
-                      background: 'radial-gradient(circle, rgba(196,255,87,0.6), transparent 70%)',
-                      filter: 'blur(22px)',
-                    }}
-                    animate={{ opacity: [0.35, 0.85, 0.35], scale: [0.92, 1.06, 0.92] }}
-                    transition={{ duration: 3.4, repeat: Infinity, ease: 'easeInOut' }}
-                  />
-                )}
+                <motion.span
+                  aria-hidden
+                  className="pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[130%] w-[125%] -translate-x-1/2 -translate-y-1/2 rounded-full"
+                  style={{
+                    background: 'radial-gradient(circle, rgba(196,255,87,0.6), transparent 70%)',
+                    filter: 'blur(22px)',
+                  }}
+                  animate={{ opacity: [0.35, 0.85, 0.35], scale: [0.92, 1.06, 0.92] }}
+                  transition={{ duration: 3.4, repeat: Infinity, ease: 'easeInOut' }}
+                />
                 <span className="ea-tnum ea-display text-[clamp(3.5rem,9vw,6.5rem)] leading-[0.9] text-ea-petroleo">
                   <CountUp value={tiktokShop.stat.value} suffix={tiktokShop.stat.suffix} />
                 </span>
