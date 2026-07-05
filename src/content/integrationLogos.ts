@@ -18,13 +18,13 @@ const BASE = '/brand/integracoes';
 export const integrationLogos: Record<string, IntegrationLogo> = {
   // Plataformas de vendas
   shopify: { label: 'Shopify', file: `${BASE}/shopify.avif` },
-  nuvemshop: { label: 'Nuvemshop', file: `${BASE}/nuvemshop.avif` },
+  nuvemshop: { label: 'Nuvemshop', file: `${BASE}/nuvemshop.avif`, bg: '#0450C4' },
   yampi: { label: 'Yampi', file: `${BASE}/yampi.avif` },
-  payt: { label: 'Payt', file: `${BASE}/payt.avif` },
-  b4you: { label: 'B4You', file: `${BASE}/b4you.avif` },
-  baggy: { label: 'Baggy', file: `${BASE}/baggy.avif` },
+  payt: { label: 'Payt', file: `${BASE}/payt.avif`, bg: '#E7791E' },
+  b4you: { label: 'B4You', file: `${BASE}/b4you.avif`, bg: '#21263C' },
+  baggy: { label: 'Baggy', file: `${BASE}/baggy.avif`, bg: '#FB3D8A' },
   youshop: { label: 'Youshop', file: `${BASE}/youshop.avif` },
-  vtext: { label: 'Vtex', file: `${BASE}/vtext.avif` },
+  vtext: { label: 'Vtex', file: `${BASE}/vtext.avif`, bg: '#F71A64' },
 
   // Marketplaces
   mercadolivre: { label: 'Mercado Livre', file: `${BASE}/mercadolivre.avif`, bg: '#FFE600' },
@@ -35,7 +35,7 @@ export const integrationLogos: Record<string, IntegrationLogo> = {
   shein: { label: 'SHEIN', file: `${BASE}/shein.webp`, bg: '#000000' },
 
   // ERPs
-  bling: { label: 'Bling', file: `${BASE}/bling.avif` },
+  bling: { label: 'Bling', file: `${BASE}/bling.avif`, bg: '#34AC62' },
   tiny: { label: 'Tiny', file: `${BASE}/tiny.svg` },
   omie: { label: 'Omie', file: `${BASE}/omie.avif` },
   sap: { label: 'SAP', file: `${BASE}/sap.avif` },

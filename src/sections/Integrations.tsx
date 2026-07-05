@@ -14,8 +14,9 @@ function LogoTile({ slug }: { slug: string }) {
   const logo = integrationLogos[slug];
   if (!logo) return null;
   return (
-    <li className="flex flex-col items-center gap-1.5">
+    <li className="flex justify-center">
       <span
+        title={logo.label}
         className="flex aspect-square w-full max-w-[64px] items-center justify-center overflow-hidden rounded-[24%] p-[18%] shadow-ea-sm ring-1 ring-ea-petroleo/10 transition-transform duration-300 ease-ea will-change-transform hover:-translate-y-0.5"
         style={{ backgroundColor: logo.bg ?? '#FFFFFF' }}
       >
@@ -26,9 +27,6 @@ function LogoTile({ slug }: { slug: string }) {
           decoding="async"
           className="h-full w-full object-contain"
         />
-      </span>
-      <span className="text-center text-[0.62rem] font-medium leading-tight text-ea-soft">
-        {logo.label}
       </span>
     </li>
   );
