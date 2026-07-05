@@ -3,24 +3,58 @@ import { motion, useReducedMotion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 import { hero, site } from '@/content/content';
 import { EASE_EA } from '@/lib/motion';
+import { cn } from '@/lib/cn';
 import { Button } from '@/components/ui/Button';
 import { Arrow } from '@/components/brand/Arrow';
 import { StaticBackdrop } from '@/components/hero3d/StaticBackdrop';
 import { SceneErrorBoundary } from '@/components/hero3d/SceneErrorBoundary';
+import { MeshField } from '@/components/herobg/MeshField';
+import { BrazilMap } from '@/components/herobg/BrazilMap';
 
 // A cena 3D é pesada → carrega em chunk separado, depois do first paint.
 const PackageScene = lazy(() => import('@/components/hero3d/PackageScene'));
 
+// PRÉVIA: 3 direções de hero para o cliente escolher. Depois de decidir,
+// mantemos só a escolhida e removemos o seletor.
+const HERO_VARIANTS = [
+  { id: 'esteira', label: 'Esteira 3D' },
+  { id: 'malha', label: 'Malha viva' },
+  { id: 'mapa', label: 'Mapa BR' },
+] as const;
+type HeroVariant = (typeof HERO_VARIANTS)[number]['id'];
+
+function initialVariant(): HeroVariant {
+  if (typeof window === 'undefined') return 'esteira';
+  try {
+    const fromUrl = new URLSearchParams(window.location.search).get('hero');
+    const stored = window.localStorage.getItem('ea-hero');
+    const v = (fromUrl || stored) as HeroVariant;
+    if (HERO_VARIANTS.some((o) => o.id === v)) return v;
+  } catch {
+    /* ignore */
+  }
+  return 'esteira';
+}
+
 export function Hero() {
   const reduce = useReducedMotion();
   const [enable3d, setEnable3d] = useState(false);
+  const [variant, setVariant] = useState<HeroVariant>(initialVariant);
 
   // Monta o WebGL logo após o first paint (confiável em todos os browsers,
-  // inclusive Safari/iOS). Com reduced-motion a cena entra estática (paused).
+  // inclusive Safari/iOS).
   useEffect(() => {
     const t = window.setTimeout(() => setEnable3d(true), 180);
     return () => window.clearTimeout(t);
   }, []);
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem('ea-hero', variant);
+    } catch {
+      /* ignore */
+    }
+  }, [variant]);
 
   // Reveal em cortina (linha mascarada). Respeita reduced-motion.
   const Line = ({ children, delay = 0 }: { children: ReactNode; delay?: number }) => {
@@ -53,17 +87,20 @@ export function Hero() {
       id="top"
       className="ea-on-dark relative -mt-16 flex min-h-[100svh] items-start overflow-hidden bg-ea-petroleo pt-16 text-ea-cremewm sm:-mt-[70px] sm:pt-[70px]"
     >
-      {/* Cena 3D / fallback estático */}
+      {/* Fundo do hero (variante selecionada) */}
       <div className="absolute inset-0">
-        {enable3d ? (
-          <SceneErrorBoundary fallback={<StaticBackdrop />}>
-            <Suspense fallback={<StaticBackdrop />}>
-              <PackageScene paused={!!reduce} />
-            </Suspense>
-          </SceneErrorBoundary>
-        ) : (
-          <StaticBackdrop />
-        )}
+        {variant === 'esteira' &&
+          (enable3d ? (
+            <SceneErrorBoundary fallback={<StaticBackdrop />}>
+              <Suspense fallback={<StaticBackdrop />}>
+                <PackageScene />
+              </Suspense>
+            </SceneErrorBoundary>
+          ) : (
+            <StaticBackdrop />
+          ))}
+        {variant === 'malha' && <MeshField />}
+        {variant === 'mapa' && <BrazilMap />}
       </div>
 
       {/* Scrim para legibilidade do texto sobre a cena */}
@@ -141,6 +178,24 @@ export function Hero() {
           </motion.span>
         </motion.a>
       )}
+
+      {/* SELETOR DE PRÉVIA (provisório) — escolha a direção do hero */}
+      <div className="pointer-events-auto fixed bottom-4 right-4 z-[80] flex items-center gap-1 rounded-pill border border-ea-cremewm/15 bg-ea-petroleo/85 p-1 text-xs text-ea-cremewm shadow-ea-lg backdrop-blur">
+        <span className="hidden px-2 text-ea-soft-dark sm:inline">Prévia:</span>
+        {HERO_VARIANTS.map((o) => (
+          <button
+            key={o.id}
+            type="button"
+            onClick={() => setVariant(o.id)}
+            className={cn(
+              'rounded-pill px-3 py-1.5 font-medium transition-colors',
+              variant === o.id ? 'bg-ea-neon text-ea-petroleo' : 'text-ea-cremewm/80 hover:text-ea-cremewm',
+            )}
+          >
+            {o.label}
+          </button>
+        ))}
+      </div>
     </section>
   );
 }
