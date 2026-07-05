@@ -60,7 +60,7 @@ export function Hero() {
   return (
     <section
       id="top"
-      className="ea-on-dark relative -mt-16 flex min-h-[100svh] items-center overflow-hidden bg-ea-petroleo pt-16 text-ea-cremewm sm:-mt-[70px] sm:pt-[70px]"
+      className="ea-on-dark relative -mt-16 flex min-h-[100svh] items-start overflow-hidden bg-ea-petroleo pt-16 text-ea-cremewm sm:-mt-[70px] sm:pt-[70px]"
     >
       {/* Cena 3D / fallback estático */}
       <div className="absolute inset-0">
@@ -81,12 +81,12 @@ export function Hero() {
         aria-hidden
         style={{
           background:
-            'radial-gradient(120% 85% at 50% 42%, transparent 34%, rgba(18,51,54,0.55) 78%), linear-gradient(180deg, rgba(18,51,54,0.55) 0%, transparent 24%, transparent 58%, rgba(18,51,54,0.85) 100%)',
+            'radial-gradient(120% 80% at 50% 38%, transparent 30%, rgba(18,51,54,0.5) 76%), linear-gradient(180deg, rgba(18,51,54,0.75) 0%, rgba(18,51,54,0.35) 20%, transparent 44%, transparent 62%, rgba(18,51,54,0.82) 100%)',
         }}
       />
 
       {/* Conteúdo (pointer-events-none deixa o mouse chegar na cena p/ parallax) */}
-      <div className="ea-container-wide pointer-events-none relative z-10 flex flex-col items-center gap-6 py-28 text-center sm:gap-7">
+      <div className="ea-container-wide pointer-events-none relative z-10 flex flex-col items-center gap-6 pb-24 pt-[12vh] text-center sm:gap-7 sm:pt-[13vh]">
         <motion.span {...fade(0.05)} className="ea-kicker inline-flex items-center gap-2 text-ea-neon">
           <Arrow className="h-3.5 w-3.5" />
           {site.locais[0]} · {site.locais[1]}
