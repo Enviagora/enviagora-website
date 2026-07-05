@@ -15,21 +15,12 @@ export function Hero() {
   const reduce = useReducedMotion();
   const [enable3d, setEnable3d] = useState(false);
 
-  // Só monta o WebGL depois que a página pintou (protege o first paint).
+  // Monta o WebGL logo após o first paint (confiável em todos os browsers,
+  // inclusive Safari/iOS). Com reduced-motion a cena entra estática (paused).
   useEffect(() => {
-    if (reduce) return;
-    let idle: number;
-    const w = window as Window & {
-      requestIdleCallback?: (cb: () => void) => number;
-      cancelIdleCallback?: (id: number) => void;
-    };
-    if (w.requestIdleCallback) {
-      idle = w.requestIdleCallback(() => setEnable3d(true));
-      return () => w.cancelIdleCallback?.(idle);
-    }
-    const t = window.setTimeout(() => setEnable3d(true), 250);
+    const t = window.setTimeout(() => setEnable3d(true), 180);
     return () => window.clearTimeout(t);
-  }, [reduce]);
+  }, []);
 
   // Reveal em cortina (linha mascarada). Respeita reduced-motion.
   const Line = ({ children, delay = 0 }: { children: ReactNode; delay?: number }) => {
@@ -67,7 +58,7 @@ export function Hero() {
         {enable3d ? (
           <SceneErrorBoundary fallback={<StaticBackdrop />}>
             <Suspense fallback={<StaticBackdrop />}>
-              <PackageScene />
+              <PackageScene paused={!!reduce} />
             </Suspense>
           </SceneErrorBoundary>
         ) : (

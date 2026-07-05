@@ -1,14 +1,13 @@
 import { useMemo, useRef } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { EffectComposer, Bloom } from '@react-three/postprocessing';
 import * as THREE from 'three';
 
 /* ==========================================================================
    PackageScene — hero 3D: SISTEMA DE ESTEIRAS / SORTER (logística real).
-   Lanes paralelas de conveyor com caixas alinhadas fluindo em direção à
-   câmera, passando por um pórtico/scanner neon (estação de sorting), tudo
-   recuando com profundidade (fog). Ocupa a faixa inferior — título fica limpo.
-   Lazy-loaded pela Hero; nunca monta com prefers-reduced-motion.
+   Lanes paralelas de conveyor com CAIXAS realistas (papelão + fita + etiqueta
+   de envio) fluindo em direção à câmera. POV baixo: topo limpo p/ o título.
+   Sem pós-processamento (compatível com iOS/Safari). Lazy-loaded pela Hero.
+   `paused` (reduced-motion) renderiza um único frame estático.
    ========================================================================== */
 
 const PETROLEO = '#123336';
@@ -23,13 +22,13 @@ const BELT_W = 2.2;
 const Z_NEAR = 7;
 const Z_FAR = -30;
 const LEN = Z_NEAR - Z_FAR;
-const ACCENT_LANE = 2; // qual lane recebe o acento neon
+const ACCENT_LANE = 2;
 
 function isMobile() {
   return typeof window !== 'undefined' && window.innerWidth < 768;
 }
 
-/** Textura de "roletes" da esteira (linhas horizontais) para dar movimento. */
+/** Textura de "roletes" da esteira (linhas horizontais). */
 function useBeltTexture() {
   return useMemo(() => {
     const c = document.createElement('canvas');
@@ -53,46 +52,82 @@ function useBeltTexture() {
   }, []);
 }
 
-function Belts({ beltTex }: { beltTex: THREE.Texture }) {
-  const texRef = useRef(beltTex);
-  useFrame((_, delta) => {
-    // roletes correndo: desloca a UV no sentido do fluxo
-    texRef.current.offset.y -= delta * 0.6;
-  });
+/** Textura de caixa de papelão: base + lacre/fita + vinco central. */
+function useBoxTexture() {
+  return useMemo(() => {
+    const c = document.createElement('canvas');
+    c.width = c.height = 128;
+    const ctx = c.getContext('2d')!;
+    // base papelão com leve gradiente
+    const g = ctx.createLinearGradient(0, 0, 0, 128);
+    g.addColorStop(0, '#e7d0b3');
+    g.addColorStop(1, '#d3b892');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, 128, 128);
+    // vinco central (flaps)
+    ctx.strokeStyle = 'rgba(120,90,55,0.28)';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(64, 0);
+    ctx.lineTo(64, 128);
+    ctx.stroke();
+    // fita/lacre horizontal
+    ctx.fillStyle = 'rgba(226,206,170,0.75)';
+    ctx.fillRect(0, 54, 128, 20);
+    ctx.strokeStyle = 'rgba(255,255,255,0.25)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(0, 55);
+    ctx.lineTo(128, 55);
+    ctx.moveTo(0, 73);
+    ctx.lineTo(128, 73);
+    ctx.stroke();
+    const tex = new THREE.CanvasTexture(c);
+    tex.anisotropy = 4;
+    return tex;
+  }, []);
+}
 
-  return (
-    <>
-      {LANES.map((x, i) => (
-        <group key={x} position={[x, 0, (Z_NEAR + Z_FAR) / 2]}>
-          {/* superfície da esteira */}
-          <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-            <planeGeometry args={[BELT_W, LEN]} />
-            <meshStandardMaterial map={beltTex} color="#ffffff" roughness={0.92} metalness={0.08} />
-          </mesh>
-          {/* trilhos laterais */}
-          {[-1, 1].map((s) => (
-            <mesh key={s} position={[s * (BELT_W / 2 + 0.05), 0.11, 0]}>
-              <boxGeometry args={[0.1, 0.22, LEN]} />
-              <meshStandardMaterial color={RAIL} metalness={0.6} roughness={0.4} />
-            </mesh>
-          ))}
-          {/* fita neon discreta na lane de acento */}
-          {i === ACCENT_LANE && (
-            <mesh position={[0, 0.12, 0]}>
-              <boxGeometry args={[0.04, 0.02, LEN]} />
-              <meshStandardMaterial color={NEON} emissive={NEON} emissiveIntensity={0.75} />
-            </mesh>
-          )}
-        </group>
-      ))}
-    </>
-  );
+/** Textura de etiqueta de envio: código de barras + linhas de endereço. */
+function useLabelTexture() {
+  return useMemo(() => {
+    const c = document.createElement('canvas');
+    c.width = 128;
+    c.height = 96;
+    const ctx = c.getContext('2d')!;
+    ctx.fillStyle = '#fafaf5';
+    ctx.fillRect(0, 0, 128, 96);
+    ctx.strokeStyle = 'rgba(18,51,54,0.25)';
+    ctx.strokeRect(2, 2, 124, 92);
+    // faixa superior (transportadora) com acento neon
+    ctx.fillStyle = NEON;
+    ctx.fillRect(2, 2, 124, 14);
+    ctx.fillStyle = '#123336';
+    ctx.fillRect(8, 6, 34, 6);
+    // código de barras
+    let x = 10;
+    while (x < 118) {
+      const w = 1 + Math.round(Math.random() * 3);
+      ctx.fillStyle = '#123336';
+      ctx.fillRect(x, 22, w, 30);
+      x += w + 1 + Math.round(Math.random() * 3);
+    }
+    // linhas de endereço
+    ctx.fillStyle = 'rgba(18,51,54,0.55)';
+    ctx.fillRect(10, 60, 90, 5);
+    ctx.fillRect(10, 70, 108, 5);
+    ctx.fillRect(10, 80, 70, 5);
+    const tex = new THREE.CanvasTexture(c);
+    tex.anisotropy = 4;
+    return tex;
+  }, []);
 }
 
 type Pkg = { lane: number; z: number; speed: number; w: number; h: number; d: number; yaw: number; shade: number };
 
-function Packages() {
-  const ref = useRef<THREE.InstancedMesh>(null);
+function Packages({ boxTex, labelTex }: { boxTex: THREE.Texture; labelTex: THREE.Texture }) {
+  const boxRef = useRef<THREE.InstancedMesh>(null);
+  const labelRef = useRef<THREE.InstancedMesh>(null);
   const dummy = useMemo(() => new THREE.Object3D(), []);
   const color = useMemo(() => new THREE.Color(), []);
   const perLane = isMobile() ? 5 : 8;
@@ -101,17 +136,16 @@ function Packages() {
   const pkgs = useMemo<Pkg[]>(() => {
     const list: Pkg[] = [];
     for (let li = 0; li < LANES.length; li++) {
-      const speed = 3.4; // esteira anda em velocidade constante (realista)
       for (let k = 0; k < perLane; k++) {
         list.push({
           lane: LANES[li],
           z: Z_FAR + (LEN / perLane) * k + Math.random() * 0.6,
-          speed,
-          w: 0.8 + Math.random() * 0.5,
-          h: 0.5 + Math.random() * 0.35,
-          d: 0.8 + Math.random() * 0.5,
-          yaw: (Math.random() - 0.5) * 0.12,
-          shade: 0.82 + Math.random() * 0.18,
+          speed: 3.4,
+          w: 0.85 + Math.random() * 0.5,
+          h: 0.55 + Math.random() * 0.4,
+          d: 0.85 + Math.random() * 0.5,
+          yaw: (Math.random() - 0.5) * 0.14,
+          shade: 0.85 + Math.random() * 0.15,
         });
       }
     }
@@ -119,66 +153,91 @@ function Packages() {
   }, [perLane]);
 
   useFrame((_, delta) => {
-    const mesh = ref.current;
-    if (!mesh) return;
+    const box = boxRef.current;
+    const label = labelRef.current;
+    if (!box || !label) return;
+    const d = Math.min(delta, 0.05); // clamp p/ evitar salto após aba inativa
     for (let i = 0; i < pkgs.length; i++) {
       const p = pkgs[i];
-      p.z += p.speed * delta;
+      p.z += p.speed * d;
       if (p.z > Z_NEAR) p.z = Z_FAR + (p.z - Z_NEAR);
-      dummy.position.set(p.lane, p.h / 2 + 0.02, p.z);
+      const cy = p.h / 2 + 0.02;
+      // caixa
+      dummy.position.set(p.lane, cy, p.z);
       dummy.rotation.set(0, p.yaw, 0);
       dummy.scale.set(p.w, p.h, p.d);
       dummy.updateMatrix();
-      mesh.setMatrixAt(i, dummy.matrix);
+      box.setMatrixAt(i, dummy.matrix);
       color.setStyle(KRAFT).multiplyScalar(p.shade);
-      mesh.setColorAt(i, color);
+      box.setColorAt(i, color);
+      // etiqueta na face frontal (+Z), acompanhando o yaw
+      const sin = Math.sin(p.yaw);
+      const cos = Math.cos(p.yaw);
+      const off = p.d / 2 + 0.012;
+      dummy.position.set(p.lane + sin * off, cy + p.h * 0.05, p.z + cos * off);
+      dummy.rotation.set(0, p.yaw, 0);
+      dummy.scale.set(Math.min(p.w * 0.72, 0.62), Math.min(p.h * 0.62, 0.46), 1);
+      dummy.updateMatrix();
+      label.setMatrixAt(i, dummy.matrix);
     }
-    mesh.instanceMatrix.needsUpdate = true;
-    if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
+    box.instanceMatrix.needsUpdate = true;
+    label.instanceMatrix.needsUpdate = true;
+    if (box.instanceColor) box.instanceColor.needsUpdate = true;
   });
 
   return (
-    <instancedMesh ref={ref} args={[undefined, undefined, count]} castShadow>
-      <boxGeometry args={[1, 1, 1]} />
-      <meshStandardMaterial color={KRAFT} roughness={0.85} metalness={0.03} />
-    </instancedMesh>
+    <>
+      <instancedMesh ref={boxRef} args={[undefined, undefined, count]}>
+        <boxGeometry args={[1, 1, 1]} />
+        <meshStandardMaterial map={boxTex} roughness={0.82} metalness={0.02} />
+      </instancedMesh>
+      <instancedMesh ref={labelRef} args={[undefined, undefined, count]}>
+        <planeGeometry args={[1, 1]} />
+        <meshBasicMaterial map={labelTex} toneMapped={false} />
+      </instancedMesh>
+    </>
   );
 }
 
-/** Pórtico/scanner neon — estação de sorting por onde as caixas passam. */
-function ScannerGantry({ z }: { z: number }) {
-  const span = 12;
-  const h = 3;
-  const beamMat = (
-    <meshStandardMaterial color={NEON} emissive={NEON} emissiveIntensity={1.7} roughness={0.4} />
-  );
+function Belts({ beltTex, paused }: { beltTex: THREE.Texture; paused: boolean }) {
+  useFrame((_, delta) => {
+    if (paused) return;
+    beltTex.offset.y -= Math.min(delta, 0.05) * 0.6;
+  });
   return (
-    <group position={[0, 0, z]}>
-      {[-1, 1].map((s) => (
-        <mesh key={s} position={[s * (span / 2), h / 2, 0]}>
-          <boxGeometry args={[0.16, h, 0.16]} />
-          {beamMat}
-        </mesh>
+    <>
+      {LANES.map((x, i) => (
+        <group key={x} position={[x, 0, (Z_NEAR + Z_FAR) / 2]}>
+          <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+            <planeGeometry args={[BELT_W, LEN]} />
+            <meshStandardMaterial map={beltTex} color="#ffffff" roughness={0.92} metalness={0.08} />
+          </mesh>
+          {[-1, 1].map((s) => (
+            <mesh key={s} position={[s * (BELT_W / 2 + 0.05), 0.11, 0]}>
+              <boxGeometry args={[0.1, 0.22, LEN]} />
+              <meshStandardMaterial color={RAIL} metalness={0.6} roughness={0.4} />
+            </mesh>
+          ))}
+          {i === ACCENT_LANE && (
+            <mesh position={[0, 0.12, 0]}>
+              <boxGeometry args={[0.04, 0.02, LEN]} />
+              <meshStandardMaterial color={NEON} emissive={NEON} emissiveIntensity={0.8} />
+            </mesh>
+          )}
+        </group>
       ))}
-      <mesh position={[0, h, 0]}>
-        <boxGeometry args={[span + 0.16, 0.16, 0.16]} />
-        {beamMat}
-      </mesh>
-      {/* plano de leitura (scan) */}
-      <mesh position={[0, h / 2, 0]}>
-        <planeGeometry args={[span, h]} />
-        <meshBasicMaterial color={NEON} transparent opacity={0.05} side={THREE.DoubleSide} depthWrite={false} />
-      </mesh>
-      <pointLight color={NEON} intensity={7} distance={12} decay={1.7} position={[0, h * 0.7, 0]} />
-    </group>
+    </>
   );
 }
 
-function Rig() {
+function Rig({ paused }: { paused: boolean }) {
   const { camera } = useThree();
-  // POV baixo (cabeceira da esteira): horizonte fica embaixo, topo limpo p/ título.
   const target = useMemo(() => new THREE.Vector3(0, 1.7, -20), []);
   useFrame((state) => {
+    if (paused) {
+      camera.lookAt(target);
+      return;
+    }
     const t = state.clock.elapsedTime;
     const px = state.pointer.x;
     const py = state.pointer.y;
@@ -189,37 +248,34 @@ function Rig() {
   return null;
 }
 
-export default function PackageScene() {
+export default function PackageScene({ paused = false }: { paused?: boolean }) {
   const beltTex = useBeltTexture();
+  const boxTex = useBoxTexture();
+  const labelTex = useLabelTexture();
+
   return (
     <Canvas
-      dpr={[1, 1.75]}
+      dpr={[1, 2]}
+      frameloop={paused ? 'demand' : 'always'}
       gl={{ antialias: true, powerPreference: 'high-performance' }}
       camera={{ position: [0.6, 2.8, 13.5], fov: 42 }}
     >
       <color attach="background" args={[PETROLEO]} />
       <fog attach="fog" args={[PETROLEO, 12, 40]} />
 
-      <ambientLight color={CREME} intensity={0.5} />
-      {/* luz de galpão (zenital) */}
-      <directionalLight position={[3, 12, 4]} color={CREME} intensity={1.35} />
+      <ambientLight color={CREME} intensity={0.7} />
+      <directionalLight position={[3, 12, 4]} color={CREME} intensity={1.6} />
       <directionalLight position={[-6, 4, -8]} color={NEON} intensity={0.35} />
 
-      <Belts beltTex={beltTex} />
-      <Packages />
-      <ScannerGantry z={-21} />
+      <Belts beltTex={beltTex} paused={paused} />
+      <Packages boxTex={boxTex} labelTex={labelTex} />
 
-      {/* piso do galpão */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.15, (Z_NEAR + Z_FAR) / 2]}>
         <planeGeometry args={[60, LEN + 20]} />
         <meshStandardMaterial color={PETROLEO} roughness={1} metalness={0} />
       </mesh>
 
-      <Rig />
-
-      <EffectComposer>
-        <Bloom intensity={0.7} luminanceThreshold={0.6} luminanceSmoothing={0.2} mipmapBlur />
-      </EffectComposer>
+      <Rig paused={paused} />
     </Canvas>
   );
 }
