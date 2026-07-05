@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Truck, Check } from 'lucide-react';
-import brazil from '@svg-maps/brazil';
+import { brazilStates } from '@/content/brazilMap';
 import { logAlliance } from '@/content/content';
 import { Section } from '@/components/layout/Section';
 import { SectionHeading } from '@/components/ui/SectionHeading';
@@ -80,7 +80,7 @@ export function LogAlliance() {
             {/* Área do mapa (aspect do viewBox → overlays alinham por %) */}
             <div className="relative mx-auto w-full" style={{ aspectRatio: `${VB.w} / ${VB.h}` }}>
               <svg viewBox={`0 0 ${VB.w} ${VB.h}`} className="absolute inset-0 h-full w-full" aria-hidden>
-                {brazil.locations.map((loc) => (
+                {brazilStates.map((loc) => (
                   <path key={loc.id} d={loc.path} fill="var(--ea-petroleo)" fillOpacity={0.07} stroke="var(--ea-petroleo)" strokeOpacity={0.2} strokeWidth={0.6} />
                 ))}
                 {!reduce && (
