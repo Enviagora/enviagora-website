@@ -97,6 +97,19 @@ export const logAlliance = {
   savingBadge: { label: 'Economia no frete', value: '+40%' },
 } as const;
 
+export const tiktokShop = {
+  badge: 'Nº 1 em TikTok Shop',
+  title: 'A maior operação de TikTok Shop da América Latina.',
+  lead: 'Somos a logística que mais entrega para o TikTok Shop no continente — mais de 1 milhão de pacotes por mês, no ritmo que as vendas virais exigem.',
+  stat: { value: 1000000, suffix: '+', label: 'pacotes por mês' },
+  points: [
+    'Nº 1 em volume na América Latina',
+    'Integração nativa com o TikTok Shop',
+    'Operação pronta para picos de viral',
+  ],
+  cta: 'Quero escalar no TikTok Shop',
+} as const;
+
 export const benefits = {
   items: [
     {
