@@ -6,6 +6,7 @@ import { Section } from '@/components/layout/Section';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { Reveal } from '@/components/motion/Reveal';
 import { Button } from '@/components/ui/Button';
+import { TikTokGlyph } from '@/components/brand/TikTokGlyph';
 
 const groupIcons: LucideIcon[] = [Store, ShoppingBag, Settings2];
 
@@ -20,13 +21,18 @@ function LogoTile({ slug }: { slug: string }) {
         className="flex aspect-square w-full max-w-[64px] items-center justify-center overflow-hidden rounded-[24%] p-[18%] shadow-ea-sm ring-1 ring-ea-petroleo/10 transition-transform duration-300 ease-ea will-change-transform hover:-translate-y-0.5"
         style={{ backgroundColor: logo.bg ?? '#FFFFFF' }}
       >
-        <img
-          src={logo.file}
-          alt={`Logo ${logo.label}`}
-          loading="lazy"
-          decoding="async"
-          className="h-full w-full object-contain"
-        />
+        {/* O TikTok usa glyph próprio (nota branca) para aparecer no fundo escuro. */}
+        {slug === 'tiktok' ? (
+          <TikTokGlyph className="h-full w-full" />
+        ) : (
+          <img
+            src={logo.file}
+            alt={`Logo ${logo.label}`}
+            loading="lazy"
+            decoding="async"
+            className="h-full w-full object-contain"
+          />
+        )}
       </span>
     </li>
   );

@@ -6,6 +6,7 @@ import { Reveal } from '@/components/motion/Reveal';
 import { Button } from '@/components/ui/Button';
 import { Arrow } from '@/components/brand/Arrow';
 import { Logo } from '@/components/brand/Logo';
+import { TikTokGlyph } from '@/components/brand/TikTokGlyph';
 import { CountUp } from '@/components/motion/CountUp';
 
 /* ==========================================================================
@@ -44,14 +45,14 @@ export function TikTokShop() {
             TikTok Shop
           </span>
 
-          {/* Topo: seta + logo oficial do TikTok Shop (nota é escura → tile branco) */}
+          {/* Topo: seta + ícone do TikTok Shop (nota branca sobre fundo escuro) */}
           <div className="flex items-start justify-between gap-4">
             <Arrow className="h-8 w-8 text-ea-petroleo sm:h-10 sm:w-10" />
             <span
               style={{ width: 56, height: 56 }}
-              className="flex shrink-0 items-center justify-center overflow-hidden rounded-[24%] bg-white p-3 shadow-ea ring-1 ring-ea-petroleo/10"
+              className="flex shrink-0 items-center justify-center overflow-hidden rounded-[24%] bg-[#010101] p-3 shadow-ea ring-1 ring-black/10"
             >
-              <img src="/brand/integracoes/tiktok.avif" alt="TikTok Shop" className="h-full w-full object-contain" />
+              <TikTokGlyph className="h-full w-full" />
             </span>
           </div>
 
