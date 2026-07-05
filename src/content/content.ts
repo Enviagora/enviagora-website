@@ -31,6 +31,8 @@ export const nav = [
 ] as const;
 
 export const hero = {
+  // Eyebrow/kicker (material de branding — posicionamento do deck aprovado).
+  kicker: 'Fulfillment premium para marcas em escala',
   // "A única logística" é destacada no site.
   titlePre: 'A ',
   titleHighlight: 'única logística',

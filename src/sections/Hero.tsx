@@ -1,7 +1,7 @@
 import { lazy, Suspense, useEffect, useState, type ReactNode } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
-import { hero, site } from '@/content/content';
+import { hero } from '@/content/content';
 import { EASE_EA } from '@/lib/motion';
 import { Button } from '@/components/ui/Button';
 import { Arrow } from '@/components/brand/Arrow';
@@ -75,10 +75,10 @@ export function Hero() {
       />
 
       {/* Conteúdo (pointer-events-none deixa o mouse chegar na cena p/ parallax) */}
-      <div className="ea-container-wide pointer-events-none relative z-10 flex flex-col items-center gap-6 pb-24 pt-[13vh] text-center">
+      <div className="ea-container-wide pointer-events-none relative z-10 flex flex-col items-center gap-5 pb-24 pt-[5vh] text-center sm:gap-6 sm:pt-[12vh]">
         <motion.span {...fade(0.05)} className="ea-kicker inline-flex items-center gap-2 text-ea-neon">
           <Arrow className="h-3.5 w-3.5" />
-          {site.locais[0]} · {site.locais[1]}
+          {hero.kicker}
         </motion.span>
 
         <h1 className="ea-display ea-hero-shadow text-display-lg text-ea-cremewm">

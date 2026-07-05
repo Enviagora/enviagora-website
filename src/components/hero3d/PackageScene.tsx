@@ -21,7 +21,7 @@ const CREME = '#fefaef';
 
 const LANES = [-4.5, -1.5, 1.5, 4.5];
 const BELT_W = 2.2;
-const Z_NEAR = 7;
+const Z_NEAR = 15; // além da câmera (~13.5): caixas saem pela borda de baixo antes de reciclar
 const Z_FAR = -30;
 const LEN = Z_NEAR - Z_FAR;
 const ACCENT_LANE = 2;
@@ -229,7 +229,7 @@ function Packages() {
   const geom = useMemo(() => new RoundedBoxGeometry(1, 1, 1, 4, 0.08), []);
   const { map, normalMap, roughnessMap } = useBoxTextures();
   const labelTex = useLabelTexture();
-  const perLane = isMobile() ? 5 : 8;
+  const perLane = isMobile() ? 6 : 10;
   const count = LANES.length * perLane;
 
   const pkgs = useMemo<Pkg[]>(() => {
