@@ -6,32 +6,28 @@ import { Section } from '@/components/layout/Section';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { Reveal } from '@/components/motion/Reveal';
 import { Button } from '@/components/ui/Button';
-import { cn } from '@/lib/cn';
 
 const groupIcons: LucideIcon[] = [Store, ShoppingBag, Settings2];
 
-/** Um logo enquadrado como ícone de aplicativo (quadradinho arredondado). */
+/** Um logo enquadrado como ícone de aplicativo: miolo centralizado com respiro. */
 function LogoTile({ slug }: { slug: string }) {
   const logo = integrationLogos[slug];
   if (!logo) return null;
-  const cover = logo.fit !== 'contain';
   return (
-    <li className="flex flex-col items-center gap-2">
+    <li className="flex flex-col items-center gap-1.5">
       <span
-        className="flex aspect-square w-full items-center justify-center overflow-hidden rounded-[22%] shadow-ea-sm ring-1 ring-ea-petroleo/10 transition-transform duration-300 ease-ea will-change-transform hover:-translate-y-0.5"
-        style={{ backgroundColor: cover ? '#FFFFFF' : logo.bg ?? '#FFFFFF' }}
+        className="flex aspect-square w-full max-w-[64px] items-center justify-center overflow-hidden rounded-[24%] p-[18%] shadow-ea-sm ring-1 ring-ea-petroleo/10 transition-transform duration-300 ease-ea will-change-transform hover:-translate-y-0.5"
+        style={{ backgroundColor: logo.bg ?? '#FFFFFF' }}
       >
         <img
           src={logo.file}
           alt={`Logo ${logo.label}`}
           loading="lazy"
           decoding="async"
-          className={cn(
-            cover ? 'h-full w-full object-cover' : 'max-h-[62%] max-w-[64%] object-contain',
-          )}
+          className="h-full w-full object-contain"
         />
       </span>
-      <span className="text-center text-[0.68rem] font-medium leading-tight text-ea-soft">
+      <span className="text-center text-[0.62rem] font-medium leading-tight text-ea-soft">
         {logo.label}
       </span>
     </li>
@@ -65,7 +61,7 @@ export function Integrations() {
                   </div>
                 </div>
 
-                <ul className="mt-auto grid grid-cols-3 gap-x-4 gap-y-5 pt-2 sm:grid-cols-4">
+                <ul className="mt-auto grid grid-cols-4 gap-x-3 gap-y-4 pt-2">
                   {group.logos.map((slug) => (
                     <LogoTile key={slug} slug={slug} />
                   ))}
