@@ -5,21 +5,20 @@ import { Arrow } from '@/components/brand/Arrow';
 import { useParallax } from '@/hooks/useParallax';
 
 export function Footer() {
-  const arrowRef = useParallax<SVGSVGElement>(120);
+  const arrowRef = useParallax<HTMLSpanElement>(120);
   return (
     <footer className="ea-on-dark relative overflow-hidden bg-ea-petroleo text-ea-cremewm">
       {/* Seta gigante como marca d'água (grafismo do sistema, sangrando). */}
       <Arrow
         ref={arrowRef}
         className="pointer-events-none absolute -right-10 -top-16 h-72 w-72 text-ea-neon/[0.06] sm:h-96 sm:w-96"
-        aria-hidden
       />
 
       <div className="ea-container-wide relative py-16 sm:py-20">
         <div className="grid gap-12 lg:grid-cols-[1.4fr_1fr_1fr]">
           {/* Marca */}
           <div className="flex flex-col gap-5">
-            <Logo on="dark" className="h-7 w-auto" />
+            <Logo on="dark" className="h-7 w-auto self-start" />
             <p className="ea-display max-w-xs text-2xl text-ea-cremewm">{footer.tagline}</p>
             <p className="max-w-xs text-sm text-ea-soft-dark">{footer.pitch}</p>
           </div>

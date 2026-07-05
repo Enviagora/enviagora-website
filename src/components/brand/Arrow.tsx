@@ -1,39 +1,37 @@
 import { forwardRef } from 'react';
+import { cn } from '@/lib/cn';
 
-type ArrowProps = React.SVGProps<SVGSVGElement> & {
-  /** Rótulo acessível. Sem título, a seta é tratada como decorativa. */
+type ArrowProps = {
+  className?: string;
+  /** Rótulo acessível. Sem título, a seta é decorativa (aria-hidden). */
   title?: string;
 };
 
+const MASK = "url('/brand/seta-enviagora-neon.svg')";
+
 /**
- * Seta ↗ — símbolo proprietário da Enviagora (direção, acesso e precisão).
- * A cor herda de `currentColor` (use `text-ea-neon`, `text-ea-petroleo`, etc.),
- * permitindo animar/estilizar via CSS. Geometria fiel ao asset do Caminho 01.
+ * Seta ↗ OFICIAL da Enviagora. Renderizada como máscara CSS e colorida por
+ * `currentColor` — funciona em qualquer cor (use `text-ea-neon`, `text-ea-petroleo`,
+ * etc.) sem repetir o path no DOM. Controle o tamanho pela className (ex.: `h-4 w-4`).
  */
-export const Arrow = forwardRef<SVGSVGElement, ArrowProps>(function Arrow(
-  { title, strokeWidth = 17, ...props },
-  ref,
-) {
+export const Arrow = forwardRef<HTMLSpanElement, ArrowProps>(function Arrow({ className, title }, ref) {
   return (
-    <svg
+    <span
       ref={ref}
-      viewBox="0 0 100 100"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
       role={title ? 'img' : undefined}
+      aria-label={title}
       aria-hidden={title ? undefined : true}
-      {...props}
-    >
-      {title ? <title>{title}</title> : null}
-      <g
-        stroke="currentColor"
-        strokeWidth={strokeWidth}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <path d="M27 73 L73 27" />
-        <path d="M41 27 L73 27 L73 59" />
-      </g>
-    </svg>
+      className={cn('inline-block shrink-0 bg-current', className)}
+      style={{
+        WebkitMaskImage: MASK,
+        maskImage: MASK,
+        WebkitMaskRepeat: 'no-repeat',
+        maskRepeat: 'no-repeat',
+        WebkitMaskPosition: 'center',
+        maskPosition: 'center',
+        WebkitMaskSize: 'contain',
+        maskSize: 'contain',
+      }}
+    />
   );
 });
