@@ -20,9 +20,10 @@ const timeline = ['Pedido recebido', 'Em separação', 'Coletado', 'Em trânsito
 const nf = new Intl.NumberFormat('pt-BR');
 
 /** Números e estados que se atualizam sozinhos → o painel parece vivo. */
-function useLiveDashboard() {
+function useLiveDashboard(run: boolean) {
   const [s, setS] = useState({ enviados: 328, estoque: 12480, repo: 24, step: 0, flash: 0 });
   useEffect(() => {
+    if (!run) return;
     const t1 = window.setInterval(() => {
       setS((p) => ({
         ...p,
@@ -37,13 +38,13 @@ function useLiveDashboard() {
       window.clearInterval(t1);
       window.clearInterval(t2);
     };
-  }, []);
+  }, [run]);
   return s;
 }
 
 function MockDashboard() {
   const reduce = useReducedMotion();
-  const live = useLiveDashboard();
+  const live = useLiveDashboard(!reduce);
   const miniStats = [
     { k: 'Em estoque', tone: 'bg-ea-ceu', v: nf.format(live.estoque) },
     { k: 'Enviados hoje', tone: 'bg-ea-neon', v: nf.format(live.enviados) },
@@ -111,7 +112,7 @@ function MockDashboard() {
 
       {/* Card flutuante: pedido percorrendo a linha do tempo */}
       <motion.div
-        className="absolute -bottom-8 -right-4 w-56 rounded-ea border border-ea-petroleo/10 bg-white p-4 shadow-ea-lg sm:-right-8"
+        className="relative ml-auto mt-4 w-56 rounded-ea border border-ea-petroleo/10 bg-white p-4 shadow-ea-lg sm:absolute sm:-bottom-8 sm:-right-4 sm:mt-0 lg:-right-8"
         initial={reduce ? undefined : { opacity: 0, y: 16 }}
         whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
         viewport={VIEWPORT}

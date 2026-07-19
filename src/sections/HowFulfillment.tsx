@@ -1,5 +1,5 @@
-import { motion } from 'framer-motion';
-import { Building2, Warehouse, Truck } from 'lucide-react';
+import { motion, useReducedMotion } from 'framer-motion';
+import { Building2, Warehouse, Truck, Box } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { howFulfillment } from '@/content/content';
 import { Section } from '@/components/layout/Section';
@@ -18,6 +18,7 @@ const STEP_ICONS: LucideIcon[] = [Building2, Warehouse, Truck];
 
 export function HowFulfillment() {
   const { steps } = howFulfillment;
+  const reduce = useReducedMotion();
 
   return (
     <Section id="como-funciona" tone="ceu">
@@ -53,13 +54,18 @@ export function HowFulfillment() {
                 </div>
 
                 <p className="relative text-base leading-relaxed text-ea-petroleo/85">{step.body}</p>
+                <div className="relative mt-auto flex items-center gap-3 border-t border-ea-petroleo/10 pt-5" aria-hidden>
+                  <Box className="h-4 w-4 text-ea-petroleo/50" strokeWidth={1.5} />
+                  <span className="h-px flex-1 bg-gradient-to-r from-ea-petroleo/25 via-ea-neon to-ea-petroleo/10" />
+                  <span className="ea-tnum text-[0.58rem] tracking-[0.16em] text-ea-soft">FLOW / 0{i + 1}</span>
+                </div>
               </article>
 
               {/* Nó conector entre os passos (só no desktop) */}
               {!isLast && (
-                <span className="absolute left-full top-1/2 z-10 ml-4 hidden h-9 w-9 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-ea-petroleo/10 bg-white shadow-ea-sm md:flex">
+                <span className="absolute left-[calc(100%+1rem)] top-1/2 z-10 hidden h-7 w-7 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-ea-petroleo/10 bg-white shadow-ea-sm md:flex">
                   <motion.span
-                    animate={{ x: [0, 2, 0], y: [0, -2, 0] }}
+                    animate={reduce ? undefined : { x: [0, 2, 0], y: [0, -2, 0] }}
                     transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
                   >
                     <Arrow className="h-4 w-4 text-ea-petroleo" />

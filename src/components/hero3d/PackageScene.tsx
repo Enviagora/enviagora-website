@@ -10,7 +10,7 @@ import { useDeviceTilt, type Tilt } from '@/hooks/useDeviceTilt';
    Material com mapa de cor (oclusão nas quinas + fita + carimbo), normal map
    (relevo de fita/vinco/papel), roughness map e reflexo de estúdio (Environment
    via Lightformers, sem rede). Cantos arredondados, sombras, variedade.
-   Anima sempre. Sem pós-processamento (compatível iOS/Safari).
+   Sem pós-processamento (compatível iOS/Safari).
    ========================================================================== */
 
 const PETROLEO = '#123336';
@@ -87,7 +87,7 @@ function getLogo() {
       const img = new Image();
       img.onload = () => resolve(img);
       img.onerror = () => resolve(null);
-      img.src = '/brand/logo-oficial-escuro.png';
+      img.src = '/brand/wordmark-petroleo.svg';
     });
   }
   return logoPromise;
@@ -101,7 +101,8 @@ function getLogo() {
  */
 function useBoxTextures() {
   return useMemo(() => {
-    const S = 512;
+    // 256 mantém detalhe suficiente no hero e reduz bastante o trabalho síncrono.
+    const S = 256;
 
     // ---- COR ----
     const cc = document.createElement('canvas');
@@ -114,7 +115,7 @@ function useBoxTextures() {
     ctx.fillStyle = g;
     ctx.fillRect(0, 0, S, S);
     // fibras / mottle (denso e fino)
-    for (let i = 0; i < 14000; i++) {
+    for (let i = 0; i < 3600; i++) {
       const a = Math.random() * 0.06;
       ctx.fillStyle = Math.random() > 0.5 ? `rgba(85,55,25,${a})` : `rgba(255,246,224,${a})`;
       ctx.fillRect(Math.random() * S, Math.random() * S, 1.3, 1.3);
@@ -193,7 +194,7 @@ function useBoxTextures() {
     const h = hc.getContext('2d')!;
     h.fillStyle = '#808080';
     h.fillRect(0, 0, S, S);
-    for (let i = 0; i < S * S * 0.45; i++) {
+    for (let i = 0; i < S * S * 0.18; i++) {
       const v = 128 + (Math.random() * 2 - 1) * 11;
       h.fillStyle = `rgb(${v},${v},${v})`;
       h.fillRect(Math.random() * S, Math.random() * S, 1, 1);
@@ -352,7 +353,7 @@ function makePkg(lane: number, z: number): Pkg {
     h = 0.55 + Math.random() * 0.3;
     d = 0.82 + Math.random() * 0.32;
   }
-  return { lane, z, speed: 3.2, w, h, d, yaw: (Math.random() - 0.5) * 0.12, shade: 0.88 + Math.random() * 0.12 };
+  return { lane, z, speed: 2.45, w, h, d, yaw: (Math.random() - 0.5) * 0.09, shade: 0.9 + Math.random() * 0.1 };
 }
 
 function Packages() {
@@ -367,7 +368,7 @@ function Packages() {
   const labelTex = useLabelTexture();
   const tapeTex = useTapeTexture();
   const normalScale = useMemo(() => new THREE.Vector2(1.4, 1.4), []);
-  const perLane = isMobile() ? 6 : 10;
+  const perLane = isMobile() ? 5 : 8;
   const count = LANES.length * perLane;
 
   const pkgs = useMemo<Pkg[]>(() => {
@@ -386,9 +387,11 @@ function Packages() {
     const tape = tapeRef.current;
     if (!box || !label || !tape) return;
     const dt = Math.min(delta, 0.05);
+    // Partida progressiva: elimina o aspecto brusco quando o Canvas aparece.
+    const startup = Math.min(1, Math.max(0.12, _.clock.elapsedTime / 2.4));
     for (let i = 0; i < pkgs.length; i++) {
       const p = pkgs[i];
-      p.z += p.speed * dt;
+      p.z += p.speed * startup * dt;
       if (p.z > Z_NEAR) p.z = Z_FAR + (p.z - Z_NEAR);
       const cy = p.h / 2 + 0.02;
       dummy.position.set(p.lane, cy, p.z);
@@ -478,6 +481,34 @@ function Belts({ beltTex }: { beltTex: THREE.Texture }) {
   );
 }
 
+/** Portal de leitura: uma referência visual clara a sorter/automação logística. */
+function ScanGate() {
+  return (
+    <group position={[0, 0, -7]}>
+      {[-6.1, 6.1].map((x) => (
+        <mesh key={x} position={[x, 1.55, 0]} castShadow>
+          <boxGeometry args={[0.16, 3.1, 0.2]} />
+          <meshStandardMaterial color={RAIL} metalness={0.7} roughness={0.32} />
+        </mesh>
+      ))}
+      <mesh position={[0, 3.05, 0]} castShadow>
+        <boxGeometry args={[12.35, 0.18, 0.22]} />
+        <meshStandardMaterial color={RAIL} metalness={0.7} roughness={0.32} />
+      </mesh>
+      <mesh position={[0, 2.82, 0.02]}>
+        <boxGeometry args={[11.8, 0.025, 0.035]} />
+        <meshStandardMaterial color={NEON} emissive={NEON} emissiveIntensity={1.4} />
+      </mesh>
+      {LANES.map((x) => (
+        <mesh key={x} position={[x, 1.15, 0.03]}>
+          <planeGeometry args={[1.7, 2.1]} />
+          <meshBasicMaterial color={NEON} transparent opacity={0.025} side={THREE.DoubleSide} />
+        </mesh>
+      ))}
+    </group>
+  );
+}
+
 function Rig({ tiltRef }: { tiltRef: MutableRefObject<Tilt> }) {
   const { camera } = useThree();
   const target = useMemo(() => new THREE.Vector3(0, 2.4, -22), []);
@@ -502,7 +533,7 @@ export default function PackageScene() {
 
   return (
     <Canvas
-      dpr={[1, 2]}
+      dpr={[1, 1.5]}
       shadows={!mobile}
       gl={{ antialias: true, powerPreference: 'high-performance' }}
       camera={{ position: [0.6, 2.7, 13.5], fov: 42 }}
@@ -539,6 +570,7 @@ export default function PackageScene() {
 
       <Belts beltTex={beltTex} />
       <Packages />
+      <ScanGate />
 
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.15, (Z_NEAR + Z_FAR) / 2]} receiveShadow>
         <planeGeometry args={[60, LEN + 20]} />

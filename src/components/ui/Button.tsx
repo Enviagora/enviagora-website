@@ -25,7 +25,7 @@ type ButtonProps = {
 const MAGNETIC: Record<Variant, boolean> = { primary: true, secondary: true, ghost: false, 'ghost-dark': false };
 
 const base =
-  'group relative inline-flex items-center justify-center gap-2 rounded-pill font-sans font-semibold leading-none ease-ea select-none focus-visible:outline-none disabled:opacity-50 disabled:pointer-events-none';
+  'group relative inline-flex items-center justify-center gap-2 rounded-pill font-sans font-semibold leading-none ease-ea select-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ea-neon disabled:opacity-50 disabled:pointer-events-none';
 
 const sizeCls: Record<Size, string> = {
   md: 'px-6 py-3 text-[0.9rem]',

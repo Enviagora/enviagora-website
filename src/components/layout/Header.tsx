@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { cn } from '@/lib/cn';
@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/Button';
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -19,10 +20,20 @@ export function Header() {
 
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : '';
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setOpen(false);
+    };
+    if (open) document.addEventListener('keydown', onKeyDown);
     return () => {
       document.body.style.overflow = '';
+      document.removeEventListener('keydown', onKeyDown);
     };
   }, [open]);
+
+  const closeMenu = () => {
+    setOpen(false);
+    window.requestAnimationFrame(() => menuButtonRef.current?.focus());
+  };
 
   // Barra flutua sobre o hero escuro → conteúdo claro no topo; escuro ao rolar.
   const dark = !scrolled;
@@ -64,6 +75,7 @@ export function Header() {
               {hero.cta}
             </Button>
             <button
+              ref={menuButtonRef}
               type="button"
               onClick={() => setOpen(true)}
               className={cn(
@@ -71,6 +83,8 @@ export function Header() {
                 dark ? 'text-ea-cremewm' : 'text-ea-petroleo',
               )}
               aria-label="Abrir menu"
+              aria-expanded={open}
+              aria-controls="menu-mobile"
             >
               <Menu className="h-6 w-6" />
             </button>
@@ -82,6 +96,7 @@ export function Header() {
       <AnimatePresence>
         {open && (
           <motion.div
+            id="menu-mobile"
             className="fixed inset-0 z-[60] flex flex-col bg-ea-petroleo text-ea-cremewm lg:hidden"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -92,9 +107,10 @@ export function Header() {
               <Logo on="dark" className="h-6 w-auto" />
               <button
                 type="button"
-                onClick={() => setOpen(false)}
+                onClick={closeMenu}
                 className="inline-flex h-10 w-10 items-center justify-center rounded-pill text-ea-cremewm"
                 aria-label="Fechar menu"
+                autoFocus
               >
                 <X className="h-6 w-6" />
               </button>
@@ -104,7 +120,7 @@ export function Header() {
                 <motion.a
                   key={item.href}
                   href={item.href}
-                  onClick={() => setOpen(false)}
+                  onClick={closeMenu}
                   className="ea-display border-b border-ea-cremewm/10 py-4 text-3xl text-ea-cremewm"
                   initial={{ opacity: 0, x: -16 }}
                   animate={{ opacity: 1, x: 0 }}
@@ -113,7 +129,7 @@ export function Header() {
                   {item.label}
                 </motion.a>
               ))}
-              <Button href="#contato" variant="primary" size="lg" className="mt-8 self-start" onClick={() => setOpen(false)}>
+              <Button href="#contato" variant="primary" size="lg" className="mt-8 self-start" onClick={closeMenu}>
                 {hero.cta}
               </Button>
             </nav>
