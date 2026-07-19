@@ -101,7 +101,7 @@ export function Hero() {
           {hero.kicker}
         </motion.span>
 
-        <h1 className="ea-display ea-hero-shadow max-w-[12ch] text-display-lg text-ea-cremewm lg:text-display-xl">
+        <h1 className="ea-display ea-hero-shadow max-w-[15ch] text-display-lg text-ea-cremewm">
           <Line delay={0.15}>
             {hero.titlePre}
             <span className="relative inline-block">
