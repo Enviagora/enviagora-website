@@ -5,6 +5,7 @@ import { ScrollProgress } from '@/components/layout/ScrollProgress';
 
 import { Hero } from '@/sections/Hero';
 import { SocialProof } from '@/sections/SocialProof';
+import { OperationalPulse } from '@/sections/OperationalPulse';
 import { TikTokShop } from '@/sections/TikTokShop';
 import { Niches } from '@/sections/Niches';
 import { Process } from '@/sections/Process';
@@ -36,6 +37,7 @@ export default function App() {
       <main id="conteudo">
         <Hero />
         <SocialProof />
+        <OperationalPulse />
         <TikTokShop />
         <Niches />
         <Process />

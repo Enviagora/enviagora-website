@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { Truck, Check } from 'lucide-react';
 import { brazilStates } from '@/content/brazilMap';
 import { logAlliance } from '@/content/content';
@@ -36,12 +36,13 @@ const py = (y: number) => `${(y / VB.h) * 100}%`;
 
 export function LogAlliance() {
   const [active, setActive] = useState(3); // começa no Sudeste (perto do CD)
+  const reduce = useReducedMotion();
 
-  // Roda em loop para todos (inclusive reduce-motion) — pedido do cliente.
   useEffect(() => {
+    if (reduce) return;
     const id = window.setInterval(() => setActive((a) => (a + 1) % REGIONS.length), 3200);
     return () => window.clearInterval(id);
-  }, []);
+  }, [reduce]);
 
   const region = REGIONS[active];
 

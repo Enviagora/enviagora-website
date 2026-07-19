@@ -61,7 +61,7 @@ export function ContactForm() {
         <Reveal delay={0.1}>
           <div className="rounded-ea-lg bg-ea-creme p-6 shadow-ea-lg sm:p-8">
             {submitted ? (
-              <div className="flex min-h-[26rem] flex-col items-center justify-center gap-4 text-center">
+              <div className="flex min-h-[26rem] flex-col items-center justify-center gap-4 text-center" role="status" aria-live="polite">
                 <span className="flex h-16 w-16 items-center justify-center rounded-full bg-ea-neon">
                   <CheckCircle2 className="h-8 w-8 text-ea-petroleo" aria-hidden />
                 </span>
@@ -72,7 +72,7 @@ export function ContactForm() {
                 </p>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="flex flex-col gap-5" noValidate>
+              <form onSubmit={handleSubmit} className="flex flex-col gap-5">
                 <p className="text-sm text-ea-soft">{contactForm.instruction}</p>
 
                 <label className={labelCls}>
@@ -88,12 +88,12 @@ export function ContactForm() {
                     {f.whatsapp}
                     <Required />
                   </span>
-                  <div className="grid grid-cols-[1.4fr_0.6fr_1fr] gap-2">
+                  <div className="grid grid-cols-[1fr_0.65fr] gap-2 sm:grid-cols-[1.4fr_0.6fr_1fr]">
                     <select className={cn(inputCls, 'appearance-none')} name="pais" defaultValue="55" aria-label={f.whatsapp}>
                       <option value="55">{f.whatsappCountry}</option>
                     </select>
-                    <input className={inputCls} name="ddd" inputMode="numeric" placeholder={f.whatsappDdd} required aria-label={f.whatsappDdd} />
-                    <input className={inputCls} name="numero" inputMode="numeric" placeholder={f.whatsappNumero} required autoComplete="tel-national" aria-label={f.whatsappNumero} />
+                    <input className={inputCls} name="ddd" inputMode="numeric" pattern="[0-9]{2}" maxLength={2} placeholder={f.whatsappDdd} required aria-label={f.whatsappDdd} />
+                    <input className={cn(inputCls, 'col-span-2 sm:col-span-1')} name="numero" inputMode="numeric" pattern="[0-9]{8,9}" maxLength={9} placeholder={f.whatsappNumero} required autoComplete="tel-national" aria-label={f.whatsappNumero} />
                   </div>
                 </div>
 
@@ -107,7 +107,7 @@ export function ContactForm() {
                   </label>
                   <label className={labelCls}>
                     <span>{f.site}</span>
-                    <input className={inputCls} name="site" type="text" inputMode="url" autoComplete="url" />
+                    <input className={inputCls} name="site" type="url" inputMode="url" autoComplete="url" placeholder="https://" />
                   </label>
                 </div>
 

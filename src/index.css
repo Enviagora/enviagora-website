@@ -4,16 +4,6 @@
    Regra: use as variáveis --ea-* e os tokens do Tailwind, nunca hardcode cor.
    ========================================================================== */
 
-/* Sora self-hosted (sans/wordmark) — garante a marca mesmo sem rede.
-   Fraunces (serif de display) carrega via <link> no index.html. */
-@font-face {
-  font-family: 'Sora';
-  font-style: normal;
-  font-weight: 300 700;
-  font-display: swap;
-  src: url('/fonts/Sora.ttf') format('truetype');
-}
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -58,6 +48,14 @@
   @media (prefers-reduced-motion: reduce) {
     html {
       scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
     }
   }
 

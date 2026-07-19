@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { Check, Heart, Music2, Package } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { tiktokShop } from '@/content/content';
@@ -49,6 +49,7 @@ const PARTICLES: Particle[] = [
 ];
 
 export function TikTokShop() {
+  const reduce = useReducedMotion();
   return (
     <Section id="tiktok-shop" tone="creme">
       <Reveal>
@@ -61,7 +62,7 @@ export function TikTokShop() {
             aria-hidden
             className="pointer-events-none absolute -z-10 h-[60%] w-[60%] rounded-full opacity-60 blur-2xl"
             style={{ background: 'radial-gradient(circle, rgba(255,255,255,0.6), transparent 70%)' }}
-            animate={{ x: ['-10%', '60%', '-10%'], y: ['-20%', '80%', '-20%'] }}
+            animate={reduce ? undefined : { x: ['-10%', '60%', '-10%'], y: ['-20%', '80%', '-20%'] }}
             transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
           />
 
@@ -103,7 +104,7 @@ export function TikTokShop() {
 
           {/* Partículas de engajamento subindo (energia viral do TikTok) */}
           <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-            {PARTICLES.map((p, i) => {
+            {!reduce && PARTICLES.map((p, i) => {
               const Icon = p.Icon;
               return (
                 <motion.span
@@ -136,7 +137,7 @@ export function TikTokShop() {
             <motion.span
               style={{ width: 56, height: 56 }}
               className="flex shrink-0 items-center justify-center overflow-hidden rounded-[24%] bg-[#010101] p-3 shadow-ea ring-1 ring-black/10"
-              animate={{ y: [0, -6, 0], rotate: [0, -4, 0] }}
+              animate={reduce ? undefined : { y: [0, -6, 0], rotate: [0, -4, 0] }}
               transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
             >
               <TikTokGlyph className="h-full w-full" />
@@ -170,7 +171,7 @@ export function TikTokShop() {
                     background: 'radial-gradient(circle, rgba(196,255,87,0.6), transparent 70%)',
                     filter: 'blur(22px)',
                   }}
-                  animate={{ opacity: [0.35, 0.85, 0.35], scale: [0.92, 1.06, 0.92] }}
+                  animate={reduce ? undefined : { opacity: [0.35, 0.85, 0.35], scale: [0.92, 1.06, 0.92] }}
                   transition={{ duration: 3.4, repeat: Infinity, ease: 'easeInOut' }}
                 />
                 <span className="ea-tnum ea-display text-[clamp(3.5rem,9vw,6.5rem)] leading-[0.9] text-ea-petroleo">
