@@ -46,8 +46,8 @@ export function ContactForm() {
               {[`Operação em ${site.locais[0]} e ${site.locais[1]}`, 'Resposta de um especialista', 'Sem taxas escondidas'].map(
                 (t) => (
                   <li key={t} className="flex items-center gap-3 text-ea-cremewm">
-                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-ea-sm bg-ea-neon">
-                      <Arrow className="h-3.5 w-3.5 text-ea-petroleo" />
+                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-ea-sm bg-ea-petroleo">
+                      <Arrow className="h-3.5 w-3.5 text-ea-neon" />
                     </span>
                     <span className="text-sm">{t}</span>
                   </li>

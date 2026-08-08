@@ -1,5 +1,5 @@
-/** EnviAgora — Tailwind theme (Re-design 2026 · Caminho 01 "Evolução Silenciosa")
- *  Base: enviagora-branding-caminho01/tailwind.config.js (HEX oficiais da marca).
+/** EnviAgora — Tailwind theme (Re-design 2026 · Caminho 02 "Autoridade Técnica")
+ *  Base: HEX oficiais da marca (paleta preservada do redesign).
  *  Estendido com escala tipográfica, sombras e espaçamentos do design system.
  *  Regra: nada de cor/spacing hardcoded nos componentes — sempre via estes tokens.
  */
@@ -25,8 +25,12 @@ export default {
         },
       },
       fontFamily: {
-        serif: ['Fraunces', 'Georgia', 'Times New Roman', 'serif'], // títulos
-        sans: ['Sora', 'ui-sans-serif', 'system-ui', 'sans-serif'], // resto + wordmark
+        // "Autoridade Técnica": Satoshi é a única família — tipografia como
+        // protagonista. `serif` fica apontando para Satoshi por compatibilidade
+        // com classes existentes (não há mais display serif no sistema).
+        sans: ['Satoshi', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        serif: ['Satoshi', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        display: ['Satoshi', 'ui-sans-serif', 'system-ui', 'sans-serif'],
       },
       letterSpacing: {
         label: '0.14em', // rótulos em CAIXA ALTA (kickers)
@@ -41,10 +45,12 @@ export default {
       },
       fontSize: {
         // escala editorial — display grande em serif
-        'display-xl': ['clamp(3rem, 8vw, 7rem)', { lineHeight: '0.98', letterSpacing: '-0.02em' }],
-        'display-lg': ['clamp(2.5rem, 6vw, 5rem)', { lineHeight: '1.0', letterSpacing: '-0.02em' }],
-        'display-md': ['clamp(2rem, 4.5vw, 3.5rem)', { lineHeight: '1.03', letterSpacing: '-0.015em' }],
-        'display-sm': ['clamp(1.6rem, 3.2vw, 2.4rem)', { lineHeight: '1.08', letterSpacing: '-0.01em' }],
+        // Escala de display em Satoshi — tracking negativo mais firme, do jeito
+        // que grotescas técnicas pedem em corpo grande (leitura institucional).
+        'display-xl': ['clamp(3rem, 8vw, 7rem)', { lineHeight: '0.95', letterSpacing: '-0.035em' }],
+        'display-lg': ['clamp(2.5rem, 6vw, 5rem)', { lineHeight: '0.98', letterSpacing: '-0.033em' }],
+        'display-md': ['clamp(2rem, 4.5vw, 3.5rem)', { lineHeight: '1.02', letterSpacing: '-0.03em' }],
+        'display-sm': ['clamp(1.6rem, 3.2vw, 2.4rem)', { lineHeight: '1.06', letterSpacing: '-0.025em' }],
       },
       boxShadow: {
         // sombras discretas e frias, coerentes com o petróleo (nunca pretas puras)

@@ -88,7 +88,7 @@ export function Hero() {
             <span className="relative inline-block">
               <span className="relative z-10">{hero.titleHighlight}</span>
               <motion.span
-                className="absolute inset-x-[-0.04em] bottom-[0.04em] z-0 h-[0.22em] origin-left rounded-full bg-ea-neon"
+                className="absolute inset-x-[-0.04em] bottom-[0.005em] z-0 h-[0.13em] origin-left rounded-full bg-ea-neon"
                 aria-hidden
                 initial={reduce ? undefined : { scaleX: 0 }}
                 animate={reduce ? undefined : { scaleX: 1 }}

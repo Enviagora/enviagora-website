@@ -38,8 +38,8 @@ export function Solution() {
           return (
             <Reveal key={f.title} delay={(i % 3) * 0.06}>
               <article className="group flex h-full flex-col gap-3 bg-ea-creme p-7 transition-colors duration-300 hover:bg-white">
-                <span className="flex h-11 w-11 items-center justify-center rounded-ea bg-ea-neon transition-transform duration-300 ease-ea group-hover:-translate-y-0.5">
-                  <Icon className="h-6 w-6 text-ea-petroleo" strokeWidth={1.7} aria-hidden />
+                <span className="flex h-11 w-11 items-center justify-center rounded-ea bg-ea-petroleo transition-transform duration-300 ease-ea group-hover:-translate-y-0.5">
+                  <Icon className="h-6 w-6 text-ea-neon" strokeWidth={1.7} aria-hidden />
                 </span>
                 <h3 className="ea-display mt-1 text-lg text-ea-petroleo">{f.title}</h3>
                 <p className="text-sm leading-relaxed text-ea-soft">{f.body}</p>
