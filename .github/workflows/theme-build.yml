@@ -1,0 +1,44 @@
+name: Tema Shopify — assets atualizados
+
+# O Shopify sincroniza esta branch direto com o tema (integração GitHub) e
+# não roda build: o que está commitado em assets/ é o que vai ao ar. Este job
+# falha se alguém mudou o app React e esqueceu de rodar `npm run build:theme`.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'index.html'
+      - 'vite.config.ts'
+      - 'tailwind.config.js'
+      - 'postcss.config.*'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'assets/enviagora-home*'
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-theme:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run build:theme
+
+      - name: Conferir se assets/ está em dia com o código
+        run: |
+          changes="$(git status --porcelain -- assets)"
+          if [ -n "$changes" ]; then
+            echo "::error::Os arquivos assets/enviagora-home* estão desatualizados. Rode 'npm run build:theme' e faça commit do resultado."
+            echo "$changes"
+            exit 1
+          fi
+          echo "assets/ em dia."

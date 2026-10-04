@@ -1,125 +1,102 @@
-# Enviagora — Website
+# Enviagora — Site (tema Shopify)
 
-Site institucional (one-pager) da **Enviagora**, o fulfillment/3PL premium para marcas em escala.
-Reconstruído do zero com identidade visual nova (**Re-design 2026 · Caminho 01 "Evolução Silenciosa"**),
-preservando 100% do copywriting original.
+Home institucional da **Enviagora** (fulfillment para marcas em escala) como **tema
+Shopify**, com a identidade do Re-design 2026 · Caminho 02 "Autoridade Técnica".
 
-> _"A única logística que funciona."_ — Logística premium / quiet scale: a operação silenciosa por trás das marcas que lideram.
+Este repositório tem duas partes:
 
----
+| Pasta | O que é | Quem lê |
+|---|---|---|
+| `layout/` `templates/` `sections/` `snippets/` `assets/` `config/` `locales/` | **O tema Shopify** (Dawn 12 + nova home). Precisa ficar na raiz da branch. | Shopify (integração GitHub) |
+| `src/` `index.html` `vite.config.ts` … | **O app React** da home (fonte). O build vira arquivos `assets/enviagora-home*`. | Você / Vite |
 
-## ✨ Stack
-
-- **[Vite](https://vitejs.dev/)** + **React 18** + **TypeScript**
-- **[Tailwind CSS](https://tailwindcss.com/)** (tema da marca em `tailwind.config.js`)
-- **[React Three Fiber](https://r3f.docs.pmnd.rs/) + [three.js](https://threejs.org/) + drei + postprocessing** — cena 3D "cinema" do hero (esteira de pacotes + hub neon com bloom)
-- **[Framer Motion](https://www.framer.com/motion/)** — reveals no scroll, micro-interações, reveal cinematográfico do título
-- **[GSAP](https://gsap.com/) + ScrollTrigger** — parallax scrubado (elementos decorativos)
-- **[Lucide](https://lucide.dev/)** — ícones vetoriais
-- **Fontes:** [Sora](https://fonts.google.com/specimen/Sora) (self-hosted) + [Fraunces](https://fonts.google.com/specimen/Fraunces) (Google Fonts, fallback Georgia)
-
-Sem backend — SPA estático. O formulário tem um **placeholder de integração** (ver `src/sections/ContactForm.tsx`).
+O Shopify ignora as pastas que não são de tema, então as duas convivem na mesma branch.
 
 ---
 
-## 🚀 Como rodar
+## Como a home funciona dentro do tema
+
+- `templates/index.json` usa o layout `enviagora` e a seção `enviagora-home`.
+- `layout/enviagora.liquid` é um layout enxuto (SEO, favicon, Satoshi, rastreamento,
+  `content_for_header`) **sem** o header/footer do Dawn — a home tem os próprios.
+- `sections/enviagora-home.liquid` carrega `assets/enviagora-home.js` + `.css` e monta o
+  app em `#enviagora-home`. No editor de tema dá para trocar os IDs do formulário HubSpot.
+- `snippets/enviagora-tracking.liquid` concentra o **HubSpot tracking** (portal 44097462)
+  e o **Meta Pixel** (410733041890285); é usado pelos dois layouts.
+- As **demais páginas** (GemPages, `/pages/plataforma`, contato, políticas…) continuam no
+  `layout/theme.liquid` do Dawn, sem mudanças.
+
+### Formulário de contato
+
+É o **formulário oficial do HubSpot** (portal `44097462`, form
+`909bd17e-13cd-40b2-b996-96f5817b8587`, região `na1`) — o mesmo do site atual, então os
+leads caem no CRM com as mesmas notificações e workflows. Ele roda num iframe do HubSpot:
+campos, textos e cores do formulário se ajustam **no HubSpot**, não aqui.
+
+---
+
+## Desenvolvimento
 
 ```bash
-npm install      # instala as dependências
-npm run dev      # ambiente de desenvolvimento (http://localhost:5173)
-npm run build    # build de produção (type-check + Vite) → dist/
-npm run preview  # serve o build de produção localmente
-npm run lint     # ESLint
+npm install
+npm run dev           # app em http://localhost:5173 (preview rápido, fora do Shopify)
+npm run build:theme   # gera assets/enviagora-home* para o tema  ← rode antes de commitar
+npm run build         # build SPA em dist/ (preview estático/bolt)
 ```
+
+**Fluxo de mudança:** editar `src/` → `npm run build:theme` → commit (código **e**
+`assets/`) → push. O Shopify não roda build; ele usa o que está commitado em `assets/`.
+O workflow `.github/workflows/theme-build.yml` falha se os assets estiverem desatualizados.
+
+Onde mexer:
+- **Textos:** `src/content/content.ts`
+- **Cores, tipografia, raios:** `tailwind.config.js` + `src/index.css` (resumo em `docs/BRANDING.md`)
+- **Logos da marca / clientes / integrações:** `src/assets/`
 
 Requisitos: Node 18+ (testado em Node 22).
 
 ---
 
-## 🧩 Importar no bolt.new
+## Conectar ao Shopify (uma vez)
 
-Este é um projeto Vite padrão e auto-suficiente, pronto para o [bolt.new](https://bolt.new):
+1. Instale o app **Shopify GitHub** na organização `Enviagora` com acesso a este repositório.
+2. No admin: **Loja virtual › Temas › Adicionar tema › Conectar do GitHub** → escolha
+   `Enviagora/enviagora-website` e a branch **`main`**.
+3. O tema conectado chega **despublicado**. Use **Visualizar** para revisar a home.
+4. Quando aprovar: **Publicar**.
 
-1. Suba este repositório no GitHub.
-2. No bolt.new, use **"Import from GitHub"** e cole a URL do repo
-   (ou abra `https://bolt.new/~/github.com/USUARIO/REPO`).
-3. O bolt roda `npm install` e `npm run dev` automaticamente. Sem passos extras.
+A sincronização é nos dois sentidos: push na `main` atualiza o tema; salvar no editor
+de tema gera um commit do bot `shopify` na `main` (faça `git pull` antes de trabalhar).
+Mais em <https://shopify.dev/docs/storefronts/themes/tools/github>.
 
-Alternativa: baixe o ZIP do repositório e arraste para o bolt.new.
+> Dica: depois de publicado, cada push na `main` vai direto ao ar. Para ter um
+> ambiente de revisão, conecte uma branch `preview` a um segundo tema despublicado.
 
----
+## Colocar no domínio (DNS)
 
-## 📁 Estrutura
+Hoje `enviagora.com.br` (raiz e www) aponta para o **HubSpot CMS**, não para o Shopify.
+Para a nova home aparecer no domínio, o DNS precisa voltar para o Shopify:
 
-```
-enviagora-website/
-├── index.html                  # SEO, Open Graph, preconnect de fontes
-├── public/
-│   ├── brand/                  # logos e grafismos SVG (claro/escuro/mono/seta/chevron)
-│   ├── fonts/Sora.ttf          # fonte self-hosted
-│   ├── favicon.svg             # símbolo (seta) neon
-│   └── og-image.(png|svg)      # imagem de compartilhamento social
-├── docs/BRANDING.md            # guia de identidade visual (Caminho 01)
-├── tailwind.config.js          # tokens da marca (cores, fontes, radius, sombras, escala)
-└── src/
-    ├── content/content.ts      # 👈 TODO o copy verbatim (fonte única de texto)
-    ├── index.css               # tokens --ea-*, base, @font-face, utilitários
-    ├── components/
-    │   ├── brand/              # Logo · Arrow (seta) · Chevron
-    │   ├── layout/             # TopBanner · Header · Footer · Section
-    │   ├── ui/                 # Button · Pill · SectionHeading · Marquee
-    │   ├── hero3d/             # PackageScene (cena 3D) · StaticBackdrop · SceneErrorBoundary
-    │   └── motion/             # Reveal · CountUp
-    ├── hooks/useParallax.ts    # parallax GSAP + ScrollTrigger (respeita reduced-motion)
-    ├── lib/                    # cn (classnames) · motion (presets Framer)
-    └── sections/               # as 13 seções do one-pager (ver App.tsx)
-```
+1. Shopify: **Configurações › Domínios › Conectar domínio existente** → `enviagora.com.br`.
+2. No provedor de DNS: registro **A** da raiz → `23.227.38.65` e **CNAME** `www` →
+   `shops.myshopify.com` (confira os valores que o Shopify mostrar nessa tela).
+3. No HubSpot, desconecte o domínio do site para não haver conflito de SSL/redirect.
 
-### Onde mexer no quê
-- **Textos do site:** só em `src/content/content.ts`. Nada de copy hardcoded nos componentes.
-- **Cores / fontes / espaçamentos:** `tailwind.config.js` + `src/index.css` (variáveis `--ea-*`). Nunca hardcode cor.
-- **Identidade/regras de marca:** `docs/BRANDING.md`.
+O HubSpot continua recebendo os leads e o tracking — só deixa de hospedar a página.
 
 ---
 
-## 🎨 Design system (resumo)
+## Pendências (fora do código)
 
-| Papel | Token | HEX |
-|---|---|---|
-| Escuro / autoridade | `ea-petroleo` | `#123336` |
-| Acento único | `ea-neon` | `#C4FF57` |
-| Fundo claro | `ea-creme` | `#FEFAEF` |
-| Complementar | `ea-ceu` | `#C4DBE0` |
-| Wellness | `ea-lavanda` | `#C9C2D6` |
-| Neutro | `ea-coolgrey` | `#DEE3E0` |
-| Quente / embalagem | `ea-kraft` | `#EBD9C7` |
-| Contraste | `ea-preto` | `#000000` |
-
-**Regra de ouro:** base neutra + **um** acento neon por peça. Verde neon nunca em texto corrido — só CTA, seta, realce.
-**Tipografia:** títulos em **Fraunces** (serif de display) · resto + wordmark em **Sora**. **Raio:** 20px / pill.
-
----
-
-## ♿ Acessibilidade & Performance
-
-- Semântica (`header`/`main`/`section`/`nav`/`footer`), hierarquia de headings, `alt`/`aria-label`.
-- Foco visível on-brand, skip-link "Pular para o conteúdo".
-- **`prefers-reduced-motion` respeitado** em todas as animações (fallback estático).
-- Mobile-first, responsivo (mobile → ultrawide), sem scroll horizontal.
-- Fontes com `display: swap`; libs de animação em chunks separados para não travar o first paint.
-- **Hero 3D** carrega em chunk próprio **depois do first paint** (`requestIdleCallback`), com **fallback estático** (`StaticBackdrop`) enquanto carrega, sem WebGL ou com **`prefers-reduced-motion`**. Menos caixas no mobile para manter 60fps.
-
----
-
-## 📝 Pendências / placeholders (preencher com dados reais)
-
-Estes pontos usam placeholders — **não foram inventados dados sensíveis**:
-
-- **Rodapé:** e-mail, telefone e **CNPJ** estão vazios em `src/content/content.ts` (`footer.contato`). Links legais apontam para `#`.
-- **Formulário:** `ContactForm.tsx` tem um `TODO(integração)` no `handleSubmit` — plugar o endpoint/CRM real.
-- **Logos das marcas/plataformas:** exibidos como wordmarks em texto (não recebemos os SVGs oficiais). Substituir por assets reais quando disponíveis.
-- **Serif oficial:** o brand usa uma serif de display comercial não confirmada; adotamos **Fraunces** (gratuita, Google Fonts) como equivalente. Trocar em `tailwind.config.js`/`index.css` se confirmarem a fonte oficial.
-
----
-
-_Identidade: Enviagora Re-design — Identidade Visual, 2026 (Caminho 01). Copy: verbatim do site enviagora.com.br._
+- **HubSpot › formulário:** os textos de consentimento (LGPD) estão em cinza escuro sobre
+  fundo escuro — quase invisíveis; o telefone vem com 🇺🇸 +1 como país padrão. Ajustar no
+  editor de formulário do HubSpot (cor do texto rico / país padrão Brasil).
+- **Shopify › Preferências:** título e meta description da página inicial (SEO).
+- **Shopify › Políticas:** preencher Privacidade e Termos (o rodapé aponta para
+  `/policies/privacy-policy` e `/policies/terms-of-service`).
+- **Logos dos clientes:** os arquivos do site atual são pequenos (≈70–180px). SVGs ou PNGs
+  maiores deixam o carrossel mais nítido em telas retina (`src/assets/clientes/`).
+- **Rodapé:** e-mail, telefone e CNPJ em `src/content/content.ts` (`footer.contato`).
+- **Footer do Dawn (`sections/footer.liquid`):** tem um script do Resend que espera uma API
+  key no navegador. Nunca coloque uma chave real ali — ficaria pública para qualquer
+  visitante (e neste repositório, que é público).
