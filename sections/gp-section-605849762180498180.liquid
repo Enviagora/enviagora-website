@@ -1,0 +1,883 @@
+
+    
+    
+    <style {% if section.settings.section_preload == "false" %} class="gps-link gps-style" type="text/disabled-css" {% endif %}>.gps-605849762180498180.gps.gpsil [style*="--bg:"]{background:var(--bg)}.gps-605849762180498180.gps.gpsil [style*="--bga:"]{background-attachment:var(--bga)}.gps-605849762180498180.gps.gpsil [style*="--bgc:"]{background-color:var(--bgc)}.gps-605849762180498180.gps.gpsil [style*="--bgi:"]{background-image:var(--bgi)}.gps-605849762180498180.gps.gpsil [style*="--bgp:"]{background-position:var(--bgp)}.gps-605849762180498180.gps.gpsil [style*="--bgr:"]{background-repeat:var(--bgr)}.gps-605849762180498180.gps.gpsil [style*="--bgs:"]{background-size:var(--bgs)}.gps-605849762180498180.gps.gpsil [style*="--b:"]{border:var(--b)}.gps-605849762180498180.gps.gpsil [style*="--bb:"]{border-bottom:var(--bb)}.gps-605849762180498180.gps.gpsil [style*="--bc:"]{border-color:var(--bc)}.gps-605849762180498180.gps.gpsil [style*="--bblr:"]{border-bottom-left-radius:var(--bblr)}.gps-605849762180498180.gps.gpsil [style*="--bbrr:"]{border-bottom-right-radius:var(--bbrr)}.gps-605849762180498180.gps.gpsil [style*="--bl:"]{border-left:var(--bl)}.gps-605849762180498180.gps.gpsil [style*="--bs:"]{border-style:var(--bs)}.gps-605849762180498180.gps.gpsil [style*="--bt:"]{border-top:var(--bt)}.gps-605849762180498180.gps.gpsil [style*="--btlr:"]{border-top-left-radius:var(--btlr)}.gps-605849762180498180.gps.gpsil [style*="--btrr:"]{border-top-right-radius:var(--btrr)}.gps-605849762180498180.gps.gpsil [style*="--bw:"]{border-width:var(--bw)}.gps-605849762180498180.gps.gpsil [style*="--shadow:"]{box-shadow:var(--shadow)}.gps-605849762180498180.gps.gpsil [style*="--c:"]{color:var(--c)}.gps-605849762180498180.gps.gpsil [style*="--cg:"]{-moz-column-gap:var(--cg);column-gap:var(--cg)}.gps-605849762180498180.gps.gpsil [style*="--fd:"]{flex-direction:var(--fd)}.gps-605849762180498180.gps.gpsil [style*="--ff:"]{font-family:var(--ff)}.gps-605849762180498180.gps.gpsil [style*="--size:"]{font-size:var(--size)}.gps-605849762180498180.gps.gpsil [style*="--weight:"]{font-weight:var(--weight)}.gps-605849762180498180.gps.gpsil [style*="--gg:"]{grid-gap:var(--gg)}.gps-605849762180498180.gps.gpsil [style*="--gtc:"]{grid-template-columns:var(--gtc)}.gps-605849762180498180.gps.gpsil [style*="--h:"]{height:var(--h)}.gps-605849762180498180.gps.gpsil [style*="--jc:"]{justify-content:var(--jc)}.gps-605849762180498180.gps.gpsil [style*="--ls:"]{letter-spacing:var(--ls)}.gps-605849762180498180.gps.gpsil [style*="--lh:"]{line-height:var(--lh)}.gps-605849762180498180.gps.gpsil [style*="--tdt:"]{text-decoration-thickness:var(--tdt)}.gps-605849762180498180.gps.gpsil [style*="--tdl:"]{text-decoration-line:var(--tdl)}.gps-605849762180498180.gps.gpsil [style*="--m:"]{margin:var(--m)}.gps-605849762180498180.gps.gpsil [style*="--mb:"]{margin-bottom:var(--mb)}.gps-605849762180498180.gps.gpsil [style*="--ml:"]{margin-left:var(--ml)}.gps-605849762180498180.gps.gpsil [style*="--op:"]{opacity:var(--op)}.gps-605849762180498180.gps.gpsil [style*="--o:"]{order:var(--o)}.gps-605849762180498180.gps.gpsil [style*="--pc:"]{place-content:var(--pc)}.gps-605849762180498180.gps.gpsil [style*="--p:"]{padding:var(--p)}.gps-605849762180498180.gps.gpsil [style*="--pb:"]{padding-bottom:var(--pb)}.gps-605849762180498180.gps.gpsil [style*="--pl:"]{padding-left:var(--pl)}.gps-605849762180498180.gps.gpsil [style*="--pr:"]{padding-right:var(--pr)}.gps-605849762180498180.gps.gpsil [style*="--pt:"]{padding-top:var(--pt)}.gps-605849762180498180.gps.gpsil [style*="--rg:"]{row-gap:var(--rg)}.gps-605849762180498180.gps.gpsil [style*="--ta:"]{text-align:var(--ta)}.gps-605849762180498180.gps.gpsil [style*="--ts:"]{text-shadow:var(--ts)}.gps-605849762180498180.gps.gpsil [style*="--tt:"]{text-transform:var(--tt)}.gps-605849762180498180.gps.gpsil [style*="--t:"]{transform:var(--t)}.gps-605849762180498180.gps.gpsil [style*="--v:"]{visibility:var(--v)}.gps-605849762180498180.gps.gpsil [style*="--w:"]{width:var(--w)}.gps-605849762180498180.gps.gpsil [style*="--line-clamp:"]{display:-webkit-box;overflow:hidden;-webkit-box-orient:vertical;-webkit-line-clamp:var(--line-clamp)}@media only screen and (max-width:1024px){.gps-605849762180498180.gps.gpsil [style*="--size-tablet:"]{font-size:var(--size-tablet)}.gps-605849762180498180.gps.gpsil [style*="--h-tablet:"]{height:var(--h-tablet)}.gps-605849762180498180.gps.gpsil [style*="--lh-tablet:"]{line-height:var(--lh-tablet)}.gps-605849762180498180.gps.gpsil [style*="--ml-tablet:"]{margin-left:var(--ml-tablet)}.gps-605849762180498180.gps.gpsil [style*="--pb-tablet:"]{padding-bottom:var(--pb-tablet)}.gps-605849762180498180.gps.gpsil [style*="--pl-tablet:"]{padding-left:var(--pl-tablet)}.gps-605849762180498180.gps.gpsil [style*="--pr-tablet:"]{padding-right:var(--pr-tablet)}.gps-605849762180498180.gps.gpsil [style*="--pt-tablet:"]{padding-top:var(--pt-tablet)}.gps-605849762180498180.gps.gpsil [style*="--v-tablet:"]{visibility:var(--v-tablet)}.gps-605849762180498180.gps.gpsil [style*="--w-tablet:"]{width:var(--w-tablet)}.gps-605849762180498180.gps.gpsil [style*="--line-clamp-tablet:"]{display:-webkit-box;overflow:hidden;-webkit-box-orient:vertical;-webkit-line-clamp:var(--line-clamp-tablet)}}@media only screen and (max-width:767px){.gps-605849762180498180.gps.gpsil [style*="--bga-mobile:"]{background-attachment:var(--bga-mobile)}.gps-605849762180498180.gps.gpsil [style*="--bgc-mobile:"]{background-color:var(--bgc-mobile)}.gps-605849762180498180.gps.gpsil [style*="--bgi-mobile:"]{background-image:var(--bgi-mobile)}.gps-605849762180498180.gps.gpsil [style*="--bgp-mobile:"]{background-position:var(--bgp-mobile)}.gps-605849762180498180.gps.gpsil [style*="--bgr-mobile:"]{background-repeat:var(--bgr-mobile)}.gps-605849762180498180.gps.gpsil [style*="--bgs-mobile:"]{background-size:var(--bgs-mobile)}.gps-605849762180498180.gps.gpsil [style*="--size-mobile:"]{font-size:var(--size-mobile)}.gps-605849762180498180.gps.gpsil [style*="--gg-mobile:"]{grid-gap:var(--gg-mobile)}.gps-605849762180498180.gps.gpsil [style*="--h-mobile:"]{height:var(--h-mobile)}.gps-605849762180498180.gps.gpsil [style*="--jc-mobile:"]{justify-content:var(--jc-mobile)}.gps-605849762180498180.gps.gpsil [style*="--lh-mobile:"]{line-height:var(--lh-mobile)}.gps-605849762180498180.gps.gpsil [style*="--mb-mobile:"]{margin-bottom:var(--mb-mobile)}.gps-605849762180498180.gps.gpsil [style*="--pb-mobile:"]{padding-bottom:var(--pb-mobile)}.gps-605849762180498180.gps.gpsil [style*="--pl-mobile:"]{padding-left:var(--pl-mobile)}.gps-605849762180498180.gps.gpsil [style*="--pr-mobile:"]{padding-right:var(--pr-mobile)}.gps-605849762180498180.gps.gpsil [style*="--pt-mobile:"]{padding-top:var(--pt-mobile)}.gps-605849762180498180.gps.gpsil [style*="--ta-mobile:"]{text-align:var(--ta-mobile)}.gps-605849762180498180.gps.gpsil [style*="--v-mobile:"]{visibility:var(--v-mobile)}.gps-605849762180498180.gps.gpsil [style*="--w-mobile:"]{width:var(--w-mobile)}.gps-605849762180498180.gps.gpsil [style*="--line-clamp-mobile:"]{display:-webkit-box;overflow:hidden;-webkit-box-orient:vertical;-webkit-line-clamp:var(--line-clamp-mobile)}}.gps-605849762180498180 .-gp-rotate-90,.gps-605849762180498180 .gp-rotate-180,.gps-605849762180498180 .gp-rotate-90{--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1}.gps-605849762180498180 .gp-g-paragraph-1{font-family:var(--g-p1-ff);font-size:var(--g-p1-size);font-style:var(--g-p1-fs);font-weight:var(--g-p1-weight);letter-spacing:var(--g-p1-ls);line-height:var(--g-p1-lh)}.gps-605849762180498180 .gp-relative{position:relative}.gps-605849762180498180 .gp-mx-auto{margin-left:auto;margin-right:auto}.gps-605849762180498180 .gp-mb-0{margin-bottom:0}.gps-605849762180498180 .gp-flex{display:flex}.gps-605849762180498180 .gp-inline-flex{display:inline-flex}.gps-605849762180498180 .gp-grid{display:grid}.gps-605849762180498180 .\!gp-hidden{display:none!important}.gps-605849762180498180 .gp-hidden{display:none}.gps-605849762180498180 .gp-min-h-0{min-height:0}.gps-605849762180498180 .gp-w-full{width:100%}.gps-605849762180498180 .gp-max-w-full{max-width:100%}.gps-605849762180498180 .-gp-rotate-90{--tw-rotate:-90deg}.gps-605849762180498180 .-gp-rotate-90,.gps-605849762180498180 .gp-rotate-180{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.gps-605849762180498180 .gp-rotate-180{--tw-rotate:180deg}.gps-605849762180498180 .gp-rotate-90{--tw-rotate:90deg;transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.gps-605849762180498180 .gp-cursor-pointer{cursor:pointer}.gps-605849762180498180 .gp-grid-rows-\[0fr\]{grid-template-rows:0fr}.gps-605849762180498180 .gp-grid-rows-\[1fr\]{grid-template-rows:1fr}.gps-605849762180498180 .gp-flex-col{flex-direction:column}.gps-605849762180498180 .gp-items-center{align-items:center}.gps-605849762180498180 .gp-justify-center{justify-content:center}.gps-605849762180498180 .gp-gap-\[16px\]{gap:16px}.gps-605849762180498180 .gp-overflow-hidden{overflow:hidden}.gps-605849762180498180 .gp-overflow-clip{overflow:clip}.gps-605849762180498180 .gp-break-all{word-break:break-all}.gps-605849762180498180 .gp-text-\[var\(--icon-expand-active-color\)\]{color:var(--icon-expand-active-color)}.gps-605849762180498180 .gp-text-g-text-1{color:var(--g-c-text-1)}.gps-605849762180498180 .gp-transition-all{transition-duration:.15s;transition-property:all;transition-timing-function:cubic-bezier(.4,0,.2,1)}.gps-605849762180498180 .gp-transition-colors{transition-duration:.15s;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke;transition-timing-function:cubic-bezier(.4,0,.2,1)}.gps-605849762180498180 .gp-duration-200{transition-duration:.2s}.gps-605849762180498180 .gp-duration-500{transition-duration:.5s}.gps-605849762180498180 .gp-ease-in-out{transition-timing-function:cubic-bezier(.4,0,.2,1)}.gps-605849762180498180 .after\:gp-absolute:after{content:var(--tw-content);position:absolute}.gps-605849762180498180 .after\:gp-left-\[2px\]:after{content:var(--tw-content);left:2px}.gps-605849762180498180 .after\:gp-top-0:after{content:var(--tw-content);top:0}.gps-605849762180498180 .after\:gp-w-full:after{content:var(--tw-content);width:100%}.gps-605849762180498180 .after\:gp-select-none:after{content:var(--tw-content);-webkit-user-select:none;-moz-user-select:none;user-select:none}.gps-605849762180498180 .after\:gp-truncate:after{content:var(--tw-content);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.gps-605849762180498180 .after\:gp-text-black:after{content:var(--tw-content);--tw-text-opacity:1;color:rgb(0 0 0/var(--tw-text-opacity,1))}.gps-605849762180498180 .after\:gp-opacity-20:after{content:var(--tw-content);opacity:.2}.gps-605849762180498180 .after\:gp-content-\[\'Your_custom_text_goes_here\'\]:after{--tw-content:"Your custom text goes here";content:var(--tw-content)}.gps-605849762180498180 .empty\:gp-pl-\[2px\]:empty{padding-left:2px}@media (hover:hover) and (pointer:fine){.gps-605849762180498180 .gp-group:hover .group-hover\:\[color\:var\(--icon-expand-hover-color\)\]{color:var(--icon-expand-hover-color)}.gps-605849762180498180 .gp-group:hover .group-hover\:\[color\:var\(--text-hover-color\)\!important\]{color:var(--text-hover-color)!important}}@media (max-width:1024px){.gps-605849762180498180 .tablet\:\!gp-hidden{display:none!important}.gps-605849762180498180 .tablet\:gp-hidden{display:none}}@media (max-width:767px){.gps-605849762180498180 .mobile\:\!gp-hidden{display:none!important}.gps-605849762180498180 .mobile\:gp-hidden{display:none}}.gps-605849762180498180 .\[\&\>svg\]\:\!gp-h-\[var\(--height-iconCollapseSize\)\]>svg{height:var(--height-iconCollapseSize)!important}.gps-605849762180498180 .\[\&\>svg\]\:\!gp-w-full>svg{width:100%!important}.gps-605849762180498180 .\[\&_\*\]\:gp-max-w-full *{max-width:100%}</style>
+    <style {% if section.settings.section_preload == "false" %} class="gps-link" type="text/disabled-css" {% endif %}>@font-face {
+  font-family: 'Sora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/sora/v17/xMQOuFFYT72X5wkB_18qmnndmSe1mX-K.ttf) format('truetype');
+}
+
+
+@font-face {
+  font-family: 'Sora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/sora/v17/xMQOuFFYT72X5wkB_18qmnndmSdSnn-K.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Sora';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/sora/v17/xMQOuFFYT72X5wkB_18qmnndmSeMmX-K.ttf) format('truetype');
+}
+</style>
+  
+    
+    
+    
+
+    {% assign locationOrigin = request.origin | append: routes.root_url | split: '/' | join: '/' %}
+
+    
+        <section
+          class="gp-mx-auto gp-max-w-full [&_*]:gp-max-w-full {% if section.settings.section_preload == "false" %}gps-lazy {% endif %}"
+          style="--w:100%;--w-tablet:calc(var(--g-ct-w, 100%) + 2 * var(--g-ct-p, 15px));--w-mobile:calc(var(--g-ct-w, 100%) + 2 * var(--g-ct-p, 15px));--pl:none;--pl-tablet:none;--pl-mobile:none;--pr:none;--pr-tablet:none;--pr-mobile:none"
+        >
+          
+    <gp-row gp-data='{"background":{"desktop":{"attachment":"scroll","color":"transparent","image":{"backupFileKey":"gempages_490759501482296354-6eb55f3f-670a-44e4-b113-a33142efe2e3.webp","height":1728,"src":"https://cdn.shopify.com/s/files/1/0709/0595/4577/files/Frame_427321987_11zon.webp","storage":"FILE_CONTENT","width":3840},"position":{"x":50,"y":50},"preload":false,"repeat":"no-repeat","size":"cover","type":"image"},"mobile":{"attachment":"scroll","color":"transparent","image":{"backupFileKey":"gempages_490759501482296354-6eb55f3f-670a-44e4-b113-a33142efe2e3.webp","height":1728,"src":"https://cdn.shopify.com/s/files/1/0709/0595/4577/files/Frame_427321987_11zon.webp","storage":"FILE_CONTENT","width":3840},"position":{"x":0,"y":50},"preload":false,"repeat":"no-repeat","size":"cover","type":"image"}},"uid":"gwqNEmI_ri"}' data-id="gwqNEmI_ri" id="gwqNEmI_ri" data-same-height-subgrid-container class="gwqNEmI_ri gp-relative gp-mx-auto gp-mb-0 gp-grid gp-max-w-full gp-transition-colors gp-duration-200 gp-ease-in-out [&_*]:gp-max-w-full gp-grid-rows-[1fr]" style="--blockPadding:base;--bs:none;--bw:1px 1px 1px 1px;--bc:var(--g-c-line-3, line-3);--d:grid;--d-mobile:grid;--d-tablet:grid;--op:100%;--bblr:0px;--bbrr:0px;--btlr:0px;--btrr:0px;--pt:30px;--pl:0px;--pb:61px;--pr:0px;--pt-mobile:10px;--pl-mobile:10px;--pb-mobile:30px;--pr-mobile:10px;--pt-tablet:30px;--pl-tablet:0px;--pb-tablet:61px;--pr-tablet:0px;--cg:16px;--rg:0px;--gtc:minmax(0, 12fr);--w:100%;--bgc:transparent;--bgc-mobile:transparent;--bgi:url(https://cdn.shopify.com/s/files/1/0709/0595/4577/files/Frame_427321987_11zon.webp);--bgi-mobile:url(https://cdn.shopify.com/s/files/1/0709/0595/4577/files/Frame_427321987_11zon.webp);--bgp:50% 50%;--bgp-mobile:0% 50%;--bgs:cover;--bgs-mobile:cover;--bgr:no-repeat;--bgr-mobile:no-repeat;--bga:scroll;--bga-mobile:scroll;--pc:start">
+      
+
+      <div
+      data-same-height-display-contents
+      style="--jc:start"
+      class="g2SfKC1QtL gp-relative gp-flex gp-flex-col"
+    >
+      
+    
+
+    
+
+    
+    <gp-row gp-data='{"uid":"gy09j5-mGK"}' data-id="gy09j5-mGK" id="gy09j5-mGK" data-same-height-subgrid-container class="gy09j5-mGK gp-relative gp-mx-auto gp-mb-0 gp-grid gp-max-w-full gp-transition-colors gp-duration-200 gp-ease-in-out [&_*]:gp-max-w-full gp-grid-rows-[1fr]" style="--bs:none;--bw:1px 1px 1px 1px;--bc:var(--g-c-line-3, line-3);--d:grid;--d-mobile:grid;--d-tablet:grid;--op:100%;--bblr:0px;--bbrr:0px;--btlr:0px;--btrr:0px;--pt:0px;--pl:0px;--pb:0px;--pr:0px;--pt-mobile:0px;--pl-mobile:0px;--pb-mobile:0px;--pr-mobile:0px;--pt-tablet:0px;--pl-tablet:0px;--pb-tablet:0px;--pr-tablet:0px;--cg:16px;--rg:0px;--gtc:minmax(0, 12fr);--w:1440px;--h:auto;--pc:start">
+      
+
+      <div
+      data-same-height-display-contents
+      style="--jc:start"
+      class="gfi_ZQJQmY gp-relative gp-flex gp-flex-col"
+    >
+      
+  <gp-animation
+    gp-interaction-wrapper
+    display-init="show"
+    gp-data='{"config":{"desktop":{"enabled":true,"trigger":"appear","triggerConfig":{"appear":{"animation":"slide","setting":{"fade":{"delay":"0","easing":"ease-out","speed":1.7},"shake":{"delay":"0","easing":"linear","intensity":11,"loop":false,"speed":0.7},"slide":{"delay":"0","direction":"up","distance":"100","easing":"ease-out","isCustomDistance":false,"speed":1.7},"zoom":{"delay":"0","easing":"ease-out","isFade":true,"scale":{"in":[80,100],"out":[120,100]},"speed":1.7,"zoomDirection":"in"}}},"hover":{"animation":"none","setting":{"fade":{"delay":"0","easing":"ease-out","speed":1.7},"shake":{"delay":"0","easing":"linear","intensity":11,"loop":false,"speed":0.7},"slide":{"delay":"0","direction":"left","easing":"ease-out","isCustomDistance":false,"speed":1.7},"zoom":{"delay":"0","easing":"ease-out","isFade":false,"scale":{"in":[100,120],"out":[100,80]},"speed":1.7,"zoomDirection":"in"}}}}}},"tag":"Heading","opacity":{"desktop":"100%"},"notEnableAnimationWhenInit":false}'
+    style="display:contents"
+  >
+    <div style="--v:hidden;--v-tablet:hidden;--v-mobile:hidden;display:contents">
+    {% assign locationOrigin = request.origin | append: routes.root_url | split: '/' | join: '/' %}
+    <div data-id="gdeOW8QVz6"
+        class="gdeOW8QVz6"
+        style="--ta:left;--ta-mobile:center;--bs:none;--bw:1px 1px 1px 1px;--bc:var(--g-c-line-3, line-3);--d:block;--d-mobile:block;--d-tablet:block;--op:100%;--bblr:0px;--bbrr:0px;--btlr:0px;--btrr:0px;--ml:0px;--pt:0px;--pl:0px;--pb:32px;--pr:0px;--mb-mobile:0px;--pt-mobile:0px;--pl-mobile:0px;--pb-mobile:10px;--pr-mobile:0px;--ml-tablet:0px;--pt-tablet:0px;--pl-tablet:0px;--pb-tablet:32px;--pr-tablet:0px;--dynamic-source-color:#F4F4F4"
+      >
+      <div class="gp-flex" style="--jc:left;--jc-mobile:center">
+        <h2
+          data-gp-text
+          class=" gp-text-instant gp-text"
+          style="--w:100%;--tdt:auto;--b:none;--bc:#121212;--bw:1px 1px 1px 1px;--bblr:0px;--bbrr:0px;--btlr:0px;--btrr:0px;--shadow:none;--ts:none;--ta:center;--ta-mobile:center;--ff:var(--g-font-Sora, 'Sora'), var(--g-font-heading, heading);--weight:400;--size:40px;--size-tablet:46px;--size-mobile:24px;--lh:140%;--lh-tablet:130%;--lh-mobile:130%;--ls:-0.96px;--c:#485551;word-break:break-word;--bgc:transparent;--bgi:url();--bgp:50% 50%;--bgs:cover;--bgr:no-repeat;--bga:scroll;--pl-mobile:0px;--pr-mobile:0px;--pt-mobile:0px;--pb-mobile:0px;overflow:hidden;--tdl:"
+        >
+          {{ section.settings.ggdeOW8QVz6_text | replace: '$locationOrigin', locationOrigin }}
+        </h2>
+      </div>
+    </div>
+    </div>
+  </gp-animation>
+  <script src="https://assets.gemcommerce.com/assets-v2/gp-animation-v7-5.js?v={{ shop.metafields.GEMPAGES.ASSETS_VERSION }}" defer="defer"></script>
+  
+  <gp-animation
+    gp-interaction-wrapper
+    display-init="show"
+    gp-data='{"config":{"desktop":{"enabled":true,"trigger":"appear","triggerConfig":{"appear":{"animation":"slide","setting":{"fade":{"delay":"0","easing":"ease-out","speed":1.7},"shake":{"delay":"0","easing":"linear","intensity":11,"loop":false,"speed":0.7},"slide":{"delay":"0","direction":"up","distance":"20","easing":"ease-out","isCustomDistance":true,"speed":1.7},"zoom":{"delay":"0","easing":"ease-out","isFade":true,"scale":{"in":[80,100],"out":[120,100]},"speed":1.7,"zoomDirection":"in"}}},"hover":{"animation":"none","setting":{"fade":{"delay":"0","easing":"ease-out","speed":1.7},"shake":{"delay":"0","easing":"linear","intensity":11,"loop":false,"speed":0.7},"slide":{"delay":"0","direction":"left","easing":"ease-out","isCustomDistance":false,"speed":1.7},"zoom":{"delay":"0","easing":"ease-out","isFade":false,"scale":{"in":[100,120],"out":[100,80]},"speed":1.7,"zoomDirection":"in"}}}}}},"tag":"Text","opacity":{"desktop":"100%"},"notEnableAnimationWhenInit":false}'
+    style="display:contents"
+  >
+    <div style="--v:hidden;--v-tablet:hidden;--v-mobile:hidden;display:contents">
+    {% assign locationOrigin = request.origin | append: routes.root_url | split: '/' | join: '/' %}
+    <div data-id="gwktLznrV1"
+        class="gwktLznrV1"
+        style="--ta:center;--bs:none;--bw:1px 1px 1px 1px;--bc:var(--g-c-line-3, line-3);--d:block;--d-mobile:block;--d-tablet:block;--op:100%;--bblr:0px;--bbrr:0px;--btlr:0px;--btrr:0px;--ml:0px;--pt:0px;--pl:0px;--pb:16px;--pr:0px;--mb-mobile:20px;--pb-mobile:0px;--ml-tablet:0px;--pt-tablet:0px;--pl-tablet:0px;--pb-tablet:16px;--pr-tablet:0px;--dynamic-source-color:#F4F4F4"
+      >
+      <div class="gp-flex" style="--jc:center">
+        <div
+          data-gp-text
+          class=" gp-text-instant gp-text"
+          style="--w:[object Object];--w-tablet:[object Object];--w-mobile:[object Object];--tdt:auto;--b:none;--bc:#121212;--bw:1px 1px 1px 1px;--bblr:0px;--bbrr:0px;--btlr:0px;--btrr:0px;--shadow:none;--ts:none;--ta:center;--ta-mobile:center;--line-clamp:unset;--line-clamp-tablet:unset;--line-clamp-mobile:unset;--ff:var(--g-font-Sora, 'Sora'), var(--g-font-body, body);--weight:400;--size:18px;--size-tablet:16px;--size-mobile:14px;--lh:150%;--lh-tablet:180%;--lh-mobile:150%;--ls:0px;--c:#6B7280;--tt:none;word-break:break-word;--bgc:transparent;--bgi:url();--bgp:50% 50%;--bgs:cover;--bgr:no-repeat;--bga:scroll;overflow:hidden;--tdl:"
+        >
+          {{ section.settings.ggwktLznrV1_text | replace: '$locationOrigin', locationOrigin }}
+        </div>
+      </div>
+    </div>
+    
+      <style id="custom-css-gwktLznrV1">
+        .gwktLznrV1 {
+z-index: 1;
+}
+.gwktLznrV1 p {
+
+}
+      </style>
+    </div>
+  </gp-animation>
+  <script src="https://assets.gemcommerce.com/assets-v2/gp-animation-v7-5.js?v={{ shop.metafields.GEMPAGES.ASSETS_VERSION }}" defer="defer"></script>
+  <div gp-el-wrapper style="--bs:none;--d:block;--d-mobile:block;--d-tablet:block;--op:100%;--bblr:0px;--bbrr:0px;--btlr:0px;--btrr:0px" class="gPmxuEknHX ">
+      
+    <gp-accordion data-id="gPmxuEknHX" class="gp-flex gp-flex-col gp-w-full" style="--gg:22px;--gg-mobile:9px;border-radius:inherit"
+      gp-data='{"uid":"gPmxuEknHX","setting":{"iconSvg":"<svg width=\"17\" height=\"16\" viewBox=\"0 0 17 16\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n                  <path d=\"M5.64645 2.64645C5.84171 2.45118 6.15829 2.45118 6.35355 2.64645L11.3536 7.64645C11.5488 7.84171 11.5488 8.15829 11.3536 8.35355L6.35355 13.3536C6.15829 13.5488 5.84171 13.5488 5.64645 13.3536C5.45118 13.1583 5.45118 12.8417 5.64645 12.6464L10.2929 8L5.64645 3.35355C5.45118 3.15829 5.45118 2.84171 5.64645 2.64645Z\" fill=\"currentColor\"/>\n                  </svg>","isIconPlus":false,"activeKey":"1","expanded":false,"expandItem":true,"iconPosition":"right","iconGlobalSize":{"desktop":{"gap":"8px"}},"iconCollapse":"<svg data-name=\"Icon22.svg\" data-id=\"605021386989109829\" width=\"20\" height=\"20\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\">\n<path d=\"M5 12H19\" stroke=\"#7CB342\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n<path d=\"M12 5V19\" stroke=\"#7CB342\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</svg>","iconExpand":"<svg data-name=\"asdsadasdff.svg\" data-id=\"605021506711323445\" width=\"20\" height=\"20\" xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\">\n<path d=\"M7.05029 16.9497L16.9498 7.05021\" stroke=\"#7CB342\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n<path d=\"M7.05029 7.05029L16.9498 16.9498\" stroke=\"#7CB342\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</svg>","iconCollapseSize":"23","layoutHeader":"text-only","expandedMode":"single","configIconSize":16,"parentUid":"gPmxuEknHX","childListNumber":["0"],"chidlrenUid":["gohpAhkw2P","g9sMIK987u","gsgn_wMqY4","gq1f1SeCAs","gqrAT9S2Vi","gPvbfodJYp","glorrZFHbg","gqxfmAgL_k","gXnMVMRF6L","g3_SJhVWWa"]},"styles":{"bgColor":{},"color":{"normal":"text-1"},"headerBorder":{},"textColor":{"active":"#7CB342","hover":"#7CB342","normal":"text-1"},"iconColor":{"normal":"text-1"},"contentSizePadding":{"desktop":{"gap":"22px","padding":{"bottom":"24px","left":"24px","link":false,"linked":false,"right":"24px","top":"0px"}},"mobile":{"gap":"9px","padding":{"bottom":"12px","left":"12px","link":false,"linked":false,"right":"12px","top":"0px"}}},"headerContentPadding":{"desktop":{"padding":{"bottom":"24px","left":"24px","link":true,"right":"24px","top":"24px"}},"mobile":{"padding":{"bottom":"18px","left":"12px","link":false,"linked":false,"right":"12px","top":"18px"}}},"widthHeightSize":{"desktop":{"height":"auto","width":"768px"}}}}'
+        >
+        <div class=" gp-hidden gp-rotate-90 -gp-rotate-90 gp-rotate-180"></div>
+      
+          <div class="gp-flex" style="--jc:center">
+            
+  <div class="gp-overflow-clip gp-group" style="--text-hover-color:#7CB342;--icon-expand-hover-color:var(--g-c-text-1, text-1);--icon-expand-active-color:var(--g-c-text-1, text-1);--icon-active-color:var(--g-c-text-1, text-1);--icon-hover-color:var(--g-c-text-1, text-1);--w:768px;--w-tablet:768px;--w-mobile:768px;--bs:solid;--bw:1px 1px 1px 1px;--bc:#F3F4F6;--bg:#FDFDFD;--bblr:14px;--bbrr:14px;--btlr:14px;--btrr:14px">
+    <div data-index="0" class="gPmxuEknHX gp-overflow-hidden gp-child-item-gPmxuEknHX gp-accordion-item">
+      <div aria-hidden uid="gohpAhkw2P" id="gohpAhkw2P" data-index="0"
+        class="gp-flex gp-accordion-item_header gp-cursor-pointer gp-items-center gp-gap-[16px] gPmxuEknHX gp-accordion-item-gPmxuEknHX-0" style="--pl:24px;--pr:24px;--pt:24px;--pb:24px;--pl-mobile:12px;--pr-mobile:12px;--pt-mobile:18px;--pb-mobile:18px;--h:auto;--h-tablet:auto;--h-mobile:auto;--fd:row-reverse;--jc:space-between">
+        
+          <div class="gp-inline-flex">
+            <span style="--c:var(--g-c-text-1, text-1);width:23px;height:23px"
+            data-index="0"
+            class="group-hover:[color:var(--icon-expand-hover-color)] gp-collapsible-icon gp-accordion-item_icon gp-inline-flex gp-items-center gp-justify-center gp-overflow-hidden gp-transition-all gp-duration-200 [&>svg]:!gp-h-[var(--height-iconCollapseSize)] [&>svg]:!gp-w-full gp-text-[var(--icon-expand-active-color)]">
+              <svg data-name="asdsadasdff.svg" data-id="605021506711323445" width="20" height="20" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+<path d="M7.05029 16.9497L16.9498 7.05021" stroke="#7CB342" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M7.05029 7.05029L16.9498 16.9498" stroke="#7CB342" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+            </span>
+          </div>
+          
+        <div class="gp-flex gp-w-full gp-items-center gp-break-all" style="--gg:8px;--jc:left;--ta:left">
+          
+          
+    {% assign locationOrigin = request.origin | append: routes.root_url | split: '/' | join: '/' %}
+    <div data-id
+        
+        style="--c:#7CB342;--dynamic-source-color:#F4F4F4"
+      >
+      <div  >
+        <div
+          data-gp-text
+          class="gp-overflow-hidden gp-accordion-text-content group-hover:[color:var(--text-hover-color)!important]  gp-text-instant"
+          style="--w:100%;--tdt:auto;--ts:none;--ff:var(--g-font-Sora, 'Sora'), var(--g-font-body, body);--weight:600;--size:18px;--size-tablet:16px;--size-mobile:14px;--lh:150%;--lh-tablet:180%;--lh-mobile:150%;word-break:break-word;overflow:hidden;--tdl:"
+        >
+          {{ section.settings.ggPmxuEknHX_childItem_0 }}
+        </div>
+      </div>
+    </div>
+    
+          
+        </div>
+      </div>
+      <div data-index="0" data-show="true" class="gp-accordion-item_body gp-transition-all gp-grid gp-duration-500 gp-overflow-hidden gp-grid-rows-[0fr]" style="grid-template-rows:1fr;grid-template-columns:minmax(auto, 100%)">
+        <div data-index="0" class="gp-accordion-item_body-inner gp-transition-all gp-duration-500 gp-min-h-0" style="--pl:24px;--pr:24px;--pt:0px;--pb:24px;--pl-mobile:12px;--pr-mobile:12px;--pt-mobile:0px;--pb-mobile:12px">
+          <div
+      data-same-height-display-contents
+      
+      class="gUnKweIkrC gp-relative gp-flex gp-flex-col"
+    >
+      
+    {% assign locationOrigin = request.origin | append: routes.root_url | split: '/' | join: '/' %}
+    <div data-id="gHtFm73ZKu"
+        class="gHtFm73ZKu"
+        style="--ta:left;--bs:none;--bw:1px 1px 1px 1px;--bc:var(--g-c-line-3, line-3);--d:block;--d-mobile:block;--d-tablet:block;--op:100%;--bblr:0px;--bbrr:0px;--btlr:0px;--btrr:0px;--dynamic-source-color:#F4F4F4"
+      >
+      <div class="gp-flex" style="--jc:left">
+        <div
+          data-gp-text
+          class="gp-g-paragraph-1  gp-text-instant gp-text"
+          style="--w:100%;--w-tablet:100%;--w-mobile:100%;--tdt:auto;--b:none;--bc:#121212;--bw:1px 1px 1px 1px;--bblr:0px;--bbrr:0px;--btlr:0px;--btrr:0px;--shadow:none;--ta:left;--line-clamp:unset;--line-clamp-tablet:unset;--line-clamp-mobile:unset;--c:#6B7280;--tt:none;word-break:break-word;--bgc:transparent;--bgi:url();--bgp:50% 50%;--bgs:cover;--bgr:no-repeat;--bga:scroll;overflow:hidden;--tdl:"
+        >
+          {{ section.settings.ggHtFm73ZKu_text | replace: '$locationOrigin', locationOrigin }}
+        </div>
+      </div>
+    </div>
+    
+    </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+          </div>
+            
+          <div class="gp-flex" style="--jc:center">
+            
+  <div class="gp-overflow-clip gp-group" style="--text-hover-color:#7CB342;--icon-expand-hover-color:var(--g-c-text-1, text-1);--icon-expand-active-color:var(--g-c-text-1, text-1);--icon-active-color:var(--g-c-text-1, text-1);--icon-hover-color:var(--g-c-text-1, text-1);--w:768px;--w-tablet:768px;--w-mobile:768px;--bs:solid;--bw:1px 1px 1px 1px;--bc:#F3F4F6;--bg:#FDFDFD;--bblr:14px;--bbrr:14px;--btlr:14px;--btrr:14px">
+    <div data-index="1" class="gPmxuEknHX gp-overflow-hidden gp-child-item-gPmxuEknHX gp-accordion-item">
+      <div aria-hidden uid="g9sMIK987u" id="g9sMIK987u" data-index="1"
+        class="gp-flex gp-accordion-item_header gp-cursor-pointer gp-items-center gp-gap-[16px] gPmxuEknHX gp-accordion-item-gPmxuEknHX-1" style="--pl:24px;--pr:24px;--pt:24px;--pb:24px;--pl-mobile:12px;--pr-mobile:12px;--pt-mobile:18px;--pb-mobile:18px;--h:auto;--h-tablet:auto;--h-mobile:auto;--fd:row-reverse;--jc:space-between">
+        
+          <div class="gp-inline-flex">
+            <span style="--c:var(--g-c-text-1, text-1);width:23px;height:23px"
+            data-index="1"
+            class="group-hover:[color:var(--icon-expand-hover-color)] gp-collapsible-icon gp-accordion-item_icon gp-inline-flex gp-items-center gp-justify-center gp-overflow-hidden gp-transition-all gp-duration-200 [&>svg]:!gp-h-[var(--height-iconCollapseSize)] [&>svg]:!gp-w-full gp-text-g-text-1">
+              <svg data-name="Icon22.svg" data-id="605021386989109829" width="20" height="20" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+<path d="M5 12H19" stroke="#7CB342" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M12 5V19" stroke="#7CB342" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+            </span>
+          </div>
+          
+        <div class="gp-flex gp-w-full gp-items-center gp-break-all" style="--gg:8px;--jc:left;--ta:left">
+          
+          
+    {% assign locationOrigin = request.origin | append: routes.root_url | split: '/' | join: '/' %}
+    <div data-id
+        
+        style="--c:var(--g-c-text-1, text-1);--dynamic-source-color:#F4F4F4"
+      >
+      <div  >
+        <div
+          data-gp-text
+          class="gp-overflow-hidden gp-accordion-text-content group-hover:[color:var(--text-hover-color)!important]  gp-text-instant"
+          style="--w:100%;--tdt:auto;--ts:none;--ff:var(--g-font-Sora, 'Sora'), var(--g-font-body, body);--weight:600;--size:18px;--size-tablet:16px;--size-mobile:14px;--lh:150%;--lh-tablet:180%;--lh-mobile:150%;word-break:break-word;overflow:hidden;--tdl:"
+        >
+          {{ section.settings.ggPmxuEknHX_childItem_1 }}
+        </div>
+      </div>
+    </div>
+    
+          
+        </div>
+      </div>
+      <div data-index="1" data-show="false" class="gp-accordion-item_body gp-transition-all gp-grid gp-duration-500 gp-overflow-hidden gp-grid-rows-[0fr]" style="grid-template-rows:0fr;grid-template-columns:minmax(auto, 100%)">
+        <div data-index="1" class="gp-accordion-item_body-inner gp-transition-all gp-duration-500 gp-min-h-0" style="--pl:24px;--pr:24px;--pl-mobile:12px;--pr-mobile:12px">
+          <div
+      data-same-height-display-contents
+      
+      class="gXL9-U4Eqx gp-relative gp-flex gp-flex-col"
+    >
+      
+    {% assign locationOrigin = request.origin | append: routes.root_url | split: '/' | join: '/' %}
+    <div data-id="goJYvp9FaY"
+        class="goJYvp9FaY"
+        style="--ta:left;--bs:none;--bw:1px 1px 1px 1px;--bc:var(--g-c-line-3, line-3);--d:block;--d-mobile:block;--d-tablet:block;--op:100%;--bblr:0px;--bbrr:0px;--btlr:0px;--btrr:0px;--dynamic-source-color:#F4F4F4"
+      >
+      <div class="gp-flex" style="--jc:left">
+        <div
+          data-gp-text
+          class="gp-g-paragraph-1  gp-text-instant gp-text"
+          style="--w:100%;--w-tablet:100%;--w-mobile:100%;--tdt:auto;--b:none;--bc:#121212;--bw:1px 1px 1px 1px;--bblr:0px;--bbrr:0px;--btlr:0px;--btrr:0px;--shadow:none;--ta:left;--line-clamp:unset;--line-clamp-tablet:unset;--line-clamp-mobile:unset;--c:#6B7280;--tt:none;word-break:break-word;--bgc:transparent;--bgi:url();--bgp:50% 50%;--bgs:cover;--bgr:no-repeat;--bga:scroll;overflow:hidden;--tdl:"
+        >
+          {{ section.settings.ggoJYvp9FaY_text | replace: '$locationOrigin', locationOrigin }}
+        </div>
+      </div>
+    </div>
+    
+    </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+          </div>
+            
+          <div class="gp-flex" style="--jc:center">
+            
+  <div class="gp-overflow-clip gp-group" style="--text-hover-color:#7CB342;--icon-expand-hover-color:var(--g-c-text-1, text-1);--icon-expand-active-color:var(--g-c-text-1, text-1);--icon-active-color:var(--g-c-text-1, text-1);--icon-hover-color:var(--g-c-text-1, text-1);--w:768px;--w-tablet:768px;--w-mobile:768px;--bs:solid;--bw:1px 1px 1px 1px;--bc:#F3F4F6;--bg:#FDFDFD;--bblr:14px;--bbrr:14px;--btlr:14px;--btrr:14px">
+    <div data-index="2" class="gPmxuEknHX gp-overflow-hidden gp-child-item-gPmxuEknHX gp-accordion-item">
+      <div aria-hidden uid="gsgn_wMqY4" id="gsgn_wMqY4" data-index="2"
+        class="gp-flex gp-accordion-item_header gp-cursor-pointer gp-items-center gp-gap-[16px] gPmxuEknHX gp-accordion-item-gPmxuEknHX-2" style="--pl:24px;--pr:24px;--pt:24px;--pb:24px;--pl-mobile:12px;--pr-mobile:12px;--pt-mobile:18px;--pb-mobile:18px;--h:auto;--h-tablet:auto;--h-mobile:auto;--fd:row-reverse;--jc:space-between">
+        
+          <div class="gp-inline-flex">
+            <span style="--c:var(--g-c-text-1, text-1);width:23px;height:23px"
+            data-index="2"
+            class="group-hover:[color:var(--icon-expand-hover-color)] gp-collapsible-icon gp-accordion-item_icon gp-inline-flex gp-items-center gp-justify-center gp-overflow-hidden gp-transition-all gp-duration-200 [&>svg]:!gp-h-[var(--height-iconCollapseSize)] [&>svg]:!gp-w-full gp-text-g-text-1">
+              <svg data-name="Icon22.svg" data-id="605021386989109829" width="20" height="20" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+<path d="M5 12H19" stroke="#7CB342" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M12 5V19" stroke="#7CB342" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+            </span>
+          </div>
+          
+        <div class="gp-flex gp-w-full gp-items-center gp-break-all" style="--gg:8px;--jc:left;--ta:left">
+          
+          
+    {% assign locationOrigin = request.origin | append: routes.root_url | split: '/' | join: '/' %}
+    <div data-id
+        
+        style="--c:var(--g-c-text-1, text-1);--dynamic-source-color:#F4F4F4"
+      >
+      <div  >
+        <div
+          data-gp-text
+          class="gp-overflow-hidden gp-accordion-text-content group-hover:[color:var(--text-hover-color)!important]  gp-text-instant"
+          style="--w:100%;--tdt:auto;--ts:none;--ff:var(--g-font-Sora, 'Sora'), var(--g-font-body, body);--weight:600;--size:18px;--size-tablet:16px;--size-mobile:14px;--lh:150%;--lh-tablet:180%;--lh-mobile:150%;word-break:break-word;overflow:hidden;--tdl:"
+        >
+          {{ section.settings.ggPmxuEknHX_childItem_2 }}
+        </div>
+      </div>
+    </div>
+    
+          
+        </div>
+      </div>
+      <div data-index="2" data-show="false" class="gp-accordion-item_body gp-transition-all gp-grid gp-duration-500 gp-overflow-hidden gp-grid-rows-[0fr]" style="grid-template-rows:0fr;grid-template-columns:minmax(auto, 100%)">
+        <div data-index="2" class="gp-accordion-item_body-inner gp-transition-all gp-duration-500 gp-min-h-0" style="--pl:24px;--pr:24px;--pl-mobile:12px;--pr-mobile:12px">
+          <div
+      data-same-height-display-contents
+      
+      class="gM6QPP5DzM gp-relative gp-flex gp-flex-col"
+    >
+      
+    {% assign locationOrigin = request.origin | append: routes.root_url | split: '/' | join: '/' %}
+    <div data-id="gUYEQIvwPq"
+        class="gUYEQIvwPq"
+        style="--ta:left;--bs:none;--bw:1px 1px 1px 1px;--bc:var(--g-c-line-3, line-3);--d:block;--d-mobile:block;--d-tablet:block;--op:100%;--bblr:0px;--bbrr:0px;--btlr:0px;--btrr:0px;--dynamic-source-color:#F4F4F4"
+      >
+      <div class="gp-flex" style="--jc:left">
+        <div
+          data-gp-text
+          class="gp-g-paragraph-1  gp-text-instant gp-text"
+          style="--w:100%;--w-tablet:100%;--w-mobile:100%;--tdt:auto;--b:none;--bc:#121212;--bw:1px 1px 1px 1px;--bblr:0px;--bbrr:0px;--btlr:0px;--btrr:0px;--shadow:none;--ta:left;--line-clamp:unset;--line-clamp-tablet:unset;--line-clamp-mobile:unset;--c:#6B7280;--tt:none;word-break:break-word;--bgc:transparent;--bgi:url();--bgp:50% 50%;--bgs:cover;--bgr:no-repeat;--bga:scroll;overflow:hidden;--tdl:"
+        >
+          {{ section.settings.ggUYEQIvwPq_text | replace: '$locationOrigin', locationOrigin }}
+        </div>
+      </div>
+    </div>
+    
+    </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+          </div>
+            
+          <div class="gp-flex" style="--jc:center">
+            
+  <div class="gp-overflow-clip gp-group" style="--text-hover-color:#7CB342;--icon-expand-hover-color:var(--g-c-text-1, text-1);--icon-expand-active-color:var(--g-c-text-1, text-1);--icon-active-color:var(--g-c-text-1, text-1);--icon-hover-color:var(--g-c-text-1, text-1);--w:768px;--w-tablet:768px;--w-mobile:768px;--bs:solid;--bw:1px 1px 1px 1px;--bc:#F3F4F6;--bg:#FDFDFD;--bblr:14px;--bbrr:14px;--btlr:14px;--btrr:14px">
+    <div data-index="3" class="gPmxuEknHX gp-overflow-hidden gp-child-item-gPmxuEknHX gp-accordion-item">
+      <div aria-hidden uid="gq1f1SeCAs" id="gq1f1SeCAs" data-index="3"
+        class="gp-flex gp-accordion-item_header gp-cursor-pointer gp-items-center gp-gap-[16px] gPmxuEknHX gp-accordion-item-gPmxuEknHX-3" style="--pl:24px;--pr:24px;--pt:24px;--pb:24px;--pl-mobile:12px;--pr-mobile:12px;--pt-mobile:18px;--pb-mobile:18px;--h:auto;--h-tablet:auto;--h-mobile:auto;--fd:row-reverse;--jc:space-between">
+        
+          <div class="gp-inline-flex">
+            <span style="--c:var(--g-c-text-1, text-1);width:23px;height:23px"
+            data-index="3"
+            class="group-hover:[color:var(--icon-expand-hover-color)] gp-collapsible-icon gp-accordion-item_icon gp-inline-flex gp-items-center gp-justify-center gp-overflow-hidden gp-transition-all gp-duration-200 [&>svg]:!gp-h-[var(--height-iconCollapseSize)] [&>svg]:!gp-w-full gp-text-g-text-1">
+              <svg data-name="Icon22.svg" data-id="605021386989109829" width="20" height="20" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+<path d="M5 12H19" stroke="#7CB342" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M12 5V19" stroke="#7CB342" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+            </span>
+          </div>
+          
+        <div class="gp-flex gp-w-full gp-items-center gp-break-all" style="--gg:8px;--jc:left;--ta:left">
+          
+          
+    {% assign locationOrigin = request.origin | append: routes.root_url | split: '/' | join: '/' %}
+    <div data-id
+        
+        style="--c:var(--g-c-text-1, text-1);--dynamic-source-color:#F4F4F4"
+      >
+      <div  >
+        <div
+          data-gp-text
+          class="gp-overflow-hidden gp-accordion-text-content group-hover:[color:var(--text-hover-color)!important]  gp-text-instant"
+          style="--w:100%;--tdt:auto;--ts:none;--ff:var(--g-font-Sora, 'Sora'), var(--g-font-body, body);--weight:600;--size:18px;--size-tablet:16px;--size-mobile:14px;--lh:150%;--lh-tablet:180%;--lh-mobile:150%;word-break:break-word;overflow:hidden;--tdl:"
+        >
+          {{ section.settings.ggPmxuEknHX_childItem_3 }}
+        </div>
+      </div>
+    </div>
+    
+          
+        </div>
+      </div>
+      <div data-index="3" data-show="false" class="gp-accordion-item_body gp-transition-all gp-grid gp-duration-500 gp-overflow-hidden gp-grid-rows-[0fr]" style="grid-template-rows:0fr;grid-template-columns:minmax(auto, 100%)">
+        <div data-index="3" class="gp-accordion-item_body-inner gp-transition-all gp-duration-500 gp-min-h-0" style="--pl:24px;--pr:24px;--pl-mobile:12px;--pr-mobile:12px">
+          <div
+      data-same-height-display-contents
+      
+      class="gJ6vhcTYsi gp-relative gp-flex gp-flex-col"
+    >
+      
+    {% assign locationOrigin = request.origin | append: routes.root_url | split: '/' | join: '/' %}
+    <div data-id="gI28CO_QJX"
+        class="gI28CO_QJX"
+        style="--ta:left;--bs:none;--bw:1px 1px 1px 1px;--bc:var(--g-c-line-3, line-3);--d:block;--d-mobile:block;--d-tablet:block;--op:100%;--bblr:0px;--bbrr:0px;--btlr:0px;--btrr:0px;--dynamic-source-color:#F4F4F4"
+      >
+      <div class="gp-flex" style="--jc:left">
+        <div
+          data-gp-text
+          class="gp-g-paragraph-1  gp-text-instant gp-text"
+          style="--w:100%;--w-tablet:100%;--w-mobile:100%;--tdt:auto;--b:none;--bc:#121212;--bw:1px 1px 1px 1px;--bblr:0px;--bbrr:0px;--btlr:0px;--btrr:0px;--shadow:none;--ta:left;--line-clamp:unset;--line-clamp-tablet:unset;--line-clamp-mobile:unset;--c:#6B7280;--tt:none;word-break:break-word;--bgc:transparent;--bgi:url();--bgp:50% 50%;--bgs:cover;--bgr:no-repeat;--bga:scroll;overflow:hidden;--tdl:"
+        >
+          {{ section.settings.ggI28CO_QJX_text | replace: '$locationOrigin', locationOrigin }}
+        </div>
+      </div>
+    </div>
+    
+    </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+          </div>
+            
+          <div class="gp-flex" style="--jc:center">
+            
+  <div class="gp-overflow-clip gp-group" style="--text-hover-color:#7CB342;--icon-expand-hover-color:var(--g-c-text-1, text-1);--icon-expand-active-color:var(--g-c-text-1, text-1);--icon-active-color:var(--g-c-text-1, text-1);--icon-hover-color:var(--g-c-text-1, text-1);--w:768px;--w-tablet:768px;--w-mobile:768px;--bs:solid;--bw:1px 1px 1px 1px;--bc:#F3F4F6;--bg:#FDFDFD;--bblr:14px;--bbrr:14px;--btlr:14px;--btrr:14px">
+    <div data-index="4" class="gPmxuEknHX gp-overflow-hidden gp-child-item-gPmxuEknHX gp-accordion-item">
+      <div aria-hidden uid="gqrAT9S2Vi" id="gqrAT9S2Vi" data-index="4"
+        class="gp-flex gp-accordion-item_header gp-cursor-pointer gp-items-center gp-gap-[16px] gPmxuEknHX gp-accordion-item-gPmxuEknHX-4" style="--pl:24px;--pr:24px;--pt:24px;--pb:24px;--pl-mobile:12px;--pr-mobile:12px;--pt-mobile:18px;--pb-mobile:18px;--h:auto;--h-tablet:auto;--h-mobile:auto;--fd:row-reverse;--jc:space-between">
+        
+          <div class="gp-inline-flex">
+            <span style="--c:var(--g-c-text-1, text-1);width:23px;height:23px"
+            data-index="4"
+            class="group-hover:[color:var(--icon-expand-hover-color)] gp-collapsible-icon gp-accordion-item_icon gp-inline-flex gp-items-center gp-justify-center gp-overflow-hidden gp-transition-all gp-duration-200 [&>svg]:!gp-h-[var(--height-iconCollapseSize)] [&>svg]:!gp-w-full gp-text-g-text-1">
+              <svg data-name="Icon22.svg" data-id="605021386989109829" width="20" height="20" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+<path d="M5 12H19" stroke="#7CB342" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M12 5V19" stroke="#7CB342" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+            </span>
+          </div>
+          
+        <div class="gp-flex gp-w-full gp-items-center gp-break-all" style="--gg:8px;--jc:left;--ta:left">
+          
+          
+    {% assign locationOrigin = request.origin | append: routes.root_url | split: '/' | join: '/' %}
+    <div data-id
+        
+        style="--c:var(--g-c-text-1, text-1);--dynamic-source-color:#F4F4F4"
+      >
+      <div  >
+        <div
+          data-gp-text
+          class="gp-overflow-hidden gp-accordion-text-content group-hover:[color:var(--text-hover-color)!important]  gp-text-instant"
+          style="--w:100%;--tdt:auto;--ts:none;--ff:var(--g-font-Sora, 'Sora'), var(--g-font-body, body);--weight:600;--size:18px;--size-tablet:16px;--size-mobile:14px;--lh:150%;--lh-tablet:180%;--lh-mobile:150%;word-break:break-word;overflow:hidden;--tdl:"
+        >
+          {{ section.settings.ggPmxuEknHX_childItem_4 }}
+        </div>
+      </div>
+    </div>
+    
+          
+        </div>
+      </div>
+      <div data-index="4" data-show="false" class="gp-accordion-item_body gp-transition-all gp-grid gp-duration-500 gp-overflow-hidden gp-grid-rows-[0fr]" style="grid-template-rows:0fr;grid-template-columns:minmax(auto, 100%)">
+        <div data-index="4" class="gp-accordion-item_body-inner gp-transition-all gp-duration-500 gp-min-h-0" style="--pl:24px;--pr:24px;--pl-mobile:12px;--pr-mobile:12px">
+          <div
+      data-same-height-display-contents
+      
+      class="gYgYWIPJCA gp-relative gp-flex gp-flex-col"
+    >
+      
+    {% assign locationOrigin = request.origin | append: routes.root_url | split: '/' | join: '/' %}
+    <div data-id="gZBpdR8ziL"
+        class="gZBpdR8ziL"
+        style="--ta:left;--bs:none;--bw:1px 1px 1px 1px;--bc:var(--g-c-line-3, line-3);--d:block;--d-mobile:block;--d-tablet:block;--op:100%;--bblr:0px;--bbrr:0px;--btlr:0px;--btrr:0px;--dynamic-source-color:#F4F4F4"
+      >
+      <div class="gp-flex" style="--jc:left">
+        <div
+          data-gp-text
+          class="gp-g-paragraph-1  gp-text-instant gp-text"
+          style="--w:100%;--w-tablet:100%;--w-mobile:100%;--tdt:auto;--b:none;--bc:#121212;--bw:1px 1px 1px 1px;--bblr:0px;--bbrr:0px;--btlr:0px;--btrr:0px;--shadow:none;--ta:left;--line-clamp:unset;--line-clamp-tablet:unset;--line-clamp-mobile:unset;--c:#6B7280;--tt:none;word-break:break-word;--bgc:transparent;--bgi:url();--bgp:50% 50%;--bgs:cover;--bgr:no-repeat;--bga:scroll;overflow:hidden;--tdl:"
+        >
+          {{ section.settings.ggZBpdR8ziL_text | replace: '$locationOrigin', locationOrigin }}
+        </div>
+      </div>
+    </div>
+    
+    </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+          </div>
+            
+          <div class="gp-flex" style="--jc:center">
+            
+  <div class="gp-overflow-clip gp-group" style="--text-hover-color:#7CB342;--icon-expand-hover-color:var(--g-c-text-1, text-1);--icon-expand-active-color:var(--g-c-text-1, text-1);--icon-active-color:var(--g-c-text-1, text-1);--icon-hover-color:var(--g-c-text-1, text-1);--w:768px;--w-tablet:768px;--w-mobile:768px;--bs:solid;--bw:1px 1px 1px 1px;--bc:#F3F4F6;--bg:#FDFDFD;--bblr:14px;--bbrr:14px;--btlr:14px;--btrr:14px">
+    <div data-index="5" class="gPmxuEknHX gp-overflow-hidden gp-child-item-gPmxuEknHX gp-accordion-item">
+      <div aria-hidden uid="gPvbfodJYp" id="gPvbfodJYp" data-index="5"
+        class="gp-flex gp-accordion-item_header gp-cursor-pointer gp-items-center gp-gap-[16px] gPmxuEknHX gp-accordion-item-gPmxuEknHX-5" style="--pl:24px;--pr:24px;--pt:24px;--pb:24px;--pl-mobile:12px;--pr-mobile:12px;--pt-mobile:18px;--pb-mobile:18px;--h:auto;--h-tablet:auto;--h-mobile:auto;--fd:row-reverse;--jc:space-between">
+        
+          <div class="gp-inline-flex">
+            <span style="--c:var(--g-c-text-1, text-1);width:23px;height:23px"
+            data-index="5"
+            class="group-hover:[color:var(--icon-expand-hover-color)] gp-collapsible-icon gp-accordion-item_icon gp-inline-flex gp-items-center gp-justify-center gp-overflow-hidden gp-transition-all gp-duration-200 [&>svg]:!gp-h-[var(--height-iconCollapseSize)] [&>svg]:!gp-w-full gp-text-g-text-1">
+              <svg data-name="Icon22.svg" data-id="605021386989109829" width="20" height="20" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+<path d="M5 12H19" stroke="#7CB342" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M12 5V19" stroke="#7CB342" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+            </span>
+          </div>
+          
+        <div class="gp-flex gp-w-full gp-items-center gp-break-all" style="--gg:8px;--jc:left;--ta:left">
+          
+          
+    {% assign locationOrigin = request.origin | append: routes.root_url | split: '/' | join: '/' %}
+    <div data-id
+        
+        style="--c:var(--g-c-text-1, text-1);--dynamic-source-color:#F4F4F4"
+      >
+      <div  >
+        <div
+          data-gp-text
+          class="gp-overflow-hidden gp-accordion-text-content group-hover:[color:var(--text-hover-color)!important]  gp-text-instant"
+          style="--w:100%;--tdt:auto;--ts:none;--ff:var(--g-font-Sora, 'Sora'), var(--g-font-body, body);--weight:600;--size:18px;--size-tablet:16px;--size-mobile:14px;--lh:150%;--lh-tablet:180%;--lh-mobile:150%;word-break:break-word;overflow:hidden;--tdl:"
+        >
+          {{ section.settings.ggPmxuEknHX_childItem_5 }}
+        </div>
+      </div>
+    </div>
+    
+          
+        </div>
+      </div>
+      <div data-index="5" data-show="false" class="gp-accordion-item_body gp-transition-all gp-grid gp-duration-500 gp-overflow-hidden gp-grid-rows-[0fr]" style="grid-template-rows:0fr;grid-template-columns:minmax(auto, 100%)">
+        <div data-index="5" class="gp-accordion-item_body-inner gp-transition-all gp-duration-500 gp-min-h-0" style="--pl:24px;--pr:24px;--pl-mobile:12px;--pr-mobile:12px">
+          <div
+      data-same-height-display-contents
+      
+      class="gKeXPdOTFn gp-relative gp-flex gp-flex-col"
+    >
+      
+    {% assign locationOrigin = request.origin | append: routes.root_url | split: '/' | join: '/' %}
+    <div data-id="gZt6xg487_"
+        class="gZt6xg487_"
+        style="--ta:left;--bs:none;--bw:1px 1px 1px 1px;--bc:var(--g-c-line-3, line-3);--d:block;--d-mobile:block;--d-tablet:block;--op:100%;--bblr:0px;--bbrr:0px;--btlr:0px;--btrr:0px;--dynamic-source-color:#F4F4F4"
+      >
+      <div class="gp-flex" style="--jc:left">
+        <div
+          data-gp-text
+          class="gp-g-paragraph-1  gp-text-instant gp-text"
+          style="--w:100%;--w-tablet:100%;--w-mobile:100%;--tdt:auto;--b:none;--bc:#121212;--bw:1px 1px 1px 1px;--bblr:0px;--bbrr:0px;--btlr:0px;--btrr:0px;--shadow:none;--ta:left;--line-clamp:unset;--line-clamp-tablet:unset;--line-clamp-mobile:unset;--c:#6B7280;--tt:none;word-break:break-word;--bgc:transparent;--bgi:url();--bgp:50% 50%;--bgs:cover;--bgr:no-repeat;--bga:scroll;overflow:hidden;--tdl:"
+        >
+          {{ section.settings.ggZt6xg487__text | replace: '$locationOrigin', locationOrigin }}
+        </div>
+      </div>
+    </div>
+    
+    </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+          </div>
+            
+          <div class="gp-flex" style="--jc:center">
+            
+  <div class="gp-overflow-clip gp-group" style="--text-hover-color:#7CB342;--icon-expand-hover-color:var(--g-c-text-1, text-1);--icon-expand-active-color:var(--g-c-text-1, text-1);--icon-active-color:var(--g-c-text-1, text-1);--icon-hover-color:var(--g-c-text-1, text-1);--w:768px;--w-tablet:768px;--w-mobile:768px;--bs:solid;--bw:1px 1px 1px 1px;--bc:#F3F4F6;--bg:#FDFDFD;--bblr:14px;--bbrr:14px;--btlr:14px;--btrr:14px">
+    <div data-index="6" class="gPmxuEknHX gp-overflow-hidden gp-child-item-gPmxuEknHX gp-accordion-item">
+      <div aria-hidden uid="glorrZFHbg" id="glorrZFHbg" data-index="6"
+        class="gp-flex gp-accordion-item_header gp-cursor-pointer gp-items-center gp-gap-[16px] gPmxuEknHX gp-accordion-item-gPmxuEknHX-6" style="--pl:24px;--pr:24px;--pt:24px;--pb:24px;--pl-mobile:12px;--pr-mobile:12px;--pt-mobile:18px;--pb-mobile:18px;--h:auto;--h-tablet:auto;--h-mobile:auto;--fd:row-reverse;--jc:space-between">
+        
+          <div class="gp-inline-flex">
+            <span style="--c:var(--g-c-text-1, text-1);width:23px;height:23px"
+            data-index="6"
+            class="group-hover:[color:var(--icon-expand-hover-color)] gp-collapsible-icon gp-accordion-item_icon gp-inline-flex gp-items-center gp-justify-center gp-overflow-hidden gp-transition-all gp-duration-200 [&>svg]:!gp-h-[var(--height-iconCollapseSize)] [&>svg]:!gp-w-full gp-text-g-text-1">
+              <svg data-name="Icon22.svg" data-id="605021386989109829" width="20" height="20" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+<path d="M5 12H19" stroke="#7CB342" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M12 5V19" stroke="#7CB342" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+            </span>
+          </div>
+          
+        <div class="gp-flex gp-w-full gp-items-center gp-break-all" style="--gg:8px;--jc:left;--ta:left">
+          
+          
+    {% assign locationOrigin = request.origin | append: routes.root_url | split: '/' | join: '/' %}
+    <div data-id
+        
+        style="--c:var(--g-c-text-1, text-1);--dynamic-source-color:#F4F4F4"
+      >
+      <div  >
+        <div
+          data-gp-text
+          class="gp-overflow-hidden gp-accordion-text-content group-hover:[color:var(--text-hover-color)!important]  gp-text-instant"
+          style="--w:100%;--tdt:auto;--ts:none;--ff:var(--g-font-Sora, 'Sora'), var(--g-font-body, body);--weight:600;--size:18px;--size-tablet:16px;--size-mobile:14px;--lh:150%;--lh-tablet:180%;--lh-mobile:150%;word-break:break-word;overflow:hidden;--tdl:"
+        >
+          {{ section.settings.ggPmxuEknHX_childItem_6 }}
+        </div>
+      </div>
+    </div>
+    
+          
+        </div>
+      </div>
+      <div data-index="6" data-show="false" class="gp-accordion-item_body gp-transition-all gp-grid gp-duration-500 gp-overflow-hidden gp-grid-rows-[0fr]" style="grid-template-rows:0fr;grid-template-columns:minmax(auto, 100%)">
+        <div data-index="6" class="gp-accordion-item_body-inner gp-transition-all gp-duration-500 gp-min-h-0" style="--pl:24px;--pr:24px;--pl-mobile:12px;--pr-mobile:12px">
+          <div
+      data-same-height-display-contents
+      
+      class="gcwDxflfkc gp-relative gp-flex gp-flex-col"
+    >
+      
+    {% assign locationOrigin = request.origin | append: routes.root_url | split: '/' | join: '/' %}
+    <div data-id="gztmVDfpqP"
+        class="gztmVDfpqP"
+        style="--ta:left;--bs:none;--bw:1px 1px 1px 1px;--bc:var(--g-c-line-3, line-3);--d:block;--d-mobile:block;--d-tablet:block;--op:100%;--bblr:0px;--bbrr:0px;--btlr:0px;--btrr:0px;--dynamic-source-color:#F4F4F4"
+      >
+      <div class="gp-flex" style="--jc:left">
+        <div
+          data-gp-text
+          class="gp-g-paragraph-1  gp-text-instant gp-text"
+          style="--w:100%;--w-tablet:100%;--w-mobile:100%;--tdt:auto;--b:none;--bc:#121212;--bw:1px 1px 1px 1px;--bblr:0px;--bbrr:0px;--btlr:0px;--btrr:0px;--shadow:none;--ta:left;--line-clamp:unset;--line-clamp-tablet:unset;--line-clamp-mobile:unset;--c:#6B7280;--tt:none;word-break:break-word;--bgc:transparent;--bgi:url();--bgp:50% 50%;--bgs:cover;--bgr:no-repeat;--bga:scroll;overflow:hidden;--tdl:"
+        >
+          {{ section.settings.ggztmVDfpqP_text | replace: '$locationOrigin', locationOrigin }}
+        </div>
+      </div>
+    </div>
+    
+    </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+          </div>
+            
+          <div class="gp-flex" style="--jc:center">
+            
+  <div class="gp-overflow-clip gp-group" style="--text-hover-color:#7CB342;--icon-expand-hover-color:var(--g-c-text-1, text-1);--icon-expand-active-color:var(--g-c-text-1, text-1);--icon-active-color:var(--g-c-text-1, text-1);--icon-hover-color:var(--g-c-text-1, text-1);--w:768px;--w-tablet:768px;--w-mobile:768px;--bs:solid;--bw:1px 1px 1px 1px;--bc:#F3F4F6;--bg:#FDFDFD;--bblr:14px;--bbrr:14px;--btlr:14px;--btrr:14px">
+    <div data-index="7" class="gPmxuEknHX gp-overflow-hidden gp-child-item-gPmxuEknHX gp-accordion-item">
+      <div aria-hidden uid="gqxfmAgL_k" id="gqxfmAgL_k" data-index="7"
+        class="gp-flex gp-accordion-item_header gp-cursor-pointer gp-items-center gp-gap-[16px] gPmxuEknHX gp-accordion-item-gPmxuEknHX-7" style="--pl:24px;--pr:24px;--pt:24px;--pb:24px;--pl-mobile:12px;--pr-mobile:12px;--pt-mobile:18px;--pb-mobile:18px;--h:auto;--h-tablet:auto;--h-mobile:auto;--fd:row-reverse;--jc:space-between">
+        
+          <div class="gp-inline-flex">
+            <span style="--c:var(--g-c-text-1, text-1);width:23px;height:23px"
+            data-index="7"
+            class="group-hover:[color:var(--icon-expand-hover-color)] gp-collapsible-icon gp-accordion-item_icon gp-inline-flex gp-items-center gp-justify-center gp-overflow-hidden gp-transition-all gp-duration-200 [&>svg]:!gp-h-[var(--height-iconCollapseSize)] [&>svg]:!gp-w-full gp-text-g-text-1">
+              <svg data-name="Icon22.svg" data-id="605021386989109829" width="20" height="20" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+<path d="M5 12H19" stroke="#7CB342" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M12 5V19" stroke="#7CB342" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+            </span>
+          </div>
+          
+        <div class="gp-flex gp-w-full gp-items-center gp-break-all" style="--gg:8px;--jc:left;--ta:left">
+          
+          
+    {% assign locationOrigin = request.origin | append: routes.root_url | split: '/' | join: '/' %}
+    <div data-id
+        
+        style="--c:var(--g-c-text-1, text-1);--dynamic-source-color:#F4F4F4"
+      >
+      <div  >
+        <div
+          data-gp-text
+          class="gp-overflow-hidden gp-accordion-text-content group-hover:[color:var(--text-hover-color)!important]  gp-relative empty:gp-pl-[2px] after:gp-content-['Your_custom_text_goes_here'] after:gp-absolute after:gp-select-none after:gp-top-0 after:gp-left-[2px] after:gp-w-full after:gp-truncate after:gp-text-black after:gp-opacity-20 gp-text-instant"
+          style="--w:100%;--tdt:auto;--ts:none;--ff:var(--g-font-Sora, 'Sora'), var(--g-font-body, body);--weight:600;--size:18px;--size-tablet:16px;--size-mobile:14px;--lh:150%;--lh-tablet:180%;--lh-mobile:150%;word-break:break-word;overflow:hidden;--tdl:"
+        >
+          
+        </div>
+      </div>
+    </div>
+    
+          
+        </div>
+      </div>
+      <div data-index="7" data-show="false" class="gp-accordion-item_body gp-transition-all gp-grid gp-duration-500 gp-overflow-hidden gp-grid-rows-[0fr]" style="grid-template-rows:0fr;grid-template-columns:minmax(auto, 100%)">
+        <div data-index="7" class="gp-accordion-item_body-inner gp-transition-all gp-duration-500 gp-min-h-0" style="--pl:24px;--pr:24px;--pl-mobile:12px;--pr-mobile:12px">
+          <div
+      data-same-height-display-contents
+      
+      class="gidKjCUPaM gp-relative gp-flex gp-flex-col"
+    >
+      
+    {% assign locationOrigin = request.origin | append: routes.root_url | split: '/' | join: '/' %}
+    <div data-id="g1fqQFk92m"
+        class="g1fqQFk92m"
+        style="--ta:left;--bs:none;--bw:1px 1px 1px 1px;--bc:var(--g-c-line-3, line-3);--d:block;--d-mobile:block;--d-tablet:block;--op:100%;--bblr:0px;--bbrr:0px;--btlr:0px;--btrr:0px;--dynamic-source-color:#F4F4F4"
+      >
+      <div class="gp-flex" style="--jc:left">
+        <div
+          data-gp-text
+          class="gp-g-paragraph-1  gp-relative empty:gp-pl-[2px] after:gp-content-['Your_custom_text_goes_here'] after:gp-absolute after:gp-select-none after:gp-top-0 after:gp-left-[2px] after:gp-w-full after:gp-truncate after:gp-text-black after:gp-opacity-20 gp-text-instant gp-text"
+          style="--w:100%;--w-tablet:100%;--w-mobile:100%;--tdt:auto;--b:none;--bc:#121212;--bw:1px 1px 1px 1px;--bblr:0px;--bbrr:0px;--btlr:0px;--btrr:0px;--shadow:none;--ta:left;--line-clamp:unset;--line-clamp-tablet:unset;--line-clamp-mobile:unset;--c:#6B7280;--tt:none;word-break:break-word;--bgc:transparent;--bgi:url();--bgp:50% 50%;--bgs:cover;--bgr:no-repeat;--bga:scroll;overflow:hidden;--tdl:"
+        >
+          
+        </div>
+      </div>
+    </div>
+    
+    </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+          </div>
+            
+          <div class="gp-flex" style="--jc:center">
+            
+  <div class="gp-overflow-clip gp-group" style="--text-hover-color:#7CB342;--icon-expand-hover-color:var(--g-c-text-1, text-1);--icon-expand-active-color:var(--g-c-text-1, text-1);--icon-active-color:var(--g-c-text-1, text-1);--icon-hover-color:var(--g-c-text-1, text-1);--w:768px;--w-tablet:768px;--w-mobile:768px;--bs:solid;--bw:1px 1px 1px 1px;--bc:#F3F4F6;--bg:#FDFDFD;--bblr:14px;--bbrr:14px;--btlr:14px;--btrr:14px">
+    <div data-index="8" class="gPmxuEknHX gp-overflow-hidden gp-child-item-gPmxuEknHX gp-accordion-item">
+      <div aria-hidden uid="gXnMVMRF6L" id="gXnMVMRF6L" data-index="8"
+        class="gp-flex gp-accordion-item_header gp-cursor-pointer gp-items-center gp-gap-[16px] gPmxuEknHX gp-accordion-item-gPmxuEknHX-8" style="--pl:24px;--pr:24px;--pt:24px;--pb:24px;--pl-mobile:12px;--pr-mobile:12px;--pt-mobile:18px;--pb-mobile:18px;--h:auto;--h-tablet:auto;--h-mobile:auto;--fd:row-reverse;--jc:space-between">
+        
+          <div class="gp-inline-flex">
+            <span style="--c:var(--g-c-text-1, text-1);width:23px;height:23px"
+            data-index="8"
+            class="group-hover:[color:var(--icon-expand-hover-color)] gp-collapsible-icon gp-accordion-item_icon gp-inline-flex gp-items-center gp-justify-center gp-overflow-hidden gp-transition-all gp-duration-200 [&>svg]:!gp-h-[var(--height-iconCollapseSize)] [&>svg]:!gp-w-full gp-text-g-text-1">
+              <svg data-name="Icon22.svg" data-id="605021386989109829" width="20" height="20" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+<path d="M5 12H19" stroke="#7CB342" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M12 5V19" stroke="#7CB342" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+            </span>
+          </div>
+          
+        <div class="gp-flex gp-w-full gp-items-center gp-break-all" style="--gg:8px;--jc:left;--ta:left">
+          
+          
+    {% assign locationOrigin = request.origin | append: routes.root_url | split: '/' | join: '/' %}
+    <div data-id
+        
+        style="--c:var(--g-c-text-1, text-1);--dynamic-source-color:#F4F4F4"
+      >
+      <div  >
+        <div
+          data-gp-text
+          class="gp-overflow-hidden gp-accordion-text-content group-hover:[color:var(--text-hover-color)!important]  gp-text-instant"
+          style="--w:100%;--tdt:auto;--ts:none;--ff:var(--g-font-Sora, 'Sora'), var(--g-font-body, body);--weight:600;--size:18px;--size-tablet:16px;--size-mobile:14px;--lh:150%;--lh-tablet:180%;--lh-mobile:150%;word-break:break-word;overflow:hidden;--tdl:"
+        >
+          {{ section.settings.ggPmxuEknHX_childItem_8 }}
+        </div>
+      </div>
+    </div>
+    
+          
+        </div>
+      </div>
+      <div data-index="8" data-show="false" class="gp-accordion-item_body gp-transition-all gp-grid gp-duration-500 gp-overflow-hidden gp-grid-rows-[0fr]" style="grid-template-rows:0fr;grid-template-columns:minmax(auto, 100%)">
+        <div data-index="8" class="gp-accordion-item_body-inner gp-transition-all gp-duration-500 gp-min-h-0" style="--pl:24px;--pr:24px;--pl-mobile:12px;--pr-mobile:12px">
+          <div
+      data-same-height-display-contents
+      
+      class="gpEmmS664P gp-relative gp-flex gp-flex-col"
+    >
+      
+    {% assign locationOrigin = request.origin | append: routes.root_url | split: '/' | join: '/' %}
+    <div data-id="gRFCIVn0RF"
+        class="gRFCIVn0RF"
+        style="--ta:left;--bs:none;--bw:1px 1px 1px 1px;--bc:var(--g-c-line-3, line-3);--d:block;--d-mobile:block;--d-tablet:block;--op:100%;--bblr:0px;--bbrr:0px;--btlr:0px;--btrr:0px;--dynamic-source-color:#F4F4F4"
+      >
+      <div class="gp-flex" style="--jc:left">
+        <div
+          data-gp-text
+          class="gp-g-paragraph-1  gp-text-instant gp-text"
+          style="--w:100%;--w-tablet:100%;--w-mobile:100%;--tdt:auto;--b:none;--bc:#121212;--bw:1px 1px 1px 1px;--bblr:0px;--bbrr:0px;--btlr:0px;--btrr:0px;--shadow:none;--ta:left;--line-clamp:unset;--line-clamp-tablet:unset;--line-clamp-mobile:unset;--c:#6B7280;--tt:none;word-break:break-word;--bgc:transparent;--bgi:url();--bgp:50% 50%;--bgs:cover;--bgr:no-repeat;--bga:scroll;overflow:hidden;--tdl:"
+        >
+          {{ section.settings.ggRFCIVn0RF_text | replace: '$locationOrigin', locationOrigin }}
+        </div>
+      </div>
+    </div>
+    
+    </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+          </div>
+            
+          <div class="gp-flex" style="--jc:center">
+            
+  <div class="gp-overflow-clip gp-group" style="--text-hover-color:#7CB342;--icon-expand-hover-color:var(--g-c-text-1, text-1);--icon-expand-active-color:var(--g-c-text-1, text-1);--icon-active-color:var(--g-c-text-1, text-1);--icon-hover-color:var(--g-c-text-1, text-1);--w:768px;--w-tablet:768px;--w-mobile:768px;--bs:solid;--bw:1px 1px 1px 1px;--bc:#F3F4F6;--bg:#FDFDFD;--bblr:14px;--bbrr:14px;--btlr:14px;--btrr:14px">
+    <div data-index="9" class="gPmxuEknHX gp-overflow-hidden gp-child-item-gPmxuEknHX gp-accordion-item">
+      <div aria-hidden uid="g3_SJhVWWa" id="g3_SJhVWWa" data-index="9"
+        class="gp-flex gp-accordion-item_header gp-cursor-pointer gp-items-center gp-gap-[16px] gPmxuEknHX gp-accordion-item-gPmxuEknHX-9" style="--pl:24px;--pr:24px;--pt:24px;--pb:24px;--pl-mobile:12px;--pr-mobile:12px;--pt-mobile:18px;--pb-mobile:18px;--h:auto;--h-tablet:auto;--h-mobile:auto;--fd:row-reverse;--jc:space-between">
+        
+          <div class="gp-inline-flex">
+            <span style="--c:var(--g-c-text-1, text-1);width:23px;height:23px"
+            data-index="9"
+            class="group-hover:[color:var(--icon-expand-hover-color)] gp-collapsible-icon gp-accordion-item_icon gp-inline-flex gp-items-center gp-justify-center gp-overflow-hidden gp-transition-all gp-duration-200 [&>svg]:!gp-h-[var(--height-iconCollapseSize)] [&>svg]:!gp-w-full gp-text-g-text-1">
+              <svg data-name="Icon22.svg" data-id="605021386989109829" width="20" height="20" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+<path d="M5 12H19" stroke="#7CB342" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M12 5V19" stroke="#7CB342" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+            </span>
+          </div>
+          
+        <div class="gp-flex gp-w-full gp-items-center gp-break-all" style="--gg:8px;--jc:left;--ta:left">
+          
+          
+    {% assign locationOrigin = request.origin | append: routes.root_url | split: '/' | join: '/' %}
+    <div data-id
+        
+        style="--c:var(--g-c-text-1, text-1);--dynamic-source-color:#F4F4F4"
+      >
+      <div  >
+        <div
+          data-gp-text
+          class="gp-overflow-hidden gp-accordion-text-content group-hover:[color:var(--text-hover-color)!important]  gp-text-instant"
+          style="--w:100%;--tdt:auto;--ts:none;--ff:var(--g-font-Sora, 'Sora'), var(--g-font-body, body);--weight:600;--size:18px;--size-tablet:16px;--size-mobile:14px;--lh:150%;--lh-tablet:180%;--lh-mobile:150%;word-break:break-word;overflow:hidden;--tdl:"
+        >
+          {{ section.settings.ggPmxuEknHX_childItem_9 }}
+        </div>
+      </div>
+    </div>
+    
+          
+        </div>
+      </div>
+      <div data-index="9" data-show="false" class="gp-accordion-item_body gp-transition-all gp-grid gp-duration-500 gp-overflow-hidden gp-grid-rows-[0fr]" style="grid-template-rows:0fr;grid-template-columns:minmax(auto, 100%)">
+        <div data-index="9" class="gp-accordion-item_body-inner gp-transition-all gp-duration-500 gp-min-h-0" style="--pl:24px;--pr:24px;--pl-mobile:12px;--pr-mobile:12px">
+          <div
+      data-same-height-display-contents
+      
+      class="gtJik7d7cr gp-relative gp-flex gp-flex-col"
+    >
+      
+    {% assign locationOrigin = request.origin | append: routes.root_url | split: '/' | join: '/' %}
+    <div data-id="gAQvFi0EfG"
+        class="gAQvFi0EfG"
+        style="--ta:left;--bs:none;--bw:1px 1px 1px 1px;--bc:var(--g-c-line-3, line-3);--d:block;--d-mobile:block;--d-tablet:block;--op:100%;--bblr:0px;--bbrr:0px;--btlr:0px;--btrr:0px;--dynamic-source-color:#F4F4F4"
+      >
+      <div class="gp-flex" style="--jc:left">
+        <div
+          data-gp-text
+          class="gp-g-paragraph-1  gp-text-instant gp-text"
+          style="--w:100%;--w-tablet:100%;--w-mobile:100%;--tdt:auto;--b:none;--bc:#121212;--bw:1px 1px 1px 1px;--bblr:0px;--bbrr:0px;--btlr:0px;--btrr:0px;--shadow:none;--ta:left;--line-clamp:unset;--line-clamp-tablet:unset;--line-clamp-mobile:unset;--c:#6B7280;--tt:none;word-break:break-word;--bgc:transparent;--bgi:url();--bgp:50% 50%;--bgs:cover;--bgr:no-repeat;--bga:scroll;overflow:hidden;--tdl:"
+        >
+          {{ section.settings.ggAQvFi0EfG_text | replace: '$locationOrigin', locationOrigin }}
+        </div>
+      </div>
+    </div>
+    
+    </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+          </div>
+            
+    </gp-accordion>
+    
+    <script {% if section.settings.section_preload == "false" %}class="gps-link" delay {% else %}src{% endif %}="https://assets.gemcommerce.com/assets-v2/gp-accordion-v7-5.js?v={{ shop.metafields.GEMPAGES.ASSETS_VERSION }}" defer="defer"></script>
+    
+  
+      </div>
+    </div>
+
+      
+    </gp-row>
+  
+  
+    </div>
+
+      
+    </gp-row>
+  
+        </section>
+      
+  
+    
+{% schema %}
+  {
+    
+    "name": "Section 6",
+    "tag": "section",
+    "class": "gps-605849762180498180 gps gpsil",
+    "settings": [{"type":"paragraph","content":"Section design by GemPages. [Click here to start design](https://admin.shopify.com/store/enviagora/apps/gempages-cro/app/shopify/edit?pageType=GP_STATIC&editorId=605849762045887236&sectionId=605849762180498180)"},{"type":"select","label":"Section Preload","id":"section_preload","options":[{"label":"On","value":"true"},{"label":"Off","value":"false"},{"label":"Off Lazy Script","value":"off_lazy_script"}],"default":"false"},{"type":"text","label":"Checksum","id":"checksum"},{"type":"html","id":"ggdeOW8QVz6_text","label":"ggdeOW8QVz6_text","default":"Perguntas <span style=\"color:#101828;\"><strong>frequentes</strong></span>"},{"type":"html","id":"ggwktLznrV1_text","label":"ggwktLznrV1_text","default":"<p>Tire suas dúvidas sobre os serviços e volte quando quiser.</p>"},{"type":"html","id":"ggPmxuEknHX_childItem_0","label":"ggPmxuEknHX_childItem_0","default":"<p>O que é o servico de Fulfillment?</p>"},{"type":"html","id":"ggPmxuEknHX_childItem_1","label":"ggPmxuEknHX_childItem_1","default":"<p>Quais são os custos?</p>"},{"type":"html","id":"ggPmxuEknHX_childItem_2","label":"ggPmxuEknHX_childItem_2","default":"<p>Quais sistemas preciso ter?</p>"},{"type":"html","id":"ggPmxuEknHX_childItem_3","label":"ggPmxuEknHX_childItem_3","default":"<p>Como é o processo de devoluções e trocas?</p>"},{"type":"html","id":"ggPmxuEknHX_childItem_4","label":"ggPmxuEknHX_childItem_4","default":"<p>Como a Enviagora consegue os fretes mais baratos do Brasil?</p>"},{"type":"html","id":"ggPmxuEknHX_childItem_5","label":"ggPmxuEknHX_childItem_5","default":"<p>Como acompanho o status dos meus pedidos e estoque?</p>"},{"type":"html","id":"ggPmxuEknHX_childItem_6","label":"ggPmxuEknHX_childItem_6","default":"<p>Qual é o tempo de implementação?</p>"},{"type":"html","id":"ggPmxuEknHX_childItem_8","label":"ggPmxuEknHX_childItem_8","default":"<p>O fulfillment é para empresas de diferentes tamanhos?</p>"},{"type":"html","id":"ggPmxuEknHX_childItem_9","label":"ggPmxuEknHX_childItem_9","default":"<p>Quais são os horários de operação?</p>"},{"type":"html","id":"ggHtFm73ZKu_text","label":"ggHtFm73ZKu_text","default":"<p>Fulfillment é o processo completo de gerenciamento de pedidos, que inclui o recebimento, armazenamento, processamento, embalagem e o despacho para os produtos ao cliente final.</p>"},{"type":"html","id":"ggoJYvp9FaY_text","label":"ggoJYvp9FaY_text","default":"<p>Os custos variam conforme o volume de pedidos, o tipo de produtos e os serviços adicionais solicitados. É necessário entrar em contato com a Enviagora para uma cotação personalizada.</p>"},{"type":"html","id":"ggUYEQIvwPq_text","label":"ggUYEQIvwPq_text","default":"<p>Você precisa de três sistemas principais:</p><p>&nbsp;</p><p><strong>ERP:</strong> para receber pedidos, gerar notas fiscais, emitir etiquetas e controlar estoque (ex.: Tiny ERP, Bling ERP);</p><p><strong>Plataforma de e-commerce:</strong> para vender online (ex.: Shopify, Nuvemshop, Yampi);</p><p><strong>Plataforma de fretes:</strong> para disponibilizar cotações e opções de frete com as tabelas da Enviagora (ex.: Frenet).</p>"},{"type":"html","id":"ggI28CO_QJX_text","label":"ggI28CO_QJX_text","default":"<p>A Enviagora gerencia todo o processo: produtos devolvidos são inspecionados, recondicionados se necessário e reintegrados ao estoque ou descartados adequadamente.</p>"},{"type":"html","id":"ggZBpdR8ziL_text","label":"ggZBpdR8ziL_text","default":"<p>Ela conecta diretamente sua empresa com transportadoras, sem taxas escondidas, aproveitando negociações coletivas e tabelas otimizadas.</p>"},{"type":"html","id":"ggZt6xg487__text","label":"ggZt6xg487__text","default":"<p>É possível acompanhar em tempo real pelo WMS.</p>"},{"type":"html","id":"ggztmVDfpqP_text","label":"ggztmVDfpqP_text","default":"<p>O tempo pode variar, mas geralmente é concluído em 30-45 dias após a finalização do contrato e abertura da filial no endereço da Enviagora.</p>"},{"type":"html","id":"ggRFCIVn0RF_text","label":"ggRFCIVn0RF_text","default":"<p>Sim, mas a cobrança mínima é de <strong>3.000 pedidos mensais</strong> (mínimo de volume para contratação).</p>"},{"type":"html","id":"ggAQvFi0EfG_text","label":"ggAQvFi0EfG_text","default":"<p>O centro de fulfillment funciona de <strong>segunda a sexta</strong>, das <strong>7h30 às 17h30</strong>, para processar e enviar pedidos nesse período.</p>"}],
+    "blocks": [{"type": "@app"}],
+    "locales": {}
+  }
+{% endschema %}

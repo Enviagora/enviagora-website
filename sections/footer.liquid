@@ -1,0 +1,770 @@
+{% comment %}theme-check-disable UndefinedObject{% endcomment %}
+{{ 'section-footer.css' | asset_url | stylesheet_tag }}
+{{ 'component-newsletter.css' | asset_url | stylesheet_tag }}
+{{ 'component-list-menu.css' | asset_url | stylesheet_tag }}
+{{ 'component-list-payment.css' | asset_url | stylesheet_tag }}
+{{ 'component-list-social.css' | asset_url | stylesheet_tag }}
+
+<script>
+(function() {
+
+  // ⚠️ COLE SUA API KEY DO RESEND AQUI ⚠️
+  const RESEND_API_KEY = 're_SEU_API_KEY_AQUI';
+  const SEU_EMAIL = 'pedro.marcon@enviagora.com.br';
+
+  var ENV_PAISES = [
+    {nome:'Brazil (Brasil)',codigo:'+55'},
+    {nome:'Afghanistan',codigo:'+93'},{nome:'Albania',codigo:'+355'},{nome:'Algeria',codigo:'+213'},
+    {nome:'Andorra',codigo:'+376'},{nome:'Angola',codigo:'+244'},{nome:'Argentina',codigo:'+54'},
+    {nome:'Armenia',codigo:'+374'},{nome:'Australia',codigo:'+61'},{nome:'Austria',codigo:'+43'},
+    {nome:'Azerbaijan',codigo:'+994'},{nome:'Bahamas',codigo:'+1'},{nome:'Bahrain',codigo:'+973'},
+    {nome:'Bangladesh',codigo:'+880'},{nome:'Belarus',codigo:'+375'},{nome:'Belgium',codigo:'+32'},
+    {nome:'Belize',codigo:'+501'},{nome:'Benin',codigo:'+229'},{nome:'Bolivia',codigo:'+591'},
+    {nome:'Bosnia',codigo:'+387'},{nome:'Botswana',codigo:'+267'},
+    {nome:'Bulgaria',codigo:'+359'},{nome:'Cambodia',codigo:'+855'},{nome:'Cameroon',codigo:'+237'},
+    {nome:'Canada',codigo:'+1'},{nome:'Chile',codigo:'+56'},{nome:'China',codigo:'+86'},
+    {nome:'Colombia',codigo:'+57'},{nome:'Costa Rica',codigo:'+506'},{nome:'Croatia',codigo:'+385'},
+    {nome:'Cuba',codigo:'+53'},{nome:'Cyprus',codigo:'+357'},{nome:'Czech Republic',codigo:'+420'},
+    {nome:'Denmark',codigo:'+45'},{nome:'Dominican Republic',codigo:'+1'},{nome:'Ecuador',codigo:'+593'},
+    {nome:'Egypt',codigo:'+20'},{nome:'El Salvador',codigo:'+503'},{nome:'Estonia',codigo:'+372'},
+    {nome:'Ethiopia',codigo:'+251'},{nome:'Finland',codigo:'+358'},{nome:'France',codigo:'+33'},
+    {nome:'Georgia',codigo:'+995'},{nome:'Germany',codigo:'+49'},{nome:'Ghana',codigo:'+233'},
+    {nome:'Greece',codigo:'+30'},{nome:'Guatemala',codigo:'+502'},{nome:'Honduras',codigo:'+504'},
+    {nome:'Hungary',codigo:'+36'},{nome:'India',codigo:'+91'},{nome:'Indonesia',codigo:'+62'},
+    {nome:'Iran',codigo:'+98'},{nome:'Iraq',codigo:'+964'},{nome:'Ireland',codigo:'+353'},
+    {nome:'Israel',codigo:'+972'},{nome:'Italy',codigo:'+39'},{nome:'Jamaica',codigo:'+1'},
+    {nome:'Japan',codigo:'+81'},{nome:'Jordan',codigo:'+962'},{nome:'Kazakhstan',codigo:'+7'},
+    {nome:'Kenya',codigo:'+254'},{nome:'Kuwait',codigo:'+965'},{nome:'Latvia',codigo:'+371'},
+    {nome:'Lebanon',codigo:'+961'},{nome:'Libya',codigo:'+218'},{nome:'Lithuania',codigo:'+370'},
+    {nome:'Luxembourg',codigo:'+352'},{nome:'Malaysia',codigo:'+60'},{nome:'Mexico',codigo:'+52'},
+    {nome:'Morocco',codigo:'+212'},{nome:'Mozambique',codigo:'+258'},{nome:'Netherlands',codigo:'+31'},
+    {nome:'New Zealand',codigo:'+64'},{nome:'Nicaragua',codigo:'+505'},{nome:'Nigeria',codigo:'+234'},
+    {nome:'Norway',codigo:'+47'},{nome:'Pakistan',codigo:'+92'},{nome:'Panama',codigo:'+507'},
+    {nome:'Paraguay',codigo:'+595'},{nome:'Peru',codigo:'+51'},{nome:'Philippines',codigo:'+63'},
+    {nome:'Poland',codigo:'+48'},{nome:'Portugal',codigo:'+351'},{nome:'Qatar',codigo:'+974'},
+    {nome:'Romania',codigo:'+40'},{nome:'Russia',codigo:'+7'},{nome:'Saudi Arabia',codigo:'+966'},
+    {nome:'Senegal',codigo:'+221'},{nome:'Serbia',codigo:'+381'},{nome:'Singapore',codigo:'+65'},
+    {nome:'Slovakia',codigo:'+421'},{nome:'Slovenia',codigo:'+386'},{nome:'South Africa',codigo:'+27'},
+    {nome:'South Korea',codigo:'+82'},{nome:'Spain',codigo:'+34'},{nome:'Sri Lanka',codigo:'+94'},
+    {nome:'Sweden',codigo:'+46'},{nome:'Switzerland',codigo:'+41'},{nome:'Syria',codigo:'+963'},
+    {nome:'Taiwan',codigo:'+886'},{nome:'Tanzania',codigo:'+255'},{nome:'Thailand',codigo:'+66'},
+    {nome:'Tunisia',codigo:'+216'},{nome:'Turkey',codigo:'+90'},{nome:'Uganda',codigo:'+256'},
+    {nome:'Ukraine',codigo:'+380'},{nome:'United Arab Emirates',codigo:'+971'},
+    {nome:'United Kingdom',codigo:'+44'},{nome:'United States',codigo:'+1'},
+    {nome:'Uruguay',codigo:'+598'},{nome:'Venezuela',codigo:'+58'},{nome:'Vietnam',codigo:'+84'},
+    {nome:'Zimbabwe',codigo:'+263'}
+  ];
+
+  function envAtualizarPaisEl(sel) {
+    if (!sel) return;
+    var row = sel.closest('.env-phone-row');
+    if (!row) return;
+    var dddInput = row.querySelector('input[maxlength="3"]');
+    if (!dddInput) return;
+    var nome = sel.options[sel.selectedIndex] ? sel.options[sel.selectedIndex].textContent : '';
+    var isBrasil = nome.indexOf('Brazil') !== -1;
+    dddInput.style.display = isBrasil ? '' : 'none';
+    dddInput.value = '';
+  }
+
+  window.envAtualizarPais = function(el) { envAtualizarPaisEl(el || document.getElementById('env-pais')); };
+  window.env2AtualizarPais = function(el) { envAtualizarPaisEl(el || document.getElementById('env2-pais')); };
+
+  function envPopularTodosPaises() {
+    document.querySelectorAll('#env-pais, #env2-pais').forEach(function(sel) {
+      if (sel.dataset.envPopulated) return;
+      sel.dataset.envPopulated = '1';
+      sel.innerHTML = '';
+      ENV_PAISES.forEach(function(p) {
+        var opt = document.createElement('option');
+        opt.value = p.codigo;
+        opt.textContent = p.nome + ' (' + p.codigo + ')';
+        sel.appendChild(opt);
+      });
+      envAtualizarPaisEl(sel);
+      sel.addEventListener('change', function() { envAtualizarPaisEl(sel); });
+    });
+  }
+
+  window.envAbrirModal = function() {
+    var overlay = document.getElementById('env-modal-overlay');
+    overlay.classList.add('env-show');
+    overlay.scrollTop = 0;
+    envPopularTodosPaises();
+  };
+
+  window.envFecharModal = function() {
+    document.getElementById('env-modal-overlay').classList.remove('env-show');
+  };
+
+  window.envToggleCanal = function(checkbox) {
+    var row = checkbox.closest('.env-canal-row');
+    if (checkbox.checked) {
+      row.classList.add('env-ativo');
+    } else {
+      row.classList.remove('env-ativo');
+      row.querySelector('.env-canal-pct').value = '';
+    }
+  };
+
+  function gerarEmailTemplate1(nome, empresa, whatsapp, site, envios, conheceu) {
+    return '<!DOCTYPE html><html><head><meta charset="UTF-8"><style>body{font-family:\'Segoe UI\',Tahoma,Geneva,Verdana,sans-serif;background:#f5f5f5;margin:0;padding:0}.container{max-width:600px;margin:0 auto;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.1)}.header{background:linear-gradient(135deg,#1b1b1b 0%,#2d2d2d 100%);padding:40px 20px;text-align:center}.header h1{color:#b5ff47;font-size:28px;margin:0;font-weight:700}.header p{color:#ccc;font-size:14px;margin:8px 0 0 0}.content{padding:40px}.section{margin-bottom:32px}.section h2{color:#1b1b1b;font-size:16px;font-weight:700;margin:0 0 16px 0;border-bottom:2px solid #b5ff47;padding-bottom:8px}.field{margin-bottom:12px;display:flex;align-items:flex-start}.label{font-weight:700;color:#555;width:140px;flex-shrink:0}.value{color:#333;flex:1}.highlight{background:#f0f0f0;padding:16px;border-radius:6px;border-left:4px solid #b5ff47;margin:16px 0}.footer{background:#f9f9f9;padding:24px 40px;border-top:1px solid #eee;text-align:center;font-size:12px;color:#999}.footer p{margin:0;line-height:1.6}</style></head><body><div class="container"><div class="header"><h1>📬 Novo Lead Qualificado</h1><p>Alguém interessado em seus serviços</p></div><div class="content"><div class="highlight"><strong style="font-size:18px;color:#b5ff47">✅ Qualificado: ' + envios + '+ envios/mês</strong></div><div class="section"><h2>Informações de Contato</h2><div class="field"><span class="label">Nome:</span><span class="value"><strong>' + nome + '</strong></span></div><div class="field"><span class="label">Empresa:</span><span class="value"><strong>' + empresa + '</strong></span></div><div class="field"><span class="label">WhatsApp:</span><span class="value"><strong>' + whatsapp + '</strong></span></div>' + (site ? '<div class="field"><span class="label">Site:</span><span class="value"><a href="' + site + '" style="color:#0066cc;text-decoration:none">' + site + '</a></span></div>' : '') + '</div><div class="section"><h2>Informações de Negócio</h2><div class="field"><span class="label">Envios/mês:</span><span class="value"><strong>' + envios + '</strong></span></div><div class="field"><span class="label">Como conheceu:</span><span class="value">' + conheceu + '</span></div></div><div class="highlight" style="background:#e8f5e9;border-left-color:#4caf50"><strong style="color:#2e7d32">🎯 Próximo passo:</strong> Entrar em contato via WhatsApp: ' + whatsapp + '</div></div><div class="footer"><p><strong>Enviagora</strong> | Fulfillment &amp; Logistics</p><p>Recebido em: ' + new Date().toLocaleDateString('pt-BR',{weekday:'long',year:'numeric',month:'long',day:'numeric',hour:'2-digit',minute:'2-digit'}) + '</p></div></div></body></html>';
+  }
+
+  function gerarEmailTemplate2(nome, empresa, whatsapp, site, nicho, envios, skus, canais, motivo, conheceu) {
+    var canaisHTML = canais.map(function(c) { return '<li>' + c.canal + ': <strong>' + c.percentual + '%</strong></li>'; }).join('');
+    return '<!DOCTYPE html><html><head><meta charset="UTF-8"><style>body{font-family:\'Segoe UI\',Tahoma,Geneva,Verdana,sans-serif;background:#f5f5f5;margin:0;padding:0}.container{max-width:600px;margin:0 auto;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.1)}.header{background:linear-gradient(135deg,#1b1b1b 0%,#2d2d2d 100%);padding:40px 20px;text-align:center}.header h1{color:#b5ff47;font-size:28px;margin:0;font-weight:700}.header p{color:#ccc;font-size:14px;margin:8px 0 0 0}.content{padding:40px}.section{margin-bottom:32px}.section h2{color:#1b1b1b;font-size:16px;font-weight:700;margin:0 0 16px 0;border-bottom:2px solid #b5ff47;padding-bottom:8px}.field{margin-bottom:12px;display:flex;align-items:flex-start}.label{font-weight:700;color:#555;width:140px;flex-shrink:0}.value{color:#333;flex:1}.highlight{background:#f0f0f0;padding:16px;border-radius:6px;border-left:4px solid #b5ff47;margin:16px 0}.canais-list{margin:12px 0}.canais-list li{margin:6px 0}.motivo-box{background:#fff3cd;padding:14px;border-radius:6px;border-left:4px solid #ffc107;margin:12px 0;font-size:13px;line-height:1.6;color:#333}.footer{background:#f9f9f9;padding:24px 40px;border-top:1px solid #eee;text-align:center;font-size:12px;color:#999}.footer p{margin:0;line-height:1.6}</style></head><body><div class="container"><div class="header"><h1>📋 Novo Lead para Análise</h1><p>Empresa com menos de 5.000 envios/mês</p></div><div class="content"><div class="highlight"><strong style="font-size:16px">🏢 ' + empresa + '</strong><br/><span style="font-size:13px;color:#666">Nicho: ' + nicho + '</span></div><div class="section"><h2>Dados Pessoais</h2><div class="field"><span class="label">Nome:</span><span class="value"><strong>' + nome + '</strong></span></div><div class="field"><span class="label">WhatsApp:</span><span class="value"><strong>' + whatsapp + '</strong></span></div>' + (site ? '<div class="field"><span class="label">Site:</span><span class="value"><a href="' + site + '" style="color:#0066cc;text-decoration:none">' + site + '</a></span></div>' : '') + '</div><div class="section"><h2>Informações Operacionais</h2><div class="field"><span class="label">Envios/mês:</span><span class="value"><strong>' + envios + '</strong></span></div><div class="field"><span class="label">SKUs:</span><span class="value"><strong>' + skus + '</strong></span></div></div><div class="section"><h2>Canais de Venda</h2><ul class="canais-list">' + canaisHTML + '</ul></div><div class="section"><h2>Por que busca Fulfillment?</h2><div class="motivo-box">' + motivo.replace(/\n/g,'<br/>') + '</div></div><div class="field"><span class="label">Como conheceu:</span><span class="value">' + conheceu + '</span></div><div class="highlight" style="background:#e3f2fd;border-left-color:#2196f3"><strong style="color:#1565c0">💬 Ação recomendada:</strong> Entrar em contato para análise e proposta customizada.</div></div><div class="footer"><p><strong>Enviagora</strong> | Fulfillment &amp; Logistics</p><p>Recebido em: ' + new Date().toLocaleDateString('pt-BR',{weekday:'long',year:'numeric',month:'long',day:'numeric',hour:'2-digit',minute:'2-digit'}) + '</p></div></div></body></html>';
+  }
+
+  window.envEnviar = async function() {
+    var nome=document.getElementById('env-nome').value.trim(),numero=document.getElementById('env-whatsapp').value.trim(),empresa=document.getElementById('env-empresa').value.trim(),site=document.getElementById('env-site').value.trim(),envios=document.getElementById('env-envios').value.trim();
+    if(envios!==''&&parseInt(envios)<5000){document.getElementById('env-toast').classList.add('env-show');setTimeout(function(){document.getElementById('env-toast').classList.remove('env-show')},6000);return}
+    var codigoPais=document.getElementById('env-pais').value,ddd=document.getElementById('env-ddd').value.trim(),whatsappCompleto=codigoPais+(ddd?' '+ddd:'')+(numero?' '+numero:''),conheceuRadio=document.querySelector('input[name="env-conheceu"]:checked'),conheceu=conheceuRadio?conheceuRadio.value:'';
+    if(conheceu==='Outro'){var outro=document.getElementById('env-conheceu-outro-txt').value.trim();conheceu=outro?'Outro: '+outro:'Outro'}
+    var campos=[{err:'env-err-nome',val:nome},{err:'env-err-whatsapp',val:numero},{err:'env-err-empresa',val:empresa},{err:'env-err-envios',val:envios},{err:'env-err-conheceu',val:conheceu}],valid=true;
+    campos.forEach(function(c){var el=document.getElementById(c.err);if(!c.val){el.classList.add('env-show');valid=false}else{el.classList.remove('env-show')}});
+    if(!valid)return;
+    var btn=document.getElementById('env-btn-enviar');btn.disabled=true;btn.textContent='Enviando...';
+    var emailHTML=gerarEmailTemplate1(nome,empresa,whatsappCompleto,site,envios,conheceu);
+    try{await fetch('https://api.resend.com/emails',{method:'POST',headers:{'Authorization':'Bearer '+RESEND_API_KEY,'Content-Type':'application/json'},body:JSON.stringify({from:'noreply@enviagora.com.br',to:SEU_EMAIL,replyTo:whatsappCompleto,subject:'📬 Novo Lead Qualificado: '+nome+' ('+empresa+')',html:emailHTML})});window.location.href='https://enviagora.com.br/pages/obrigado-indicacao'}catch(e){var s=document.getElementById('env-status');s.textContent='Erro ao enviar. Verifique sua API Key do Resend.';s.classList.add('env-show');btn.disabled=false;btn.textContent='Enviar';console.error('Erro:',e)}
+  };
+
+  window.env2Enviar = async function() {
+    var nome=document.getElementById('env2-nome').value.trim(),empresa=document.getElementById('env2-empresa').value.trim(),numero=document.getElementById('env2-whatsapp').value.trim(),site=document.getElementById('env2-site').value.trim(),nicho=document.getElementById('env2-nicho').value.trim(),envios=document.getElementById('env2-envios').value.trim(),skus=document.getElementById('env2-skus').value.trim(),motivo=document.getElementById('env2-motivo').value.trim();
+    var codigoPais=document.getElementById('env2-pais').value,ddd=document.getElementById('env2-ddd').value.trim(),whatsapp=codigoPais+(ddd?' '+ddd:'')+(numero?' '+numero:''),conheceuRadio2=document.querySelector('input[name="env2-conheceu"]:checked'),conheceu2=conheceuRadio2?conheceuRadio2.value:'';
+    if(conheceu2==='Outro'){var outro2=document.getElementById('env2-conheceu-outro-txt').value.trim();conheceu2=outro2?'Outro: '+outro2:'Outro'}
+    var campos=[{err:'env2-err-nome',val:nome},{err:'env2-err-empresa',val:empresa},{err:'env2-err-whatsapp',val:numero},{err:'env2-err-motivo',val:motivo},{err:'env2-err-nicho',val:nicho},{err:'env2-err-envios',val:envios},{err:'env2-err-skus',val:skus},{err:'env2-err-conheceu',val:conheceu2}],valid=true;
+    campos.forEach(function(c){var el=document.getElementById(c.err);if(!c.val){el.classList.add('env-show');valid=false}else{el.classList.remove('env-show')}});
+    var canais=[];document.querySelectorAll('#env2-canais .env-canal-row').forEach(function(row){var cb=row.querySelector('input[type="checkbox"]');if(cb.checked){var pct=row.querySelector('.env-canal-pct').value;canais.push({canal:row.dataset.canal,percentual:pct?parseInt(pct):0})}});
+    var errCanais=document.getElementById('env2-err-canais');if(canais.length===0){errCanais.classList.add('env-show');valid=false}else{errCanais.classList.remove('env-show')}
+    if(!valid)return;
+    var btn=document.getElementById('env2-btn-enviar');btn.disabled=true;btn.textContent='Enviando...';
+    var emailHTML=gerarEmailTemplate2(nome,empresa,whatsapp,site,nicho,envios,skus,canais,motivo,conheceu2);
+    try{await fetch('https://api.resend.com/emails',{method:'POST',headers:{'Authorization':'Bearer '+RESEND_API_KEY,'Content-Type':'application/json'},body:JSON.stringify({from:'noreply@enviagora.com.br',to:SEU_EMAIL,replyTo:whatsapp,subject:'📋 Novo Lead para Análise: '+nome+' ('+empresa+') - '+envios+' envios/mês',html:emailHTML})});envFecharModal();window.location.href='https://enviagora.com.br/pages/pagina-de-obrigado'}catch(e){var s=document.getElementById('env2-status');s.textContent='Erro ao enviar. Verifique sua API Key do Resend.';s.classList.add('env-show');btn.disabled=false;btn.textContent='Enviar';console.error('Erro:',e)}
+  };
+
+  function envInit() {
+    if (!document.getElementById('env-pais')) { setTimeout(envInit, 200); return; }
+    envPopularTodosPaises();
+  }
+  envInit();
+
+})();
+</script>
+
+{%- style -%}
+  .footer {
+    margin-top: {{ section.settings.margin_top | times: 0.75 | round: 0 }}px;
+  }
+
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .footer {
+      margin-top: {{ section.settings.margin_top }}px;
+    }
+
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<footer class="footer color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+  {%- liquid
+    assign has_social_icons = true
+    if settings.social_facebook_link == blank and settings.social_instagram_link == blank and settings.social_youtube_link == blank and settings.social_tiktok_link == blank and settings.social_twitter_link == blank and settings.social_pinterest_link == blank and settings.social_snapchat_link == blank and settings.social_tumblr_link == blank and settings.social_vimeo_link == blank
+      assign has_social_icons = false
+    endif
+
+    if settings.brand_image == blank and settings.brand_headline == blank and settings.brand_description == blank
+      assign brand_empty = true
+    endif
+
+    if section.blocks.size == 1 and section.blocks[0].type == 'brand_information' and brand_empty and has_social_icons == false and section.settings.newsletter_enable == false and section.settings.enable_follow_on_shop == false
+      assign only_empty_brand = true
+    endif
+  -%}
+  {%- if section.blocks.size > 0
+    or section.settings.newsletter_enable
+    or section.settings.show_social and has_social_icons == true
+    or section.settings.enable_follow_on_shop
+  -%}
+    {%- unless only_empty_brand -%}
+      <div class="footer__content-top page-width">
+        {%- if section.blocks.size > 0 -%}
+          {%- liquid
+            if section.blocks.size == 9
+              assign footer_grid_class = 'grid--3-col-tablet'
+            elsif section.blocks.size > 6
+              assign footer_grid_class = 'grid--4-col-desktop'
+            elsif section.blocks.size > 4
+              assign footer_grid_class = 'grid--3-col-tablet'
+            endif
+          -%}
+          <div
+            class="footer__blocks-wrapper grid grid--1-col grid--2-col grid--4-col-tablet {{ footer_grid_class }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+            {% if settings.animations_reveal_on_scroll %}
+              data-cascade
+            {% endif %}
+          >
+            {%- for block in section.blocks -%}
+              <div
+                class="footer-block grid__item{% if block.type == 'link_list' %} footer-block--menu{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+                {{ block.shopify_attributes }}
+                {% if settings.animations_reveal_on_scroll %}
+                  data-cascade
+                  style="--animation-order: {{ forloop.index }};"
+                {% endif %}
+              >
+                {%- if block.settings.heading != blank -%}
+                  <h2 class="footer-block__heading inline-richtext">{{- block.settings.heading -}}</h2>
+                {%- endif -%}
+
+                {%- case block.type -%}
+                  {%- when '@app' -%}
+                    {% render block %}
+                  {%- when 'text' -%}
+                    <div class="footer-block__details-content rte">
+                      {{ block.settings.subtext }}
+                    </div>
+                  {%- when 'link_list' -%}
+                    {%- if block.settings.menu != blank -%}
+                      <ul class="footer-block__details-content list-unstyled">
+                        {%- for link in block.settings.menu.links -%}
+                          <li>
+                            <a
+                              href="{{ link.url }}"
+                              class="link link--text list-menu__item list-menu__item--link{% if link.active %} list-menu__item--active{% endif %}"
+                            >
+                              {{ link.title }}
+                            </a>
+                          </li>
+                        {%- endfor -%}
+                      </ul>
+                    {%- endif -%}
+                  {%- when 'brand_information' -%}
+                    <div class="footer-block__brand-info">
+                      {%- if settings.brand_image != blank -%}
+                        {%- assign brand_image_height = settings.brand_image_width
+                          | divided_by: settings.brand_image.aspect_ratio
+                        -%}
+                        <div
+                          class="footer-block__image-wrapper"
+                          style="max-width: min(100%, {{ settings.brand_image_width }}px);"
+                        >
+                          {{
+                            settings.brand_image
+                            | image_url: width: 1100
+                            | image_tag:
+                              loading: 'lazy',
+                              widths: '50, 100, 150, 200, 300, 400, 550, 800, 1100',
+                              height: brand_image_height,
+                              width: settings.brand_image_width
+                          }}
+                        </div>
+                      {%- endif -%}
+                      {%- if settings.brand_headline != blank -%}
+                        <h2 class="footer-block__heading rte">{{ settings.brand_headline }}</h2>
+                      {%- endif -%}
+                      {%- if settings.brand_description != blank -%}
+                        <div class="rte">{{ settings.brand_description }}</div>
+                      {%- endif -%}
+                      {%- if block.settings.show_social and has_social_icons -%}
+                        {%- render 'social-icons', class: 'footer__list-social' -%}
+                      {%- endif -%}
+                    </div>
+                  {%- when 'image' -%}
+                    <div class="footer-block__details-content footer-block-image {{ block.settings.alignment }}">
+                      {%- if block.settings.image != blank -%}
+                        {%- assign image_size_2x = block.settings.image_width | times: 2 | at_most: 5760 -%}
+                        <div
+                          class="footer-block__image-wrapper"
+                          style="max-width: min(100%, {{ block.settings.image_width }}px);"
+                        >
+                          <img
+                            srcset="{{ block.settings.image | image_url: width: block.settings.image_width }}, {{ block.settings.image | image_url: width: image_size_2x }} 2x"
+                            src="{{ block.settings.image | image_url: width: 760 }}"
+                            alt="{{ block.settings.image.alt | escape }}"
+                            loading="lazy"
+                            width="{{ block.settings.image.width }}"
+                            height="{{ block.settings.image.height }}"
+                          >
+                        </div>
+                      {%- else -%}
+                        {{ 'image' | placeholder_svg_tag: 'placeholder-svg placeholder' }}
+                      {%- endif -%}
+                    </div>
+                {%- endcase -%}
+              </div>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+
+        <div
+          class="footer-block--newsletter{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+          {% if settings.animations_reveal_on_scroll %}
+            data-cascade
+          {% endif %}
+        >
+          {%- if section.settings.newsletter_enable -%}
+            <div class="footer-block__newsletter">
+              {%- if section.settings.newsletter_heading != blank -%}
+                <h2 class="footer-block__heading inline-richtext">{{ section.settings.newsletter_heading }}</h2>
+              {%- endif -%}
+              {%- form 'customer', id: 'ContactFooter', class: 'footer__newsletter newsletter-form' -%}
+                <input type="hidden" name="contact[tags]" value="newsletter">
+                <div class="newsletter-form__field-wrapper">
+                  <div class="field">
+                    <input
+                      id="NewsletterForm--{{ section.id }}"
+                      type="email"
+                      name="contact[email]"
+                      class="field__input"
+                      value="{{ form.email }}"
+                      aria-required="true"
+                      autocorrect="off"
+                      autocapitalize="off"
+                      autocomplete="email"
+                      {% if form.errors %}
+                        autofocus
+                        aria-invalid="true"
+                        aria-describedby="ContactFooter-error"
+                      {% elsif form.posted_successfully? %}
+                        aria-describedby="ContactFooter-success"
+                      {% endif %}
+                      placeholder="{{ 'newsletter.label' | t }}"
+                      required
+                    >
+                    <label class="field__label" for="NewsletterForm--{{ section.id }}">
+                      {{ 'newsletter.label' | t }}
+                    </label>
+                    <button
+                      type="submit"
+                      class="newsletter-form__button field__button"
+                      name="commit"
+                      id="Subscribe"
+                      aria-label="{{ 'newsletter.button_label' | t }}"
+                    >
+                      {% render 'icon-arrow' %}
+                    </button>
+                  </div>
+                  {%- if form.errors -%}
+                    <small class="newsletter-form__message form__message" id="ContactFooter-error">
+                      {%- render 'icon-error' -%}
+                      {{- form.errors.translated_fields.email | capitalize }}
+                      {{ form.errors.messages.email -}}
+                    </small>
+                  {%- endif -%}
+                </div>
+                {%- if form.posted_successfully? -%}
+                  <h3
+                    class="newsletter-form__message newsletter-form__message--success form__message"
+                    id="ContactFooter-success"
+                    tabindex="-1"
+                    autofocus
+                  >
+                    {% render 'icon-success' -%}
+                    {{- 'newsletter.success' | t }}
+                  </h3>
+                {%- endif -%}
+              {%- endform -%}
+            </div>
+          {%- endif -%}
+
+          {%- if shop.features.follow_on_shop? and section.settings.enable_follow_on_shop -%}
+            <div class="footer__follow-on-shop">
+              {% comment %} TODO: enable theme-check once `login_button` is accepted as valid filter {% endcomment %}
+              {% # theme-check-disable %}
+              {{ shop | login_button: action: 'follow' }}
+              {% # theme-check-enable %}
+            </div>
+          {%- endif -%}
+
+          {%- if section.settings.show_social and has_social_icons -%}
+            {%- render 'social-icons', class: 'footer__list-social' -%}
+          {%- endif -%}
+        </div>
+      </div>
+    {%- endunless -%}
+  {%- endif -%}
+
+  <div
+    class="footer__content-bottom{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+    {% if settings.animations_reveal_on_scroll %}
+      data-cascade
+    {% endif %}
+  >
+    <div class="footer__content-bottom-wrapper page-width">
+      <div class="footer__column footer__localization isolate">
+        {%- if section.settings.enable_country_selector and localization.available_countries.size > 1 -%}
+          <noscript>
+            {%- form 'localization', id: 'FooterCountryFormNoScript', class: 'localization-form' -%}
+              <div class="localization-form__select">
+                <h2 class="visually-hidden" id="FooterCountryLabelNoScript">{{ 'localization.country_label' | t }}</h2>
+                <select
+                  class="localization-selector link"
+                  name="country_code"
+                  aria-labelledby="FooterCountryLabelNoScript"
+                >
+                  {%- for country in localization.available_countries -%}
+                    <option
+                      value="{{ country.iso_code }}"
+                      {%- if country.iso_code == localization.country.iso_code %}
+                        selected
+                      {% endif %}
+                    >
+                      {{ country.name }} ({{ country.currency.iso_code }}
+                      {{ country.currency.symbol }})
+                    </option>
+                  {%- endfor -%}
+                </select>
+                {% render 'icon-caret' %}
+              </div>
+              <button class="button button--tertiary">{{ 'localization.update_country' | t }}</button>
+            {%- endform -%}
+          </noscript>
+          <localization-form>
+            {%- form 'localization', id: 'FooterCountryForm', class: 'localization-form' -%}
+              <div class="no-js-hidden">
+                <h2 class="caption-large text-body" id="FooterCountryLabel">{{ 'localization.country_label' | t }}</h2>
+                {%- render 'country-localization', localPosition: 'FooterCountry' -%}
+              </div>
+            {%- endform -%}
+          </localization-form>
+        {%- endif -%}
+
+        {%- if section.settings.enable_language_selector and localization.available_languages.size > 1 -%}
+          <noscript>
+            {%- form 'localization', id: 'FooterLanguageFormNoScript', class: 'localization-form' -%}
+              <div class="localization-form__select">
+                <h2 class="visually-hidden" id="FooterLanguageLabelNoScript">
+                  {{ 'localization.language_label' | t }}
+                </h2>
+                <select
+                  class="localization-selector link"
+                  name="locale_code"
+                  aria-labelledby="FooterLanguageLabelNoScript"
+                >
+                  {%- for language in localization.available_languages -%}
+                    <option
+                      value="{{ language.iso_code }}"
+                      lang="{{ language.iso_code }}"
+                      {%- if language.iso_code == localization.language.iso_code %}
+                        selected
+                      {% endif %}
+                    >
+                      {{ language.endonym_name | capitalize }}
+                    </option>
+                  {%- endfor -%}
+                </select>
+                {% render 'icon-caret' %}
+              </div>
+              <button class="button button--tertiary">{{ 'localization.update_language' | t }}</button>
+            {%- endform -%}
+          </noscript>
+
+          <localization-form>
+            {%- form 'localization', id: 'FooterLanguageForm', class: 'localization-form' -%}
+              <div class="no-js-hidden">
+                <h2 class="caption-large text-body" id="FooterLanguageLabel">
+                  {{ 'localization.language_label' | t }}
+                </h2>
+                {%- render 'language-localization', localPosition: 'FooterLanguage' -%}
+              </div>
+            {%- endform -%}
+          </localization-form>
+        {%- endif -%}
+      </div>
+      <div class="footer__column footer__column--info">
+        {%- if section.settings.payment_enable -%}
+          <div class="footer__payment">
+            <span class="visually-hidden">{{ 'sections.footer.payment' | t }}</span>
+            <ul class="list list-payment" role="list">
+              {%- for type in shop.enabled_payment_types -%}
+                <li class="list-payment__item">
+                  {{ type | payment_type_svg_tag: class: 'icon icon--full-color' }}
+                </li>
+              {%- endfor -%}
+            </ul>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+    <div class="footer__content-bottom-wrapper page-width{% if section.settings.enable_country_selector == false and section.settings.enable_language_selector == false %} footer__content-bottom-wrapper--center{% endif %}">
+      <div class="footer__copyright caption">
+        <small class="copyright__content"
+          >&copy; {{ 'now' | date: '%Y' }}, {{ shop.name | link_to: routes.root_url -}}
+        </small>
+        <small class="copyright__content">{{ powered_by_link }}</small>
+        {%- if section.settings.show_policy -%}
+          <ul class="policies list-unstyled">
+            {%- for policy in shop.policies -%}
+              {%- if policy != blank -%}
+                <li>
+                  <small class="copyright__content"
+                    ><a href="{{ policy.url }}">{{ policy.title }}</a></small
+                  >
+                </li>
+              {%- endif -%}
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "t:sections.footer.name",
+  "blocks": [
+    {
+      "type": "@app"
+    },
+    {
+      "type": "link_list",
+      "name": "t:sections.footer.blocks.link_list.name",
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "default": "Quick links",
+          "label": "t:sections.footer.blocks.link_list.settings.heading.label"
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "default": "footer",
+          "label": "t:sections.footer.blocks.link_list.settings.menu.label",
+          "info": "t:sections.footer.blocks.link_list.settings.menu.info"
+        }
+      ]
+    },
+    {
+      "type": "brand_information",
+      "name": "t:sections.footer.blocks.brand_information.name",
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "t:sections.footer.blocks.brand_information.settings.paragraph.content"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.footer.blocks.brand_information.settings.header__1.content"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_social",
+          "default": true,
+          "label": "t:sections.footer.blocks.brand_information.settings.show_social.label",
+          "info": "t:sections.footer.blocks.brand_information.settings.show_social.info"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "t:sections.footer.blocks.text.name",
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "default": "Heading",
+          "label": "t:sections.footer.blocks.text.settings.heading.label"
+        },
+        {
+          "type": "richtext",
+          "id": "subtext",
+          "default": "<p>Share contact information, store details, and brand content with your customers.</p>",
+          "label": "t:sections.footer.blocks.text.settings.subtext.label"
+        }
+      ]
+    },
+    {
+      "type": "image",
+      "name": "Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "range",
+          "id": "image_width",
+          "min": 50,
+          "max": 550,
+          "step": 5,
+          "unit": "px",
+          "label": "Image width",
+          "default": 100
+        },
+        {
+          "type": "select",
+          "id": "alignment",
+          "label": "Image alignment on large screen",
+          "options": [
+            {
+              "value": "",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "center"
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "background-1"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.footer.settings.header__1.content",
+      "info": "t:sections.footer.settings.header__1.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "newsletter_enable",
+      "default": true,
+      "label": "t:sections.footer.settings.newsletter_enable.label"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "newsletter_heading",
+      "default": "Subscribe to our emails",
+      "label": "t:sections.footer.settings.newsletter_heading.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.footer.settings.header__9.content",
+      "info": "t:sections.footer.settings.header__9.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_follow_on_shop",
+      "default": true,
+      "label": "t:sections.footer.settings.enable_follow_on_shop.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.footer.settings.header__2.content",
+      "info": "t:sections.footer.settings.header__2.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_social",
+      "default": true,
+      "label": "t:sections.footer.settings.show_social.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.footer.settings.header__3.content",
+      "info": "t:sections.footer.settings.header__4.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_country_selector",
+      "default": true,
+      "label": "t:sections.footer.settings.enable_country_selector.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.footer.settings.header__5.content",
+      "info": "t:sections.footer.settings.header__6.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_language_selector",
+      "default": true,
+      "label": "t:sections.footer.settings.enable_language_selector.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.footer.settings.header__7.content"
+    },
+    {
+      "type": "checkbox",
+      "id": "payment_enable",
+      "default": true,
+      "label": "t:sections.footer.settings.payment_enable.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.footer.settings.header__8.content",
+      "info": "t:sections.footer.settings.header__8.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_policy",
+      "default": false,
+      "label": "t:sections.footer.settings.show_policy.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.spacing"
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.footer.settings.margin_top.label",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 36
+    }
+  ],
+  "default": {
+    "blocks": [
+      {
+        "type": "link_list"
+      },
+      {
+        "type": "text"
+      }
+    ]
+  }
+
+  
+}
+{% endschema %}
