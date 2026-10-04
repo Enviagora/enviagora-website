@@ -1,4 +1,5 @@
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion } from 'framer-motion';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 import type { ReactNode } from 'react';
 import { EASE_EA, VIEWPORT } from '@/lib/motion';
 
@@ -14,16 +15,13 @@ type RevealProps = {
 
 /**
  * Wrapper de reveal no scroll (fade + subida). Respeita prefers-reduced-motion:
- * quando ativo, renderiza o conteúdo estático (sem transform), garantindo fallback.
+ * quando ativo, o conteúdo aparece sem animação. O elemento é sempre o mesmo
+ * (motion.*) — trocar de tipo após hidratar remontaria os filhos (ex.: o
+ * formulário do HubSpot).
  */
 export function Reveal({ children, className, delay = 0, y = 26, as = 'div' }: RevealProps) {
   const reduce = useReducedMotion();
   const Tag = motion[as];
-
-  if (reduce) {
-    const Static = as;
-    return <Static className={className}>{children}</Static>;
-  }
 
   return (
     <Tag
@@ -31,7 +29,7 @@ export function Reveal({ children, className, delay = 0, y = 26, as = 'div' }: R
       initial={{ opacity: 0, y }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={VIEWPORT}
-      transition={{ duration: 0.7, ease: EASE_EA, delay }}
+      transition={reduce ? { duration: 0 } : { duration: 0.7, ease: EASE_EA, delay }}
     >
       {children}
     </Tag>

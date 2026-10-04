@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion } from 'framer-motion';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { Boxes, Bell, Check } from 'lucide-react';
 import { realTime } from '@/content/content';
 import { Section } from '@/components/layout/Section';
@@ -7,6 +8,7 @@ import { SectionHeading } from '@/components/ui/SectionHeading';
 import { Reveal } from '@/components/motion/Reveal';
 import { VIEWPORT } from '@/lib/motion';
 import { cn } from '@/lib/cn';
+import { Arrow } from '@/components/brand/Arrow';
 
 // Estados de UI ilustrativos (não são copy do site) — dão a sensação de "ao vivo".
 const rows = [
@@ -53,7 +55,7 @@ function MockDashboard() {
   return (
     <div className="relative">
       {/* Janela do painel */}
-      <div className="overflow-hidden rounded-ea-lg border border-ea-petroleo/10 bg-white shadow-ea-lg">
+      <div className="overflow-hidden rounded-ea-lg border border-ea-petroleo/15 bg-white shadow-ea">
         <div className="flex items-center gap-2 border-b border-ea-petroleo/10 bg-ea-creme px-4 py-3">
           <span className="h-2.5 w-2.5 rounded-full bg-ea-petroleo/20" />
           <span className="h-2.5 w-2.5 rounded-full bg-ea-petroleo/20" />
@@ -162,9 +164,20 @@ export function RealTime() {
             <p className="max-w-xl text-base leading-relaxed text-ea-soft">{realTime.body}</p>
           </Reveal>
           <Reveal delay={0.1}>
-            <span className="inline-flex items-center gap-2 text-sm font-medium text-ea-soft">
-              <span className="ea-kicker text-ea-petroleo">{realTime.poweredBy}</span>
-            </span>
+            <ul className="grid gap-px overflow-hidden rounded-ea border border-ea-petroleo/10 bg-ea-petroleo/10 sm:grid-cols-3">
+              {realTime.features.map((f) => (
+                <li key={f.title} className="flex flex-col gap-1.5 bg-ea-coolgrey p-4">
+                  <span className="flex items-center gap-2 text-sm font-bold text-ea-petroleo">
+                    <Arrow className="h-3 w-3 shrink-0" />
+                    {f.title}
+                  </span>
+                  <span className="text-sm leading-snug text-ea-soft">{f.body}</span>
+                </li>
+              ))}
+            </ul>
+          </Reveal>
+          <Reveal delay={0.15}>
+            <span className="ea-kicker text-ea-petroleo">{realTime.poweredBy}</span>
           </Reveal>
         </div>
       </div>

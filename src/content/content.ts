@@ -1,13 +1,12 @@
 /* ==========================================================================
-   EnviAgora — CONTEÚDO (copy verbatim do site atual)
+   EnviAgora — CONTEÚDO
    --------------------------------------------------------------------------
-   FONTE ÚNICA DE TEXTO. Todo o copy foi extraído do site enviagora.com.br
-   (one-pager) exatamente como está — sem reescrever. Ao editar textos do site,
-   altere APENAS aqui. Os componentes só consomem estas constantes.
+   FONTE ÚNICA DE TEXTO. A base é o copy do site enviagora.com.br; os textos de
+   conversão novos (hero, simulador, microcopy de CTA, pós-envio) usam apenas
+   números e promessas já publicados no site — nada de dado inventado.
+   Ao editar textos do site, altere APENAS aqui. Os componentes só consomem
+   estas constantes.
    ========================================================================== */
-
-/** CTA recorrente usado em várias seções. */
-export const CTA_ESPECIALISTA = 'Quero falar com um especialista';
 
 export const site = {
   name: 'Enviagora',
@@ -26,26 +25,33 @@ export const topBanner =
 export const nav = [
   { label: 'Operação', href: '#operacao' },
   { label: 'Como funciona', href: '#como-funciona' },
+  { label: 'Economia', href: '#economia' },
   { label: 'Integrações', href: '#integracoes' },
-  { label: 'Perguntas frequentes', href: '#faq' },
+  { label: 'Dúvidas', href: '#faq' },
 ] as const;
 
 export const hero = {
   // Eyebrow/kicker (material de branding — posicionamento do deck aprovado).
   kicker: 'Fulfillment premium para marcas em escala',
-  // "A única logística" é destacada no site.
+  // Assinatura verbal oficial da marca, com "única logística" em destaque.
   titlePre: 'A ',
   titleHighlight: 'única logística',
-  titlePos: ' que funciona para sua marca!',
+  titlePos: ' que funciona.',
   subtitle:
-    'Cuidamos de todo o seu processo logístico, desde o armazenamento e embalagem até o envio.',
-  bullets: [
-    'Descontos de até 40% em fretes',
-    'Economize até 60% com incentivos fiscais',
-    'Localização: Extrema/MG e Barueri/SP',
+    'Armazenamos, embalamos e enviamos os pedidos de marcas de suplementos, cosméticos e nutracêuticos — com até 40% de economia no frete.',
+  // Prova logo na dobra (números já publicados no site).
+  proof: [
+    { value: '+1M', label: 'pacotes por mês' },
+    { value: '99,6%', label: 'de assertividade nos pedidos' },
+    { value: '92%', label: 'dos pedidos enviados em até 24h' },
+    { value: '2 CDs', label: 'Extrema/MG e Barueri/SP' },
   ],
   cta: 'Falar com um especialista',
+  ctaSecondary: 'Calcular minha economia',
 } as const;
+
+/** Linha de segurança sob os CTAs principais (reduz o atrito do primeiro contato). */
+export const reassurance = 'Sem compromisso · um especialista retorna para entender sua operação';
 
 export const socialProof = {
   title: 'Marcas de sucesso que confiam na',
@@ -68,10 +74,12 @@ export const niches = {
     {
       title: 'Suplementos e nutracêuticos',
       body: 'Atendemos marcas que exigem rastreabilidade, cuidado com o shelf life e alto giro de pedidos em todo o Brasil.',
+      features: ['Controle de lotes e validades', 'Galpões com ANVISA', 'Logística B2C & B2B'],
     },
     {
       title: 'Beleza e cuidado pessoal',
       body: 'Do skincare ao haircare: logística pensada para kits, brindes, combos promocionais e embalagem com experiência.',
+      features: ['Unboxing customizável', 'Sua identidade visual em cada envio', 'Kits, brindes e combos'],
     },
   ],
 } as const;
@@ -79,6 +87,9 @@ export const niches = {
 export const process = {
   title: 'Cuidamos de todo o processo, do armazenamento ao envio.',
   local: 'CD ENVIAGORA · EXTREMA/MG',
+  // Legenda da foto real do galpão (a mesma usada no site atual).
+  photoCaption: 'Operação própria',
+  photoNote: 'Centros de distribuição em Extrema/MG e Barueri/SP',
   steps: [
     {
       title: 'Armazenamos',
@@ -96,13 +107,41 @@ export const process = {
 } as const;
 
 export const logAlliance = {
+  kicker: 'Economia no frete',
   title: 'Tenha acesso às melhores transportadoras',
   subtitle: 'Uma rede exclusiva de transportadoras selecionadas.',
   brand: 'LogAlliance',
   intro:
     'Para cada envio, cotamos o frete em várias transportadoras da rede e usamos sempre a mais barata da região. Sem taxas escondidas.',
-  cta: CTA_ESPECIALISTA,
-  savingBadge: { label: 'Economia no frete', value: '+40%' },
+  savingBadge: { label: 'Economia no frete', value: 'até 40%' },
+  benefits: [
+    { title: 'Até 40% de desconto em fretes', body: 'Desde o primeiro envio, graças à força de negociação coletiva da Enviagora.' },
+    { title: 'Sem taxas escondidas', body: 'Você paga direto à transportadora, sem comissões, intermediações ou surpresas no final do mês.' },
+    { title: 'Entrega rápida', body: 'Transportadoras de alta performance, focadas em agilidade, rastreio e pontualidade.' },
+    { title: 'Entrega em todo Brasil', body: 'Cobertura nacional garantida pelas transportadoras da aliança.' },
+  ],
+} as const;
+
+/**
+ * Simulador de economia no frete. Usa só a promessa já publicada (até 40% com a
+ * LogAlliance) e deixa claro que é estimativa.
+ */
+export const calculator = {
+  kicker: 'Simulador',
+  title: 'Quanto você economizaria no frete?',
+  ordersLabel: 'Pedidos por mês',
+  freightLabel: 'Frete médio por pedido hoje',
+  freightHint: 'Ajuste para o seu frete atual',
+  resultLabel: 'Economia estimada no frete',
+  perYear: 'por ano',
+  disclaimer:
+    'Estimativa com base no desconto de até 40% da LogAlliance. O valor real depende de peso, dimensões, regiões de destino e mix de pedidos.',
+  minNote: 'Nossa cobrança mínima é de 3.000 pedidos por mês.',
+  cta: 'Quero essa economia',
+  tax: {
+    value: 'Até 60%',
+    text: 'de redução de impostos com incentivos fiscais estratégicos de ICMS — avaliados caso a caso pelo especialista.',
+  },
 } as const;
 
 export const tiktokShop = {
@@ -118,44 +157,14 @@ export const tiktokShop = {
   cta: 'Quero escalar agora',
 } as const;
 
-export const benefits = {
-  items: [
-    {
-      title: '40% de desconto em fretes',
-      body: 'Economize até 40% no frete desde o primeiro envio, graças à força de negociação coletiva da Enviagora.',
-      icon: 'discount',
-    },
-    {
-      title: 'Sem taxas escondidas',
-      body: 'Você paga direto à transportadora, sem comissões, intermediações ou surpresas no final do mês.',
-      icon: 'transparent',
-    },
-    {
-      title: 'Entrega rápida',
-      body: 'Parceria com transportadoras de alta performance, focadas em agilidade, rastreio e pontualidade.',
-      icon: 'fast',
-    },
-    {
-      title: 'Entrega em todo Brasil',
-      body: 'Alcance clientes em qualquer estado com cobertura nacional garantida pelas transportadoras da aliança.',
-      icon: 'nationwide',
-    },
-  ],
-  cta: CTA_ESPECIALISTA,
-} as const;
-
-export const stats = {
-  items: [
-    { value: 60, suffix: '%', title: 'Redução de impostos', label: 'com incentivos fiscais' },
-    { value: 40, suffix: '%', title: 'Redução com fretes', label: 'com a LogAlliance' },
-    { value: 99.6, suffix: '%', title: 'Taxa de assertividade', label: 'nos pedidos enviados' },
-    { value: 92, suffix: '%', title: 'dos pedidos enviados', label: 'em até 24 horas' },
-  ],
-} as const;
-
 export const realTime = {
   title: 'Acompanhamento em tempo real da sua operação',
   body: 'Tenha visibilidade total da sua operação com atualizações em tempo real sobre pedidos. Acompanhe o andamento de cada envio, monitore o estoque dos seus produtos no nosso centro de distribuição e identifique pontos de atenção com facilidade. Tudo isso em um painel claro e intuitivo!',
+  features: [
+    { title: 'Sistema WMS', body: 'Gestão da operação automatizada e eficiente.' },
+    { title: 'Notificações inteligentes', body: 'Avisos de estoque e chegada de mercadoria.' },
+    { title: 'Lotes e validades', body: 'Rastreie prazos e lotes com precisão, da entrada à saída.' },
+  ],
   poweredBy: 'powered by aws',
 } as const;
 
@@ -179,42 +188,49 @@ export const integrations = {
       logos: ['bling', 'tiny', 'omie', 'sap', 'totvs', 'linx'],
     },
   ],
-  cta: CTA_ESPECIALISTA,
+  cta: 'Falar sobre minha integração',
 } as const;
 
-export const howFulfillment = {
-  title: 'Como funciona um fulfillment?',
-  subtitle: 'Você foca em vender e deixa que nós cuidamos da logística',
+/** "Como começar" — os 3 passos de implantação, exibidos junto do formulário. */
+export const comoComecar = {
+  title: 'Como começar',
   steps: [
     {
-      step: 'Passo 1',
+      title: 'Integração',
       body: 'Abertura do CNPJ e integração com nosso sistema, que será responsável por receber todas as suas vendas.',
     },
     {
-      step: 'Passo 2',
-      body: 'Envie seus produtos para o centro de distribuição da Enviagora para armazena-los de acordo com lotes e validades.',
+      title: 'Estoque no CD',
+      body: 'Você envia seus produtos para o centro de distribuição da Enviagora, armazenados de acordo com lotes e validades.',
     },
     {
-      step: 'Passo 3',
+      title: 'Operação rodando',
       body: 'Recebemos as vendas, separamos e embalamos cada pedido e deixamos pronto para coleta da transportadora.',
     },
   ],
+  note: 'Implementação geralmente concluída em até 30 dias após o contrato.',
 } as const;
 
-export const solution = {
-  title: 'Solução completa para impulsionar a logística do seu negócio',
-  features: [
-    { title: 'Unboxing customizável', body: 'Surpreenda seus clientes com experiências únicas.', icon: 'gift' },
-    { title: 'Logística B2C & B2B', body: 'Operamos com excelência no atacado e no varejo.', icon: 'briefcase' },
-    { title: 'Incentivos fiscais', body: 'Aproveite incentivos fiscais estratégicos de ICMS.', icon: 'percent' },
-    { title: 'Controle de lotes e validades', body: 'Rastreie prazos e lotes com precisão. Da entrada à saída.', icon: 'calendar' },
-    { title: 'Utilize sua identidade visual', body: 'Na Enviagora a sua marca é destaque em cada envio.', icon: 'sparkles' },
-    { title: 'Galpões com ANVISA', body: 'Estrutura aprovada para produtos regulamentados.', icon: 'shield' },
-    { title: 'Localização estratégica', body: 'Mais agilidade com centros logísticos bem localizados.', icon: 'pin' },
-    { title: 'Notificações inteligentes', body: 'Receba notificações de estoque e chegada de mercadoria.', icon: 'bell' },
-    { title: 'Sistema WMS', body: 'Gestão da operação automatizada e eficiente.', icon: 'cpu' },
-  ],
-} as const;
+/**
+ * Cases com resultado. A seção só aparece quando houver itens — preencher apenas
+ * com dados reais e aprovados pelo cliente (nada de depoimento inventado).
+ */
+export type CaseStudy = {
+  brand: string;
+  segment: string;
+  /** Resultado principal, ex.: "-31%". */
+  metric: string;
+  metricLabel: string;
+  quote: string;
+  author: string;
+  role: string;
+};
+
+export const cases: { kicker: string; title: string; items: CaseStudy[] } = {
+  kicker: 'Resultados',
+  title: 'Marcas que escalaram com a Enviagora',
+  items: [],
+};
 
 export const contactForm = {
   // Copy do bloco de contato do site atual. Os campos do formulário em si vêm
@@ -222,7 +238,26 @@ export const contactForm = {
   kicker: 'Leve sua operação para o próximo nível!',
   title: 'Estamos selecionando marcas com +5.000 envios/mês que buscam uma logística 5 estrelas',
   instruction: 'Preencha seus dados abaixo para entrar em contato com um especialista:',
+  // Alternativa ao formulário (copy do site atual: "Se preferir, converse
+  // conosco imediatamente pelo WhatsApp").
+  whatsappPre: 'Se preferir,',
+  whatsappCta: 'converse com a gente pelo WhatsApp',
+  success: {
+    title: 'Recebemos seus dados!',
+    body: 'Um especialista da Enviagora vai entrar em contato para entender a sua operação.',
+    scheduleTitle: 'Quer adiantar? Escolha um horário para conversar:',
+    whatsappTitle: 'Quer adiantar a conversa?',
+    whatsappCta: 'Falar agora no WhatsApp',
+  },
 } as const;
+
+/** Mensagem do WhatsApp após o envio (mesmo formato do fluxo atual do site). */
+export function leadWhatsappMessage(lead: { firstName?: string; orderVolume?: string }) {
+  const inicio = lead.firstName ? `Olá! Sou ${lead.firstName}, acabei` : 'Olá! Acabei';
+  const v = lead.orderVolume ?? '';
+  const volume = !v ? '' : /^\d|^at|^mais/i.test(v) ? ` Fazemos ${v.charAt(0).toLowerCase()}${v.slice(1)} envios por mês.` : ` ${v}.`;
+  return `${inicio} de preencher o formulário no site e gostaria de falar com um consultor.${volume}`;
+}
 
 export const faq = {
   title: 'Perguntas frequentes',
@@ -285,7 +320,7 @@ export const faq = {
   ],
   footerBold: 'Ficou com dúvidas?',
   footerRest: ' Entre em contato agora mesmo com um de nossos especialistas!',
-  cta: CTA_ESPECIALISTA,
+  cta: 'Tirar dúvidas com um especialista',
 } as const;
 
 /** Rodapé. Dados de contato/legais são placeholders — preencher com os reais. */
@@ -298,6 +333,7 @@ export const footer = {
       links: [
         { label: 'Operação exclusiva', href: '#operacao' },
         { label: 'Como funciona', href: '#como-funciona' },
+        { label: 'Economia no frete', href: '#economia' },
         { label: 'Integrações', href: '#integracoes' },
         { label: 'Perguntas frequentes', href: '#faq' },
       ],
@@ -305,8 +341,9 @@ export const footer = {
     {
       title: 'Centros de distribuição',
       links: [
-        { label: 'Extrema/MG', href: '#' },
-        { label: 'Barueri/SP', href: '#' },
+        // Sem link: são informação, não navegação.
+        { label: 'Extrema/MG', href: '' },
+        { label: 'Barueri/SP', href: '' },
       ],
     },
   ],

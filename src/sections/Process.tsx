@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
-import { motion, useReducedMotion, useScroll, useTransform, useMotionValueEvent } from 'framer-motion';
+import { motion, useScroll, useTransform, useMotionValueEvent } from 'framer-motion';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { Warehouse, PackageOpen, Truck } from 'lucide-react';
 import { process } from '@/content/content';
 import { Section } from '@/components/layout/Section';
@@ -7,6 +8,9 @@ import { SectionHeading } from '@/components/ui/SectionHeading';
 import { Pill } from '@/components/ui/Pill';
 import { Arrow } from '@/components/brand/Arrow';
 import { cn } from '@/lib/cn';
+import { Reveal } from '@/components/motion/Reveal';
+import cdInterno960 from '@/assets/operacao/cd-interno-960.webp';
+import cdInterno1600 from '@/assets/operacao/cd-interno-1600.webp';
 
 /* ==========================================================================
    Process — "A jornada de um pacote", do armazenamento ao envio.
@@ -56,7 +60,7 @@ export function Process() {
   const isActive = (i: number) => reached >= i + 1;
 
   return (
-    <Section tone="petroleo">
+    <Section id="como-funciona" tone="petroleo">
       <div className="flex flex-col items-center gap-5">
         <Pill tone="dark" className="border border-ea-neon/30 !text-ea-neon">
           {process.local}
@@ -159,6 +163,31 @@ export function Process() {
           })}
         </ol>
       </div>
+
+      {/* Foto real da operação — prova concreta de estrutura, sem render. */}
+      <Reveal className="mt-8 md:mt-20">
+        <figure className="relative overflow-hidden rounded-ea-lg border border-ea-cremewm/10">
+          <img
+            src={cdInterno1600}
+            srcSet={`${cdInterno960} 960w, ${cdInterno1600} 1600w`}
+            sizes="(min-width: 1280px) 1184px, 100vw"
+            width={1600}
+            height={1198}
+            alt="Interior de um centro de distribuição da Enviagora, com porta-paletes cheios de caixas"
+            loading="lazy"
+            decoding="async"
+            className="aspect-[4/3] w-full object-cover sm:aspect-[21/9]"
+          />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ea-petroleo/80 via-transparent to-transparent" />
+          <figcaption className="absolute inset-x-0 bottom-0 flex flex-wrap items-end justify-between gap-3 p-5 sm:p-8">
+            <span className="ea-kicker inline-flex items-center gap-2 text-ea-neon">
+              <Arrow className="h-3.5 w-3.5" />
+              {process.photoCaption}
+            </span>
+            <span className="hidden text-sm text-ea-cremewm/85 sm:inline">{process.photoNote}</span>
+          </figcaption>
+        </figure>
+      </Reveal>
     </Section>
   );
 }

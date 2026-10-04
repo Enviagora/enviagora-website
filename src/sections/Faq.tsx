@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Plus } from 'lucide-react';
-import { faq } from '@/content/content';
+import { faq, reassurance } from '@/content/content';
 import { Section } from '@/components/layout/Section';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { Reveal } from '@/components/motion/Reveal';
@@ -68,7 +68,7 @@ export function Faq() {
         <SectionHeading kicker="Dúvidas" title={faq.title} align="center" className="mx-auto" />
 
         <Reveal className="mt-12">
-          <div className="rounded-ea-lg border border-ea-petroleo/10 bg-white px-6 shadow-ea-sm sm:px-8">
+          <div className="rounded-ea-lg border border-ea-petroleo/15 bg-white px-6 sm:px-8">
             {faq.items.map((item, i) => (
               <FaqRow
                 key={item.q}
@@ -89,6 +89,7 @@ export function Faq() {
           <Button href="#contato" size="lg">
             {faq.cta}
           </Button>
+          <p className="text-xs text-ea-soft">{reassurance}</p>
         </Reveal>
       </div>
     </Section>

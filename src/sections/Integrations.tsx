@@ -54,7 +54,7 @@ export function Integrations() {
           const Icon = groupIcons[i];
           return (
             <Reveal key={group.title} delay={i * 0.1}>
-              <article className="flex h-full flex-col gap-6 rounded-ea-lg border border-ea-petroleo/10 bg-white p-7 shadow-ea-sm">
+              <article className="flex h-full flex-col gap-6 rounded-ea-lg border border-ea-petroleo/15 bg-white p-7">
                 <div className="flex flex-col gap-4">
                   <span className="flex h-12 w-12 items-center justify-center rounded-ea bg-ea-petroleo">
                     <Icon className="h-6 w-6 text-ea-neon" strokeWidth={1.7} aria-hidden />

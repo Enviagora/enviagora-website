@@ -6,12 +6,13 @@ import { logAlliance } from '@/content/content';
 import { Section } from '@/components/layout/Section';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { Reveal } from '@/components/motion/Reveal';
-import { Button } from '@/components/ui/Button';
+import { SavingsCalculator } from '@/components/conversion/SavingsCalculator';
 import { Chevron } from '@/components/brand/Chevron';
 import { cn } from '@/lib/cn';
 
 /* ==========================================================================
-   LogAlliance — mapa do Brasil animado mostrando a cotação de frete.
+   Economia — LogAlliance (mapa do Brasil animado com a cotação de frete),
+   benefícios da rede e o simulador de economia com CTA pré-preenchido.
    A cada ciclo, um caminhão sai do CD (Extrema/MG) para uma região; aparece o
    comparativo de cotações (várias transportadoras) e destacamos a MAIS BARATA.
    ========================================================================== */
@@ -46,18 +47,23 @@ export function LogAlliance() {
   const region = REGIONS[active];
 
   return (
-    <Section id="logalliance" tone="creme">
+    <Section id="economia" tone="creme">
       <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
-        {/* Texto enxuto */}
+        {/* Texto + benefícios da rede (grade com réguas finas) */}
         <div className="flex flex-col gap-6">
-          <SectionHeading kicker="Rede de transportadoras" title={logAlliance.title} subtitle={logAlliance.subtitle} align="left" />
+          <SectionHeading kicker={logAlliance.kicker} title={logAlliance.title} subtitle={logAlliance.subtitle} align="left" />
           <Reveal delay={0.05}>
             <p className="max-w-lg text-base leading-relaxed text-ea-soft">{logAlliance.intro}</p>
           </Reveal>
           <Reveal delay={0.1}>
-            <Button href="#contato" size="lg">
-              {logAlliance.cta}
-            </Button>
+            <ul className="grid gap-px overflow-hidden rounded-ea border border-ea-petroleo/10 bg-ea-petroleo/10 sm:grid-cols-2">
+              {logAlliance.benefits.map((b) => (
+                <li key={b.title} className="flex flex-col gap-1.5 bg-ea-creme p-5">
+                  <span className="text-sm font-bold text-ea-petroleo">{b.title}</span>
+                  <span className="text-sm leading-relaxed text-ea-soft">{b.body}</span>
+                </li>
+              ))}
+            </ul>
           </Reveal>
         </div>
 
@@ -178,6 +184,10 @@ export function LogAlliance() {
           </div>
         </Reveal>
       </div>
+
+      <Reveal delay={0.05} className="mt-16 sm:mt-20">
+        <SavingsCalculator />
+      </Reveal>
     </Section>
   );
 }

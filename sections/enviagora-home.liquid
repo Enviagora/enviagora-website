@@ -1,7 +1,9 @@
 {%- comment -%}
-  Home Enviagora — monta o app React gerado por `npm run build:theme`
-  (assets/enviagora-home.js + .css). Os settings abaixo chegam ao app via
-  #enviagora-config; o resto do conteúdo vive em src/content/content.ts.
+  Home Enviagora — app React gerado por `npm run build:theme`
+  (assets/enviagora-home.js + .css). O HTML já vem pré-renderizado do snippet
+  enviagora-home-ssr (gerado no build) e o React hidrata em cima dele.
+  Os settings abaixo chegam ao app via #enviagora-config; o resto do conteúdo
+  vive em src/content/content.ts.
 {%- endcomment -%}
 {{ 'enviagora-home.css' | asset_url | stylesheet_tag }}
 <link rel="modulepreload" href="{{ 'enviagora-home.js' | asset_url }}">
@@ -11,19 +13,24 @@
     "hubspot": {
       "portalId": {{ section.settings.hubspot_portal_id | json }},
       "formId": {{ section.settings.hubspot_form_id | json }},
-      "region": {{ section.settings.hubspot_region | json }}
+      "region": {{ section.settings.hubspot_region | json }},
+      "meetingsUrl": {{ section.settings.meetings_url | json }}
+    },
+    "whatsapp": {
+      "number": {{ section.settings.whatsapp_number | json }},
+      "message": {{ section.settings.whatsapp_message | json }}
     }
   }
 </script>
 
-<div id="enviagora-home"></div>
+{%- comment -%} Sem espaços entre a div e o snippet: o conteúdo precisa bater com o React. {%- endcomment -%}
+<div id="enviagora-home">{%- render 'enviagora-home-ssr' -%}</div>
 
 <noscript>
-  <div style="font-family:Satoshi,Arial,sans-serif;background:#123336;color:#FAFAF5;padding:64px 24px;text-align:center">
-    <h1 style="text-transform:uppercase;font-weight:500;letter-spacing:.02em">A única logística que funciona para sua marca</h1>
-    <p>Fulfillment para marcas de suplementos, cosméticos e nutracêuticos em escala. Do armazenamento ao envio.</p>
-    <p>Ative o JavaScript do navegador para falar com um especialista.</p>
-  </div>
+  {%- comment -%} Sem JS, as animações de entrada não rodam — mostra tudo. {%- endcomment -%}
+  <style>
+    #enviagora-home [style*="opacity:0"] { opacity: 1 !important; transform: none !important; }
+  </style>
 </noscript>
 
 <script type="module" src="{{ 'enviagora-home.js' | asset_url }}"></script>
@@ -67,6 +74,29 @@
         { "value": "eu1", "label": "eu1 (Europa)" }
       ],
       "default": "na1"
+    },
+    {
+      "type": "url",
+      "id": "meetings_url",
+      "label": "Link de agendamento (HubSpot Meetings)",
+      "info": "Opcional. Ex.: https://meetings.hubspot.com/seu-usuario. Se preenchido, a agenda aparece logo após o envio do formulário."
+    },
+    {
+      "type": "header",
+      "content": "WhatsApp comercial"
+    },
+    {
+      "type": "text",
+      "id": "whatsapp_number",
+      "label": "Número (com DDI e DDD, só dígitos)",
+      "info": "Ex.: 5535936180694. Deixe vazio para esconder todos os botões de WhatsApp.",
+      "default": "5535936180694"
+    },
+    {
+      "type": "textarea",
+      "id": "whatsapp_message",
+      "label": "Mensagem inicial",
+      "default": "Olá! Quero falar com um especialista da Enviagora sobre a minha operação."
     }
   ],
   "presets": [

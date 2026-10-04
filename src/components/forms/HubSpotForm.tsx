@@ -1,6 +1,5 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { getSiteConfig } from '@/lib/siteConfig';
-import { cn } from '@/lib/cn';
 
 const SCRIPT_ID = 'enviagora-hsforms-embed';
 
@@ -23,12 +22,17 @@ type HubSpotFormProps = {
  * pesar o carregamento inicial da home.
  */
 export function HubSpotForm({ className }: HubSpotFormProps) {
-  const { portalId, formId, region } = getSiteConfig().hubspot;
   const ref = useRef<HTMLDivElement>(null);
+  // IDs vêm do tema (config no navegador). No HTML pré-renderizado o frame
+  // ainda não existe; ele entra após montar, já com os IDs certos.
+  const [hs, setHs] = useState<ReturnType<typeof getSiteConfig>['hubspot'] | null>(null);
+  useEffect(() => setHs(getSiteConfig().hubspot), []);
+  const portalId = hs?.portalId;
+  const region = hs?.region;
 
   useEffect(() => {
     const el = ref.current;
-    if (!el || document.getElementById(SCRIPT_ID)) return;
+    if (!el || !portalId || !region || document.getElementById(SCRIPT_ID)) return;
 
     const inject = () => {
       if (document.getElementById(SCRIPT_ID)) return;
@@ -57,12 +61,10 @@ export function HubSpotForm({ className }: HubSpotFormProps) {
   }, [portalId, region]);
 
   return (
-    <div
-      ref={ref}
-      className={cn('hs-form-frame', className)}
-      data-region={region}
-      data-form-id={formId}
-      data-portal-id={portalId}
-    />
+    <div ref={ref} className={className}>
+      {hs && (
+        <div className="hs-form-frame" data-region={hs.region} data-form-id={hs.formId} data-portal-id={hs.portalId} />
+      )}
+    </div>
   );
 }

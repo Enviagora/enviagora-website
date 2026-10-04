@@ -1,8 +1,8 @@
-import { lazy, Suspense, useEffect, useState, type ReactNode } from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
+import { lazy, Suspense, useEffect, useState, type CSSProperties } from 'react';
+import { motion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
-import { hero } from '@/content/content';
-import { EASE_EA } from '@/lib/motion';
+import { hero, reassurance } from '@/content/content';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { Button } from '@/components/ui/Button';
 import { Arrow } from '@/components/brand/Arrow';
 import { StaticBackdrop } from '@/components/hero3d/StaticBackdrop';
@@ -11,40 +11,23 @@ import { SceneErrorBoundary } from '@/components/hero3d/SceneErrorBoundary';
 // A cena 3D é pesada → carrega em chunk separado, depois do first paint.
 const PackageScene = lazy(() => import('@/components/hero3d/PackageScene'));
 
+const delay = (s: number): CSSProperties => ({ animationDelay: `${s}s` });
+
 export function Hero() {
   const reduce = useReducedMotion();
   const [enable3d, setEnable3d] = useState(false);
 
+  // A cena 3D só entra quando o navegador estiver ocioso — o texto do hero
+  // (pré-renderizado) pinta primeiro.
   useEffect(() => {
-    const t = window.setTimeout(() => setEnable3d(true), 180);
+    const w = window as Window & { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number };
+    if (w.requestIdleCallback) {
+      const id = w.requestIdleCallback(() => setEnable3d(true), { timeout: 1200 });
+      return () => (window as Window & { cancelIdleCallback?: (id: number) => void }).cancelIdleCallback?.(id);
+    }
+    const t = window.setTimeout(() => setEnable3d(true), 300);
     return () => window.clearTimeout(t);
   }, []);
-
-  // Reveal em cortina (linha mascarada). Respeita reduced-motion.
-  const Line = ({ children, delay = 0 }: { children: ReactNode; delay?: number }) => {
-    if (reduce) return <span className="block">{children}</span>;
-    return (
-      <span className="block overflow-hidden pb-[0.08em]">
-        <motion.span
-          className="block"
-          initial={{ y: '115%' }}
-          animate={{ y: 0 }}
-          transition={{ duration: 0.95, ease: EASE_EA, delay }}
-        >
-          {children}
-        </motion.span>
-      </span>
-    );
-  };
-
-  const fade = (delay: number) =>
-    reduce
-      ? { initial: undefined, animate: undefined }
-      : {
-          initial: { opacity: 0, y: 18 },
-          animate: { opacity: 1, y: 0 },
-          transition: { duration: 0.8, ease: EASE_EA, delay },
-        };
 
   return (
     <section
@@ -70,67 +53,79 @@ export function Hero() {
         aria-hidden
         style={{
           background:
-            'radial-gradient(70% 55% at 50% 33%, rgba(18,51,54,0.62) 0%, rgba(18,51,54,0.30) 45%, transparent 72%), linear-gradient(180deg, rgba(18,51,54,0.72) 0%, transparent 34%, transparent 60%, rgba(18,51,54,0.85) 100%)',
+            'radial-gradient(70% 55% at 50% 33%, rgba(18,51,54,0.62) 0%, rgba(18,51,54,0.30) 45%, transparent 72%), linear-gradient(180deg, rgba(18,51,54,0.72) 0%, transparent 34%, transparent 55%, rgba(18,51,54,0.92) 100%)',
         }}
       />
 
       {/* Conteúdo (pointer-events-none deixa o mouse chegar na cena p/ parallax) */}
-      <div className="ea-container-wide pointer-events-none relative z-10 flex flex-col items-center gap-5 pb-24 pt-[5vh] text-center sm:gap-6 sm:pt-[12vh]">
+      <div className="ea-container-wide pointer-events-none relative z-10 flex min-h-[calc(100svh-7.5rem)] flex-col items-center gap-4 pb-6 pt-[3vh] text-center sm:gap-6 sm:pb-10 sm:pt-[9vh]">
         {/* Kicker só no desktop — no mobile deixa o hero mais limpo. */}
-        <motion.span {...fade(0.05)} className="ea-kicker hidden items-center gap-2 text-ea-neon sm:inline-flex">
+        <span className="ea-rise ea-kicker hidden items-center gap-2 text-ea-neon sm:inline-flex" style={delay(0.05)}>
           <Arrow className="h-3.5 w-3.5" />
           {hero.kicker}
-        </motion.span>
+        </span>
 
         <h1 className="ea-display ea-hero-shadow text-display-lg text-ea-cremewm">
-          <Line delay={0.15}>
-            {hero.titlePre}
-            {/* Destaque da manchete: peso Bold + neon (permitido sobre fundo escuro). */}
-            <span className="ea-highlight text-ea-neon">{hero.titleHighlight}</span>
-          </Line>
-          <Line delay={0.28}>{hero.titlePos.trim()}</Line>
+          <span className="ea-line">
+            <span style={delay(0.12)}>
+              {hero.titlePre}
+              {/* Destaque da manchete: peso Bold + neon (permitido sobre fundo escuro). */}
+              <span className="ea-highlight text-ea-neon">{hero.titleHighlight}</span>{' '}
+            </span>
+          </span>
+          <span className="ea-line">
+            <span style={delay(0.24)}>{hero.titlePos.trim()}</span>
+          </span>
         </h1>
 
-        <motion.p {...fade(0.5)} className="ea-hero-shadow max-w-xl text-base text-ea-cremewm/85 sm:text-lg">
+        <p className="ea-rise ea-hero-shadow max-w-2xl text-base text-ea-cremewm/90 sm:text-lg" style={delay(0.45)}>
           {hero.subtitle}
-        </motion.p>
+        </p>
 
-        <motion.ul {...fade(0.62)} className="flex flex-wrap items-center justify-center gap-2.5">
-          {hero.bullets.map((b) => (
+        <div className="ea-rise pointer-events-auto flex flex-col items-center gap-3 pt-2" style={delay(0.6)} data-track="hero">
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <Button href="#contato" size="lg">
+              {hero.cta}
+            </Button>
+            <Button href="#economia" variant="ghost-dark" size="lg" withArrow={false}>
+              {hero.ctaSecondary}
+            </Button>
+          </div>
+          <p className="ea-hero-shadow max-w-[34ch] text-[0.72rem] text-ea-cremewm/85 sm:max-w-none sm:text-xs">{reassurance}</p>
+        </div>
+
+        {/* Prova na dobra: números já publicados, em grade com réguas finas */}
+        <ul
+          className="ea-rise mt-auto grid w-full max-w-4xl grid-cols-2 overflow-hidden rounded-ea border border-ea-cremewm/15 bg-ea-petroleo/55 backdrop-blur-md sm:grid-cols-4"
+          style={delay(0.75)}
+        >
+          {hero.proof.map((p, i) => (
             <li
-              key={b}
-              className="flex items-center gap-2 rounded-pill border border-ea-cremewm/12 bg-ea-petroleo/40 px-3.5 py-2 text-sm font-medium text-ea-cremewm backdrop-blur-sm"
+              key={p.label}
+              className={[
+                'flex flex-col items-center gap-1 px-3 py-3 sm:py-5',
+                i % 2 === 1 ? 'border-l border-ea-cremewm/15' : '',
+                i >= 2 ? 'border-t border-ea-cremewm/15 sm:border-t-0' : '',
+                i === 2 ? 'sm:border-l' : '',
+              ].join(' ')}
             >
-              <Arrow className="h-3.5 w-3.5 shrink-0 text-ea-neon" />
-              {b}
+              <span className="ea-metric text-[1.7rem] text-ea-cremewm sm:text-4xl">{p.value}</span>
+              <span className="text-[0.7rem] leading-snug text-ea-soft-dark sm:text-xs">{p.label}</span>
             </li>
           ))}
-        </motion.ul>
-
-        <motion.div {...fade(0.74)} className="pointer-events-auto flex flex-wrap items-center justify-center gap-3 pt-2">
-          <Button href="#contato" size="lg">
-            {hero.cta}
-          </Button>
-          <Button href="#como-funciona" variant="ghost-dark" size="lg" withArrow={false}>
-            Como funciona
-          </Button>
-        </motion.div>
+        </ul>
       </div>
 
-      {/* Indicador de scroll */}
+      {/* Indicador de scroll (só desktop: no mobile a prova ocupa a base) */}
       {!reduce && (
         <motion.a
           href="#operacao"
           aria-label="Rolar para explorar"
-          className="pointer-events-auto absolute bottom-6 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-1 text-ea-soft-dark transition-colors hover:text-ea-cremewm"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.4, duration: 0.8 }}
+          className="pointer-events-auto absolute bottom-3 left-1/2 z-10 hidden -translate-x-1/2 text-ea-soft-dark transition-colors hover:text-ea-cremewm lg:block"
+          animate={{ y: [0, 5, 0] }}
+          transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
         >
-          <span className="ea-kicker text-[0.62rem]">Explorar</span>
-          <motion.span animate={{ y: [0, 6, 0] }} transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}>
-            <ChevronDown className="h-5 w-5" />
-          </motion.span>
+          <ChevronDown className="h-5 w-5" />
         </motion.a>
       )}
     </section>

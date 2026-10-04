@@ -1,5 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
-import { useInView, useReducedMotion } from 'framer-motion';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useInView } from 'framer-motion';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
+
+const useIsoLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
 type CountUpProps = {
   value: number;
@@ -18,8 +21,14 @@ export function CountUp({ value, suffix = '', decimals, duration = 1.6, classNam
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true, margin: '0px 0px -20% 0px' });
   const reduce = useReducedMotion();
-  const [display, setDisplay] = useState(0);
+  // O HTML pré-renderizado (e quem está sem JS) vê o valor final; no navegador
+  // o contador zera antes do primeiro paint e anima ao entrar na tela.
+  const [display, setDisplay] = useState(value);
   const dec = decimals ?? (Number.isInteger(value) ? 0 : 1);
+
+  useIsoLayoutEffect(() => {
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) setDisplay(0);
+  }, []);
 
   useEffect(() => {
     if (!inView) return;
@@ -30,7 +39,7 @@ export function CountUp({ value, suffix = '', decimals, duration = 1.6, classNam
     let raf = 0;
     const start = performance.now();
     const tick = (now: number) => {
-      const t = Math.min(1, (now - start) / (duration * 1000));
+      const t = Math.min(1, Math.max(0, (now - start) / (duration * 1000)));
       const eased = 1 - Math.pow(1 - t, 3);
       setDisplay(value * eased);
       if (t < 1) raf = requestAnimationFrame(tick);

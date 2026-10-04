@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { useReducedMotion } from 'framer-motion';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { cn } from '@/lib/cn';
 
 type MarqueeProps = {

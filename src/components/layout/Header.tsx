@@ -35,7 +35,7 @@ export function Header() {
             'flex h-14 items-center justify-between gap-4 rounded-ea border pl-4 pr-2 transition-all duration-300 ease-ea sm:pl-6 sm:pr-3',
             scrolled
               ? 'border-ea-petroleo/10 bg-ea-creme/90 shadow-ea backdrop-blur-md'
-              : 'border-ea-cremewm/12 bg-ea-petroleo/35 backdrop-blur-md',
+              : 'border-ea-cremewm/10 bg-ea-petroleo/35 backdrop-blur-md',
           )}
         >
           <a href="#top" aria-label="Enviagora — início" className="shrink-0">

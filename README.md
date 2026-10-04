@@ -19,8 +19,12 @@ O Shopify ignora as pastas que não são de tema, então as duas convivem na mes
 - `templates/index.json` usa o layout `enviagora` e a seção `enviagora-home`.
 - `layout/enviagora.liquid` é um layout enxuto (SEO, favicon, Satoshi, rastreamento,
   `content_for_header`) **sem** o header/footer do Dawn — a home tem os próprios.
-- `sections/enviagora-home.liquid` carrega `assets/enviagora-home.js` + `.css` e monta o
-  app em `#enviagora-home`. No editor de tema dá para trocar os IDs do formulário HubSpot.
+- `sections/enviagora-home.liquid` carrega `assets/enviagora-home.js` + `.css`. O HTML da
+  home já vem **pré-renderizado** do snippet `enviagora-home-ssr` (gerado no build): a
+  página pinta e é indexável antes do JavaScript, e o React só "hidrata" esse HTML.
+- **Settings da seção** (editor de tema › Home Enviagora): IDs do formulário HubSpot,
+  link do **HubSpot Meetings** (opcional) e **WhatsApp comercial** (número + mensagem;
+  vazio = esconde todos os botões de WhatsApp).
 - `snippets/enviagora-tracking.liquid` concentra o **HubSpot tracking** (portal 44097462)
   e o **Meta Pixel** (410733041890285); é usado pelos dois layouts.
 - As **demais páginas** (GemPages, `/pages/plataforma`, contato, políticas…) continuam no
@@ -33,6 +37,16 @@ O Shopify ignora as pastas que não são de tema, então as duas convivem na mes
 leads caem no CRM com as mesmas notificações e workflows. Ele roda num iframe do HubSpot:
 campos, textos e cores do formulário se ajustam **no HubSpot**, não aqui.
 
+Em volta dele (`src/lib/hubspotForm.ts`, via eventos globais do embed v4):
+- **Lead no envio:** `fbq('track', 'Lead')` no Meta Pixel + evento `enviagora_lead` no
+  `dataLayer` (com a faixa de pedidos/mês; nada de dado pessoal no pixel).
+- **Depois do envio:** confirmação + agenda do HubSpot Meetings (se configurada) ou botão de
+  WhatsApp com mensagem pronta (nome + volume), como o fluxo atual do site.
+- **Simulador de economia** (`#economia`): o CTA pré-preenche "Pedidos por mês" e
+  "Principal necessidade = Reduzir custo de frete" no formulário.
+- **Cliques em CTA:** `enviagora_cta_click` no `dataLayer` e `CTAClick` no Meta, com a
+  seção de origem (hero, header, barra mobile, FAQ…).
+
 ---
 
 ## Desenvolvimento
@@ -40,18 +54,23 @@ campos, textos e cores do formulário se ajustam **no HubSpot**, não aqui.
 ```bash
 npm install
 npm run dev           # app em http://localhost:5173 (preview rápido, fora do Shopify)
-npm run build:theme   # gera assets/enviagora-home* para o tema  ← rode antes de commitar
+npm run build:theme   # gera assets/enviagora-home* + o HTML pré-renderizado  ← rode antes de commitar
 npm run build         # build SPA em dist/ (preview estático/bolt)
 ```
 
-**Fluxo de mudança:** editar `src/` → `npm run build:theme` → commit (código **e**
-`assets/`) → push. O Shopify não roda build; ele usa o que está commitado em `assets/`.
-O workflow `.github/workflows/theme-build.yml` falha se os assets estiverem desatualizados.
+**Fluxo de mudança:** editar `src/` → `npm run build:theme` → commit (código, `assets/` **e**
+`snippets/enviagora-home-ssr.liquid`) → push. O Shopify não roda build; ele usa o que está
+commitado. O workflow `.github/workflows/theme-build.yml` falha se algo estiver desatualizado.
+
+O `build:theme` roda o build do cliente e depois `scripts/prerender-theme.mjs`, que
+renderiza o app no Node e grava o snippet (imagens viram `{{ '…' | asset_url }}`). Código
+que só existe no navegador (`window`, config do tema) deve rodar em `useEffect`, para o
+primeiro render bater com o HTML pré-renderizado.
 
 Onde mexer:
-- **Textos:** `src/content/content.ts`
+- **Textos:** `src/content/content.ts` (inclui `cases`, que só aparece quando tiver itens)
 - **Cores, tipografia, raios:** `tailwind.config.js` + `src/index.css` (resumo em `docs/BRANDING.md`)
-- **Logos da marca / clientes / integrações:** `src/assets/`
+- **Logos da marca / clientes / integrações / fotos da operação:** `src/assets/`
 
 Requisitos: Node 18+ (testado em Node 22).
 
@@ -88,6 +107,24 @@ O HubSpot continua recebendo os leads e o tracking — só deixa de hospedar a p
 
 ## Pendências (fora do código)
 
+Itens que dependem de dados reais — o site não inventa nenhum deles:
+
+- **Cases com resultado:** preencher `cases.items` em `src/content/content.ts` (marca,
+  métrica, depoimento, autor) com dados aprovados pelos clientes. Sem itens, a seção não
+  aparece.
+- **HubSpot Meetings:** colar o link do agendador no setting da seção para a agenda
+  aparecer logo após o envio do formulário.
+- **WhatsApp:** o padrão é o número usado hoje no formulário do site
+  (`5535936180694`); confirme se é o comercial certo (setting da seção).
+- **Mínimo de pedidos:** o FAQ diz "cobrança mínima de 3.000 pedidos" e o topo/contato
+  falam em "+5.000 envios/mês". Definir um número e alinhar `faq`, `topBanner`,
+  `contactForm` e `calculator.minNote` em `src/content/content.ts`.
+- **HubSpot › rótulos traduzidos errado:** no campo de ERP "Tiny" aparece como "Pequeno" e
+  "Linx" como "Doninha"; no segmento "Pet" aparece "Cinco". Corrigir no editor do formulário.
+- **HubSpot › formulário em 2 etapas:** dá para dividir em "contato" e "operação" no
+  próprio editor do HubSpot — formulários longos convertem menos em uma etapa só.
+- **Fotos:** a seção "Como funciona" usa a foto real do galpão do site atual. Fotos de
+  operação (separação, embalagem, expedição) em alta deixam o site ainda mais premium.
 - **HubSpot › formulário:** os textos de consentimento (LGPD) estão em cinza escuro sobre
   fundo escuro — quase invisíveis; o telefone vem com 🇺🇸 +1 como país padrão. Ajustar no
   editor de formulário do HubSpot (cor do texto rico / país padrão Brasil).

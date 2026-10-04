@@ -2,6 +2,8 @@ import { TopBanner } from '@/components/layout/TopBanner';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { ScrollProgress } from '@/components/layout/ScrollProgress';
+import { MobileCtaBar } from '@/components/conversion/MobileCtaBar';
+import { useConversionTracking } from '@/hooks/useConversionTracking';
 
 import { Hero } from '@/sections/Hero';
 import { SocialProof } from '@/sections/SocialProof';
@@ -9,16 +11,15 @@ import { TikTokShop } from '@/sections/TikTokShop';
 import { Niches } from '@/sections/Niches';
 import { Process } from '@/sections/Process';
 import { LogAlliance } from '@/sections/LogAlliance';
-import { Benefits } from '@/sections/Benefits';
-import { Stats } from '@/sections/Stats';
 import { RealTime } from '@/sections/RealTime';
 import { Integrations } from '@/sections/Integrations';
-import { HowFulfillment } from '@/sections/HowFulfillment';
-import { Solution } from '@/sections/Solution';
+import { Cases } from '@/sections/Cases';
 import { ContactForm } from '@/sections/ContactForm';
 import { Faq } from '@/sections/Faq';
 
 export default function App() {
+  useConversionTracking();
+
   return (
     <>
       {/* Skip link — acessibilidade por teclado */}
@@ -33,6 +34,8 @@ export default function App() {
       <TopBanner />
       <Header />
 
+      {/* Narrativa: promessa + prova → para quem → como funciona → economia →
+          controle → integrações → resultados → contato → objeções. */}
       <main id="conteudo">
         <Hero />
         <SocialProof />
@@ -40,17 +43,15 @@ export default function App() {
         <Niches />
         <Process />
         <LogAlliance />
-        <Benefits />
-        <Stats />
         <RealTime />
         <Integrations />
-        <HowFulfillment />
-        <Solution />
+        <Cases />
         <ContactForm />
         <Faq />
       </main>
 
       <Footer />
+      <MobileCtaBar />
     </>
   );
 }

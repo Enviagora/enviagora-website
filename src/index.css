@@ -131,6 +131,15 @@
     font-weight: 700;
   }
 
+  /* Seta ↗ oficial (símbolo) como máscara: herda a cor do texto (currentColor). */
+  .ea-arrow {
+    display: inline-block;
+    flex-shrink: 0;
+    background-color: currentColor;
+    -webkit-mask: url('./assets/brand/simbolo.svg') center / contain no-repeat;
+    mask: url('./assets/brand/simbolo.svg') center / contain no-repeat;
+  }
+
   /* Números e métricas — o dado é protagonista: Satoshi Light, tabular */
   .ea-metric {
     font-family: theme('fontFamily.sans');
@@ -142,6 +151,27 @@
 }
 
 @layer utilities {
+  /* Entradas em CSS (hero): rodam no primeiro paint do HTML pré-renderizado,
+     sem esperar o JavaScript. O atraso vem por style={{ animationDelay }}. */
+  .ea-rise {
+    animation: ea-rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .ea-line {
+    display: block;
+    overflow: hidden;
+    padding-bottom: 0.08em;
+  }
+  .ea-line > span {
+    display: block;
+    animation: ea-line 0.95s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ea-rise,
+    .ea-line > span {
+      animation: none;
+    }
+  }
+
   /* Máscara de fade nas laterais (usada no marquee de logos) */
   .ea-edge-fade {
     -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
@@ -161,5 +191,24 @@
   /* Halo escuro sutil p/ legibilidade de texto sobre a cena 3D luminosa do hero */
   .ea-hero-shadow {
     text-shadow: 0 2px 24px rgba(18, 51, 54, 0.6), 0 1px 3px rgba(18, 51, 54, 0.45);
+  }
+}
+
+@keyframes ea-rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes ea-line {
+  from {
+    transform: translateY(110%);
+  }
+  to {
+    transform: none;
   }
 }

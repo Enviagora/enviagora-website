@@ -53,7 +53,7 @@ export function TikTokShop() {
     <Section id="tiktok-shop" tone="creme">
       <Reveal>
         <div
-          className="relative isolate overflow-hidden rounded-ea-lg p-8 shadow-ea-lg sm:p-12 lg:p-16"
+          className="relative isolate overflow-hidden rounded-ea-lg p-8 sm:p-12 lg:p-16"
           style={{ background: BLOCK_BG }}
         >
           {/* Curva de crescimento viral — bem sutil, como marca-d'água atrás do texto */}

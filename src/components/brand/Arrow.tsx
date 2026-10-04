@@ -1,6 +1,5 @@
 import { forwardRef } from 'react';
 import { cn } from '@/lib/cn';
-import simbolo from '@/assets/brand/simbolo.svg';
 
 type ArrowProps = {
   className?: string;
@@ -8,12 +7,10 @@ type ArrowProps = {
   title?: string;
 };
 
-// Símbolo oficial do Caminho 02 (seta geométrica com contraforte). Importado
-// pelo Vite para resolver a URL tanto no dev quanto no CDN do Shopify.
-const MASK = `url("${simbolo}")`;
-
 /**
- * Seta ↗ OFICIAL da Enviagora. Renderizada como máscara CSS e colorida por
+ * Seta ↗ OFICIAL da Enviagora (símbolo do Caminho 02, src/assets/brand/simbolo.svg).
+ * A máscara fica na classe `.ea-arrow` (index.css) — um único url() no CSS em vez
+ * de repetir o SVG em cada seta do HTML. Colorida por
  * `currentColor` — funciona em qualquer cor (use `text-ea-neon`, `text-ea-petroleo`,
  * etc.) sem repetir o path no DOM. Controle o tamanho pela className (ex.: `h-4 w-4`).
  */
@@ -24,17 +21,7 @@ export const Arrow = forwardRef<HTMLSpanElement, ArrowProps>(function Arrow({ cl
       role={title ? 'img' : undefined}
       aria-label={title}
       aria-hidden={title ? undefined : true}
-      className={cn('inline-block shrink-0 bg-current', className)}
-      style={{
-        WebkitMaskImage: MASK,
-        maskImage: MASK,
-        WebkitMaskRepeat: 'no-repeat',
-        maskRepeat: 'no-repeat',
-        WebkitMaskPosition: 'center',
-        maskPosition: 'center',
-        WebkitMaskSize: 'contain',
-        maskSize: 'contain',
-      }}
+      className={cn('ea-arrow', className)}
     />
   );
 });
