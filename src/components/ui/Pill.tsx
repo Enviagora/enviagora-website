@@ -1,12 +1,10 @@
 import type { ReactNode } from 'react';
 import { cn } from '@/lib/cn';
 
-type Tone = 'creme' | 'lavanda' | 'ceu' | 'neon' | 'outline' | 'dark';
+type Tone = 'creme' | 'neon' | 'outline' | 'dark';
 
 const toneCls: Record<Tone, string> = {
   creme: 'bg-ea-creme text-ea-petroleo',
-  lavanda: 'bg-ea-lavanda text-ea-petroleo',
-  ceu: 'bg-ea-ceu text-ea-petroleo',
   neon: 'bg-ea-neon text-ea-petroleo',
   outline: 'border border-ea-petroleo/20 text-ea-petroleo',
   dark: 'bg-ea-petroleo text-ea-cremewm',

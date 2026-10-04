@@ -10,18 +10,28 @@ export default {
     extend: {
       colors: {
         ea: {
-          petroleo: '#123336',
-          'petroleo-2': '#1B4145', // superfície escura (surface no tema dark)
-          neon: '#C4FF57',
-          creme: '#FEFAEF',
-          cremewm: '#FAFAF5', // wordmark sobre escuro
-          ceu: '#C4DBE0',
-          lavanda: '#C9C2D6',
-          coolgrey: '#DEE3E0',
-          kraft: '#EBD9C7',
+          // Núcleo oficial (Caminho 02 · tokens.css da marca)
+          petroleo: '#123336', // Verde Profundo — primária
+          'petroleo-2': '#1B4448', // verde-700 — superfície escura
+          neon: '#C4FF57', // Verde Neon — acento único
+          'neon-300': '#D5FF8B', // hover do botão primário
+          creme: '#FAFAF5', // Creme — fundo claro padrão
+          cremewm: '#FAFAF5', // wordmark/texto sobre escuro
+          coolgrey: '#DEE3E0', // Cinza Névoa — fundo claro técnico
+          eucalipto: '#B0C2BF', // suporte — blocos de respiro
+          lilas: '#D8D6E8', // suporte — vertical beleza (uso pontual)
+          // Escala do verde profundo (tokens.css) — gráficos, estados, superfícies
+          'verde-900': '#0B1F21',
+          'verde-700': '#1B4448',
+          'verde-600': '#2A5B5F',
+          'verde-500': '#3E7478',
+          'verde-400': '#6A9698',
+          'verde-300': '#9BBBBC',
+          'verde-200': '#C6D8D8',
+          'verde-100': '#E3EDEC',
           preto: '#000000',
-          soft: '#3A5457', // texto secundário (petróleo suavizado)
-          'soft-dark': '#AEC3C0', // texto secundário sobre escuro
+          soft: '#2A5B5F', // verde-600 — texto secundário em fundo claro
+          'soft-dark': '#9BBBBC', // verde-300 — texto secundário em fundo escuro
         },
       },
       fontFamily: {
@@ -38,19 +48,20 @@ export default {
         tighter: '-0.03em',
       },
       borderRadius: {
-        ea: '20px',
-        'ea-lg': '28px',
-        'ea-sm': '10px',
-        pill: '999px',
+        // Sistema técnico e angular: raios contidos. A pílula fica só nas tags.
+        'ea-sm': '8px', // controles e botões
+        ea: '16px', // blocos
+        'ea-lg': '24px', // cards
+        pill: '999px', // tags
       },
       fontSize: {
-        // escala editorial — display grande em serif
-        // Escala de display em Satoshi — tracking negativo mais firme, do jeito
-        // que grotescas técnicas pedem em corpo grande (leitura institucional).
-        'display-xl': ['clamp(3rem, 8vw, 7rem)', { lineHeight: '0.95', letterSpacing: '-0.035em' }],
-        'display-lg': ['clamp(2.5rem, 6vw, 5rem)', { lineHeight: '0.98', letterSpacing: '-0.033em' }],
-        'display-md': ['clamp(2rem, 4.5vw, 3.5rem)', { lineHeight: '1.02', letterSpacing: '-0.03em' }],
-        'display-sm': ['clamp(1.6rem, 3.2vw, 2.4rem)', { lineHeight: '1.06', letterSpacing: '-0.025em' }],
+        // Manchetes e títulos em CAIXA ALTA, Satoshi Medium, tracking levemente
+        // aberto (o jeitão institucional da marca). Caixa alta ocupa mais
+        // espaço, por isso a escala é um pouco menor que a de caixa mista.
+        'display-xl': ['clamp(2.75rem, 7vw, 6rem)', { lineHeight: '1.0', letterSpacing: '0.01em' }],
+        'display-lg': ['clamp(2.25rem, 5.4vw, 4.5rem)', { lineHeight: '1.05', letterSpacing: '0.015em' }],
+        'display-md': ['clamp(1.75rem, 3.8vw, 3rem)', { lineHeight: '1.1', letterSpacing: '0.02em' }],
+        'display-sm': ['clamp(1.4rem, 2.6vw, 2rem)', { lineHeight: '1.15', letterSpacing: '0.02em' }],
       },
       boxShadow: {
         // sombras discretas e frias, coerentes com o petróleo (nunca pretas puras)

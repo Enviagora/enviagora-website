@@ -13,7 +13,7 @@ import { CountUp } from '@/components/motion/CountUp';
 
 /* ==========================================================================
    TikTokShop — bloco-manifesto no estilo do material de marca: card com
-   gradiente verde→lilás, headline em Fraunces, seta e wordmark. Destaca a
+   bloco chapado em Verde Neon, manchete em caixa alta, seta e wordmark. Destaca a
    autoridade (Nº 1 em TikTok Shop na América Latina · +1 milhão de pacotes/mês).
 
    Animação "viral" (roda no desktop e no mobile, como as demais seções):
@@ -23,9 +23,9 @@ import { CountUp } from '@/components/motion/CountUp';
    competir com o texto.
    ========================================================================== */
 
-// Gradiente da marca (verde neon → creme → lilás), como no material impresso.
-const GRADIENT =
-  'linear-gradient(158deg, #c4ff57 0%, #dcefb4 28%, #dcdcdf 60%, #d1c8e8 100%)';
+// Bloco chapado em Verde Neon (Caminho 02: cor chapada, sem gradiente). Sobre
+// neon, tudo em verde profundo — inclusive o logo, monocromático.
+const BLOCK_BG = '#C4FF57';
 
 // Curva "hockey-stick": fica baixa e dispara à direita (crescimento viral).
 const CURVE = 'M0,146 C80,146 150,144 210,132 C258,122 292,98 320,64 C342,38 366,16 400,6';
@@ -54,17 +54,8 @@ export function TikTokShop() {
       <Reveal>
         <div
           className="relative isolate overflow-hidden rounded-ea-lg p-8 shadow-ea-lg sm:p-12 lg:p-16"
-          style={{ background: GRADIENT }}
+          style={{ background: BLOCK_BG }}
         >
-          {/* Brilho suave em movimento (vida no gradiente) */}
-          <motion.div
-            aria-hidden
-            className="pointer-events-none absolute -z-10 h-[60%] w-[60%] rounded-full opacity-60 blur-2xl"
-            style={{ background: 'radial-gradient(circle, rgba(255,255,255,0.6), transparent 70%)' }}
-            animate={{ x: ['-10%', '60%', '-10%'], y: ['-20%', '80%', '-20%'] }}
-            transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
-          />
-
           {/* Curva de crescimento viral — bem sutil, como marca-d'água atrás do texto */}
           <svg
             aria-hidden
@@ -145,7 +136,7 @@ export function TikTokShop() {
 
           {/* Selo de autoridade */}
           <div className="mt-8">
-            <span className="inline-flex items-center gap-2 rounded-pill bg-ea-petroleo px-4 py-2 text-[0.72rem] font-bold uppercase tracking-label text-ea-neon">
+            <span className="inline-flex items-center gap-2 rounded-pill bg-ea-petroleo px-4 py-2 text-[0.75rem] font-bold uppercase tracking-label text-ea-neon">
               <span className="relative flex h-2 w-2">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-ea-neon opacity-70" />
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-ea-neon" />
@@ -155,25 +146,14 @@ export function TikTokShop() {
           </div>
 
           {/* Headline */}
-          <h2 className="ea-display mt-5 max-w-[18ch] text-display-md text-ea-petroleo">{tiktokShop.title}</h2>
+          <h2 className="ea-display mt-5 max-w-[20ch] text-display-md text-ea-petroleo">{tiktokShop.title}</h2>
           <p className="mt-5 max-w-xl text-base leading-relaxed text-ea-petroleo/75 sm:text-lg">{tiktokShop.lead}</p>
 
           {/* Stat gigante + provas + CTA */}
           <div className="mt-10 grid gap-8 lg:mt-12 lg:grid-cols-[auto_1fr] lg:items-center lg:gap-14">
             <div className="flex flex-col">
               <span className="relative inline-flex w-fit">
-                {/* Halo neon pulsando atrás do número */}
-                <motion.span
-                  aria-hidden
-                  className="pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[130%] w-[125%] -translate-x-1/2 -translate-y-1/2 rounded-full"
-                  style={{
-                    background: 'radial-gradient(circle, rgba(196,255,87,0.6), transparent 70%)',
-                    filter: 'blur(22px)',
-                  }}
-                  animate={{ opacity: [0.35, 0.85, 0.35], scale: [0.92, 1.06, 0.92] }}
-                  transition={{ duration: 3.4, repeat: Infinity, ease: 'easeInOut' }}
-                />
-                <span className="ea-tnum ea-display text-[clamp(3.5rem,9vw,6.5rem)] leading-[0.9] text-ea-petroleo">
+                <span className="ea-metric text-[clamp(3.25rem,9vw,6.5rem)] text-ea-petroleo">
                   <CountUp value={tiktokShop.stat.value} suffix={tiktokShop.stat.suffix} />
                 </span>
               </span>
@@ -203,7 +183,7 @@ export function TikTokShop() {
 
           {/* Wordmark no rodapé do card */}
           <div className="mt-12 flex items-end justify-end">
-            <Logo on="light" className="h-6 w-auto opacity-80 sm:h-7" />
+            <Logo on="neon" className="h-5 sm:h-6" />
           </div>
         </div>
       </Reveal>

@@ -37,7 +37,8 @@ export function SectionHeading({
     >
       {kicker ? (
         <span className={cn('ea-kicker inline-flex items-center gap-2', theme === 'dark' ? 'text-ea-neon' : 'text-ea-petroleo')}>
-          <Arrow className="h-3.5 w-3.5 text-ea-neon" />
+          {/* Neon só sobre escuro; em fundo claro a seta vai em verde profundo. */}
+          <Arrow className={cn('h-3.5 w-3.5', theme === 'dark' ? 'text-ea-neon' : 'text-ea-petroleo')} />
           {kicker}
         </span>
       ) : null}

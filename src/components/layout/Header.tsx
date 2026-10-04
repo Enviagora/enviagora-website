@@ -32,14 +32,14 @@ export function Header() {
       <div className="ea-container-wide">
         <div
           className={cn(
-            'flex h-14 items-center justify-between gap-4 rounded-pill border pl-4 pr-2 transition-all duration-300 ease-ea sm:pl-6 sm:pr-3',
+            'flex h-14 items-center justify-between gap-4 rounded-ea border pl-4 pr-2 transition-all duration-300 ease-ea sm:pl-6 sm:pr-3',
             scrolled
               ? 'border-ea-petroleo/10 bg-ea-creme/90 shadow-ea backdrop-blur-md'
               : 'border-ea-cremewm/12 bg-ea-petroleo/35 backdrop-blur-md',
           )}
         >
           <a href="#top" aria-label="Enviagora — início" className="shrink-0">
-            <Logo on={dark ? 'dark' : 'light'} className="h-6 w-auto" />
+            <Logo on={dark ? 'dark' : 'light'} className="h-[17px] sm:h-5" />
           </a>
 
           <nav className="hidden items-center gap-8 lg:flex" aria-label="Navegação principal">
@@ -67,7 +67,7 @@ export function Header() {
               type="button"
               onClick={() => setOpen(true)}
               className={cn(
-                'inline-flex h-10 w-10 items-center justify-center rounded-pill lg:hidden',
+                'inline-flex h-10 w-10 items-center justify-center rounded-ea-sm lg:hidden',
                 dark ? 'text-ea-cremewm' : 'text-ea-petroleo',
               )}
               aria-label="Abrir menu"
@@ -89,7 +89,7 @@ export function Header() {
             transition={{ duration: 0.25 }}
           >
             <div className="ea-container-wide flex h-16 items-center justify-between pt-2">
-              <Logo on="dark" className="h-6 w-auto" />
+              <Logo on="dark" className="h-5" />
               <button
                 type="button"
                 onClick={() => setOpen(false)}

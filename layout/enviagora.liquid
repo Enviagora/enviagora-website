@@ -1,0 +1,42 @@
+{%- comment -%}
+  Layout da nova home (Re-design 2026 · Caminho 02 "Autoridade Técnica").
+  Página inteira é renderizada pelo app React da seção `enviagora-home`, que tem
+  header e footer próprios — por isso este layout não inclui os grupos de
+  header/footer do Dawn. As demais páginas da loja continuam no theme.liquid.
+{%- endcomment -%}
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="#123336">
+    <link rel="canonical" href="{{ canonical_url }}">
+
+    <title>
+      {{ page_title }}
+      {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+    </title>
+    {%- if page_description -%}
+      <meta name="description" content="{{ page_description | escape }}">
+    {%- endif -%}
+    {% render 'meta-tags' %}
+
+    <link rel="icon" type="image/svg+xml" href="{{ 'enviagora-favicon.svg' | asset_url }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ 'enviagora-favicon-32.png' | asset_url }}">
+    <link rel="apple-touch-icon" href="{{ 'enviagora-apple-touch-icon.png' | asset_url }}">
+
+    {%- comment -%} Satoshi — tipografia oficial da marca (Fontshare) {%- endcomment -%}
+    <link rel="preconnect" href="https://api.fontshare.com">
+    <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
+    <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f%5B%5D=satoshi@300,400,500,700,900&display=swap">
+
+    {% render 'enviagora-tracking' %}
+
+    {{ content_for_header }}
+  </head>
+
+  <body>
+    {{ content_for_layout }}
+  </body>
+</html>

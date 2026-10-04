@@ -64,7 +64,7 @@ export function LogAlliance() {
         {/* Painel: mapa animado */}
         <Reveal delay={0.1}>
           <div
-            className="relative w-full overflow-hidden rounded-ea-lg border border-ea-petroleo/10 bg-ea-ceu/40 p-4 shadow-ea sm:p-6"
+            className="relative w-full overflow-hidden rounded-ea-lg border border-ea-petroleo/10 bg-ea-coolgrey/70 p-4 shadow-ea sm:p-6"
             style={{ backgroundImage: 'radial-gradient(rgba(18,51,54,0.12) 1.1px, transparent 1.2px)', backgroundSize: '18px 18px' }}
           >
             {/* Wordmark LogAlliance */}
@@ -104,12 +104,13 @@ export function LogAlliance() {
                 <span className="absolute -inset-1 animate-ping rounded-full bg-ea-neon/40" />
               </span>
 
-              {/* Chip de melhor preço por região (oculto na região ativa → vira popover) */}
+              {/* Chip de melhor preço por região (oculto na região ativa → vira popover).
+                  No mobile o mapa é estreito e o popover cobria os chips — ali só o popover. */}
               {REGIONS.map((r, i) =>
                 i === active ? null : (
                   <span
                     key={r.name}
-                    className="ea-tnum absolute z-10 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap rounded-pill bg-white px-2.5 py-1 text-[0.72rem] font-semibold text-ea-petroleo shadow-ea-sm"
+                    className="ea-tnum absolute z-10 hidden -translate-x-1/2 -translate-y-1/2 whitespace-nowrap rounded-pill bg-white sm:block px-2.5 py-1 text-[0.72rem] font-semibold text-ea-petroleo shadow-ea-sm"
                     style={{ left: px(r.x), top: py(r.y) }}
                   >
                     {r.quotes[r.best]}
@@ -135,7 +136,7 @@ export function LogAlliance() {
                 <motion.div
                   key={active}
                   className={cn(
-                    'absolute w-36 rounded-ea border border-ea-petroleo/10 bg-white p-2.5 shadow-ea sm:w-44',
+                    'absolute w-40 rounded-ea border border-ea-petroleo/10 bg-white p-2.5 shadow-ea sm:w-44',
                     region.side === 'left' ? 'right-3.5' : 'left-3.5',
                   )}
                   style={{ top: -52, transformOrigin: region.side === 'left' ? 'right center' : 'left center' }}
@@ -171,7 +172,7 @@ export function LogAlliance() {
               </span>
               <span className="flex flex-col leading-tight">
                 <span className="text-[0.68rem] uppercase tracking-label text-ea-soft-dark">{logAlliance.savingBadge.label}</span>
-                <span className="font-serif text-xl text-ea-neon">{logAlliance.savingBadge.value}</span>
+                <span className="ea-metric text-2xl text-ea-neon">{logAlliance.savingBadge.value}</span>
               </span>
             </div>
           </div>

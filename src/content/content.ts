@@ -50,8 +50,16 @@ export const hero = {
 export const socialProof = {
   title: 'Marcas de sucesso que confiam na',
   titleBrand: 'Enviagora',
-  // Marcas exibidas no carrossel do site atual.
-  brands: ['Gommy', 'Envy Hair', 'maxfem', 'AlwaysFit', 'POPTUDA', 'ADEUS', 'BLOOM'],
+  // Clientes do carrossel do site atual (logos em src/assets/clientes).
+  brands: [
+    { name: 'Gummy Original', logo: 'gummy' },
+    { name: 'Envy Hair', logo: 'envy-hair' },
+    { name: 'maxfem', logo: 'maxfem' },
+    { name: 'AlwaysFit', logo: 'alwaysfit' },
+    { name: 'Popozuda', logo: 'popozuda' },
+    { name: 'ADEUS', logo: 'adeus' },
+    { name: 'BLOOM', logo: 'bloom' },
+  ],
 } as const;
 
 export const niches = {
@@ -88,7 +96,7 @@ export const process = {
 } as const;
 
 export const logAlliance = {
-  title: 'Tenha acesso as melhores transportadoras',
+  title: 'Tenha acesso às melhores transportadoras',
   subtitle: 'Uma rede exclusiva de transportadoras selecionadas.',
   brand: 'LogAlliance',
   intro:
@@ -209,31 +217,11 @@ export const solution = {
 } as const;
 
 export const contactForm = {
+  // Copy do bloco de contato do site atual. Os campos do formulário em si vêm
+  // do HubSpot (formulário 909bd17e…), não daqui.
+  kicker: 'Leve sua operação para o próximo nível!',
   title: 'Estamos selecionando marcas com +5.000 envios/mês que buscam uma logística 5 estrelas',
   instruction: 'Preencha seus dados abaixo para entrar em contato com um especialista:',
-  fields: {
-    nome: 'Nome',
-    whatsapp: 'WhatsApp',
-    whatsappCountry: 'Brazil (Brasil) (+55)',
-    whatsappDdd: 'DDD',
-    whatsappNumero: 'Número',
-    empresa: 'Nome da empresa',
-    site: 'Seu site',
-    envios: 'Quantidade de envios por mês',
-    origem: 'Como você conheceu a Enviagora?',
-  },
-  origemOptions: [
-    'Indicação',
-    'Instagram',
-    'Pesquisa',
-    'Vi alguém postando',
-    'Conheço marcas que operam aí',
-    'Conheço o Rafael',
-    'Outro',
-  ],
-  submit: 'Enviar',
-  secondaryLink: 'Não tenho +5.000 envios/mês',
-  secondaryCall: 'Leve sua operação para o próximo nível!',
 } as const;
 
 export const faq = {
@@ -333,7 +321,7 @@ export const footer = {
   legal: '© 2026 Enviagora. Todos os direitos reservados.',
   legalLinks: [
     // TODO(cliente): apontar para as páginas reais quando existirem.
-    { label: 'Política de Privacidade', href: '#' },
-    { label: 'Termos de Uso', href: '#' },
+    { label: 'Política de Privacidade', href: '/policies/privacy-policy' },
+    { label: 'Termos de Uso', href: '/policies/terms-of-service' },
   ],
 } as const;

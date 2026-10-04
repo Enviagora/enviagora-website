@@ -22,7 +22,7 @@ function FaqRow({ item, open, onToggle, id }: { item: Item; open: boolean; onTog
           aria-controls={id}
           className="flex w-full items-center justify-between gap-4 py-5 text-left"
         >
-          <span className="ea-display text-lg text-ea-petroleo sm:text-xl">{item.q}</span>
+          <span className="text-base font-bold leading-snug text-ea-petroleo sm:text-lg">{item.q}</span>
           <span
             className={cn(
               'flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-ea-creme transition-all duration-300 ease-ea',

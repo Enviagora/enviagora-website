@@ -85,16 +85,8 @@ export function Hero() {
         <h1 className="ea-display ea-hero-shadow text-display-lg text-ea-cremewm">
           <Line delay={0.15}>
             {hero.titlePre}
-            <span className="relative inline-block">
-              <span className="relative z-10">{hero.titleHighlight}</span>
-              <motion.span
-                className="absolute inset-x-[-0.04em] bottom-[0.005em] z-0 h-[0.13em] origin-left rounded-full bg-ea-neon"
-                aria-hidden
-                initial={reduce ? undefined : { scaleX: 0 }}
-                animate={reduce ? undefined : { scaleX: 1 }}
-                transition={{ duration: 0.7, ease: EASE_EA, delay: 0.9 }}
-              />
-            </span>
+            {/* Destaque da manchete: peso Bold + neon (permitido sobre fundo escuro). */}
+            <span className="ea-highlight text-ea-neon">{hero.titleHighlight}</span>
           </Line>
           <Line delay={0.28}>{hero.titlePos.trim()}</Line>
         </h1>

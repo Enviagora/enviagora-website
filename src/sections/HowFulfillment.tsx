@@ -20,7 +20,7 @@ export function HowFulfillment() {
   const { steps } = howFulfillment;
 
   return (
-    <Section id="como-funciona" tone="ceu">
+    <Section id="como-funciona" tone="coolgrey">
       <SectionHeading
         kicker="Passo a passo"
         title={howFulfillment.title}
@@ -39,7 +39,7 @@ export function HowFulfillment() {
                 {/* Número-fantasma anexado ao canto (marca-d'água) */}
                 <span
                   aria-hidden
-                  className="ea-display ea-tnum pointer-events-none absolute -right-1 -top-6 select-none text-[7rem] leading-none text-ea-petroleo/[0.07]"
+                  className="ea-metric pointer-events-none absolute -right-1 -top-5 select-none text-[7rem] text-ea-petroleo/[0.08]"
                 >
                   0{i + 1}
                 </span>

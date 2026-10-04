@@ -11,9 +11,9 @@ import { cn } from '@/lib/cn';
 // Estados de UI ilustrativos (não são copy do site) — dão a sensação de "ao vivo".
 const rows = [
   { status: 'Enviado', tone: 'bg-ea-neon', w: 62 },
-  { status: 'Em separação', tone: 'bg-ea-ceu', w: 48 },
-  { status: 'Em trânsito', tone: 'bg-ea-lavanda', w: 70 },
-  { status: 'Conferência', tone: 'bg-ea-kraft', w: 54 },
+  { status: 'Em separação', tone: 'bg-ea-verde-500', w: 48 },
+  { status: 'Em trânsito', tone: 'bg-ea-verde-400', w: 70 },
+  { status: 'Conferência', tone: 'bg-ea-eucalipto', w: 54 },
 ];
 const timeline = ['Pedido recebido', 'Em separação', 'Coletado', 'Em trânsito'];
 
@@ -45,9 +45,9 @@ function MockDashboard() {
   const reduce = useReducedMotion();
   const live = useLiveDashboard();
   const miniStats = [
-    { k: 'Em estoque', tone: 'bg-ea-ceu', v: nf.format(live.estoque) },
+    { k: 'Em estoque', tone: 'bg-ea-verde-500', v: nf.format(live.estoque) },
     { k: 'Enviados hoje', tone: 'bg-ea-neon', v: nf.format(live.enviados) },
-    { k: 'Reposição', tone: 'bg-ea-lavanda', v: nf.format(live.repo) },
+    { k: 'Reposição', tone: 'bg-ea-eucalipto', v: nf.format(live.repo) },
   ];
 
   return (
@@ -77,7 +77,7 @@ function MockDashboard() {
             {miniStats.map((t) => (
               <div key={t.k} className="rounded-ea-sm bg-ea-creme p-3">
                 <span className={cn('mb-2 block h-4 w-4 rounded', t.tone)} />
-                <span className="ea-tnum block font-serif text-lg leading-none text-ea-petroleo">{t.v}</span>
+                <span className="ea-metric block text-xl text-ea-petroleo">{t.v}</span>
                 <span className="mt-1 block text-[0.6rem] text-ea-soft">{t.k}</span>
               </div>
             ))}
@@ -150,7 +150,7 @@ function MockDashboard() {
 
 export function RealTime() {
   return (
-    <Section tone="kraft">
+    <Section tone="coolgrey">
       <div className="grid items-center gap-12 lg:grid-cols-[1fr_0.9fr] lg:gap-20">
         <Reveal className="order-2 lg:order-1">
           <MockDashboard />

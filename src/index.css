@@ -15,28 +15,28 @@
 @tailwind utilities;
 
 :root {
-  /* --- Cores da marca (HEX oficiais) --- */
-  --ea-petroleo: #123336;
-  --ea-petroleo-2: #1b4145;
+  /* --- Cores da marca (HEX oficiais · tokens.css do Caminho 02) --- */
+  --ea-petroleo: #123336; /* Verde Profundo */
+  --ea-petroleo-2: #1b4448; /* verde-700 */
   --ea-neon: #c4ff57;
-  --ea-creme: #fefaef;
+  --ea-neon-300: #d5ff8b;
+  --ea-creme: #fafaf5;
   --ea-creme-wm: #fafaf5;
-  --ea-ceu-azul: #c4dbe0;
-  --ea-lavanda: #c9c2d6;
-  --ea-cool-grey: #dee3e0;
-  --ea-kraft: #ebd9c7;
+  --ea-cool-grey: #dee3e0; /* Cinza Névoa */
+  --ea-eucalipto: #b0c2bf;
+  --ea-lilas: #d8d6e8;
   --ea-preto: #000000;
   --ea-branco: #ffffff;
 
   /* --- Papéis semânticos (base clara padrão) --- */
   --ea-bg: var(--ea-creme);
   --ea-text: var(--ea-petroleo);
-  --ea-text-soft: #3a5457;
+  --ea-text-soft: #2a5b5f;
   --ea-accent: var(--ea-neon);
 
-  /* --- Forma --- */
-  --ea-radius: 20px;
-  --ea-radius-sm: 10px;
+  /* --- Forma: raios contidos; pílula só em tags --- */
+  --ea-radius: 16px;
+  --ea-radius-sm: 8px;
 }
 
 @layer base {
@@ -62,7 +62,7 @@
     color: var(--ea-text);
     font-family: theme('fontFamily.sans');
     font-weight: 400;
-    line-height: 1.6;
+    line-height: 1.55;
     overflow-x: hidden;
   }
 
@@ -84,8 +84,8 @@
   h1, h2, h3, h4 {
     font-family: theme('fontFamily.sans');
     font-weight: 700;
-    line-height: 1.05;
-    letter-spacing: -0.025em;
+    line-height: 1.15;
+    letter-spacing: -0.005em;
   }
 }
 
@@ -104,24 +104,40 @@
     padding-inline: clamp(1.25rem, 5vw, 3rem);
   }
 
-  /* Kicker / rótulo em CAIXA ALTA com tracking aberto (assinatura tipográfica) */
+  /* Rótulo / olho / eyebrow — Satoshi Bold, CAIXA ALTA, tracking 0.14em */
   .ea-kicker {
     font-family: theme('fontFamily.sans');
     text-transform: uppercase;
     letter-spacing: theme('letterSpacing.label');
-    font-weight: 600;
-    font-size: 0.72rem;
-    line-height: 1;
+    font-weight: 700;
+    font-size: 0.75rem;
+    line-height: 1.35;
   }
 
-  /* Título de display — Satoshi Bold com tracking fechado.
-     "Tipografia como protagonista": o peso e o aperto é que criam presença,
-     sem ornamento. */
+  /* Manchete / título — Satoshi Medium em CAIXA ALTA com tracking levemente
+     aberto: a assinatura tipográfica do Caminho 02. O tracking/line-height
+     finos vêm dos tamanhos display-* do Tailwind quando usados. */
   .ea-display {
     font-family: theme('fontFamily.sans');
+    font-weight: 500;
+    text-transform: uppercase;
+    line-height: 1.1;
+    letter-spacing: 0.02em;
+  }
+
+  /* Destaque dentro de manchete: peso (Bold). Em fundo escuro pode ganhar o
+     neon via classe de cor; em fundo claro, só peso — nunca neon. */
+  .ea-highlight {
     font-weight: 700;
-    line-height: 1.0;
-    letter-spacing: -0.03em;
+  }
+
+  /* Números e métricas — o dado é protagonista: Satoshi Light, tabular */
+  .ea-metric {
+    font-family: theme('fontFamily.sans');
+    font-weight: 300;
+    line-height: 1;
+    letter-spacing: -0.01em;
+    font-variant-numeric: tabular-nums lining-nums;
   }
 }
 

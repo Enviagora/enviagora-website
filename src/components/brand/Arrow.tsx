@@ -1,5 +1,6 @@
 import { forwardRef } from 'react';
 import { cn } from '@/lib/cn';
+import simbolo from '@/assets/brand/simbolo.svg';
 
 type ArrowProps = {
   className?: string;
@@ -7,7 +8,9 @@ type ArrowProps = {
   title?: string;
 };
 
-const MASK = "url('/brand/seta-enviagora-neon.svg')";
+// Símbolo oficial do Caminho 02 (seta geométrica com contraforte). Importado
+// pelo Vite para resolver a URL tanto no dev quanto no CDN do Shopify.
+const MASK = `url("${simbolo}")`;
 
 /**
  * Seta ↗ OFICIAL da Enviagora. Renderizada como máscara CSS e colorida por

@@ -1,4 +1,6 @@
 import { useMemo, useRef, type MutableRefObject } from 'react';
+import wordmarkVerde from '@/assets/brand/wordmark-verde.png';
+import simboloVerde from '@/assets/brand/simbolo-verde.png';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Environment, Lightformer } from '@react-three/drei';
 import { RoundedBoxGeometry } from 'three-stdlib';
@@ -17,7 +19,7 @@ const PETROLEO = '#123336';
 const BELT = '#0d2528';
 const RAIL = '#20494d';
 const NEON = '#c4ff57';
-const CREME = '#fefaef';
+const CREME = '#fafaf5';
 
 const LANES = [-4.5, -1.5, 1.5, 4.5];
 const BELT_W = 2.2;
@@ -79,18 +81,21 @@ function heightToNormal(hc: HTMLCanvasElement, strength: number) {
   return new THREE.CanvasTexture(nc);
 }
 
-/** Carrega (uma vez) o logo oficial escuro para carimbar nas caixas. */
-let logoPromise: Promise<HTMLImageElement | null> | null = null;
-function getLogo() {
-  if (!logoPromise) {
-    logoPromise = new Promise((resolve) => {
+/** Carrega (uma vez por URL) uma imagem da marca para carimbar nas texturas. */
+const imageCache = new Map<string, Promise<HTMLImageElement | null>>();
+function loadImage(src: string) {
+  let p = imageCache.get(src);
+  if (!p) {
+    p = new Promise((resolve) => {
       const img = new Image();
+      img.crossOrigin = 'anonymous';
       img.onload = () => resolve(img);
       img.onerror = () => resolve(null);
-      img.src = '/brand/logo-oficial-escuro.png';
+      img.src = src;
     });
+    imageCache.set(src, p);
   }
-  return logoPromise;
+  return p;
 }
 
 /**
@@ -167,18 +172,18 @@ function useBoxTextures() {
 
     // tagline + url impressos (petróleo)
     ctx.fillStyle = 'rgba(18,51,54,0.66)';
-    ctx.font = 'italic 500 20px Georgia, "Times New Roman", serif';
+    ctx.font = '500 17px Satoshi, Arial, sans-serif';
     ctx.textBaseline = 'alphabetic';
-    ctx.fillText('A única logística que funciona.', S * 0.09, S * 0.2);
+    ctx.fillText('A ÚNICA LOGÍSTICA QUE FUNCIONA.', S * 0.09, S * 0.2);
     ctx.fillStyle = 'rgba(18,51,54,0.42)';
-    ctx.font = '600 11px Sora, Arial, sans-serif';
+    ctx.font = '700 11px Satoshi, Arial, sans-serif';
     ctx.fillText('ENVIAGORA.COM.BR', S * 0.09, S * 0.9);
 
     const map = new THREE.CanvasTexture(cc);
     map.anisotropy = 8;
 
-    // wordmark grande impresso quando o logo oficial carregar
-    getLogo().then((img) => {
+    // Wordmark ENVIAGORA em verde profundo, em escala grande (regra de embalagem)
+    loadImage(wordmarkVerde).then((img) => {
       if (!img) return;
       const ar = img.width / img.height;
       const bw = S * 0.64;
@@ -242,14 +247,12 @@ function useLabelTexture() {
     ctx.strokeStyle = 'rgba(18,51,54,0.25)';
     ctx.lineWidth = 2;
     ctx.strokeRect(1, 1, W - 2, H - 2);
-    // cabeçalho petróleo com marca
+    // Cabeçalho da etiqueta: wordmark pequeno em verde profundo + régua fina.
+    // Etiqueta de envio não leva neon (leitura de leitor óptico em primeiro lugar).
     ctx.fillStyle = PETROLEO;
-    ctx.fillRect(1, 1, W - 2, 22);
-    ctx.fillStyle = NEON;
-    ctx.fillRect(8, 8, 9, 9);
-    ctx.fillStyle = 'rgba(240,240,235,0.92)';
-    ctx.font = '700 11px Sora, Arial, sans-serif';
-    ctx.fillText('ENVIAGORA', 24, 16);
+    ctx.font = '700 11px Satoshi, Arial, sans-serif';
+    ctx.fillText('ENVIAGORA', 9, 16);
+    ctx.fillRect(9, 22, W - 18, 1);
     // QR fake
     const qx = 9;
     const qy = 31;
@@ -315,13 +318,13 @@ function useTapeTexture() {
     ctx.fillRect(0, H - 3, W, 3);
     const tex = new THREE.CanvasTexture(c);
     tex.anisotropy = 8;
-    // wordmark repetido ao longo da fita
-    getLogo().then((img) => {
+    // Símbolo repetido ao longo da fita neon (logo monocromático escuro sobre neon)
+    loadImage(simboloVerde).then((img) => {
       if (!img) return;
       const ar = img.width / img.height;
-      const lh = H * 0.5;
+      const lh = H * 0.56;
       const lw = lh * ar;
-      for (let x = W * 0.02; x < W; x += lw + H * 0.5) {
+      for (let x = W * 0.03; x < W; x += lw + H * 1.1) {
         ctx.drawImage(img, x, (H - lh) / 2, lw, lh);
       }
       tex.needsUpdate = true;
@@ -532,7 +535,7 @@ export default function PackageScene() {
 
       {/* Reflexo de estúdio (sem rede) — dá vida ao material do papelão */}
       <Environment resolution={96} frames={1}>
-        <Lightformer form="rect" intensity={1.4} color="#fefaef" position={[0, 8, 3]} scale={[14, 6, 1]} rotation={[-Math.PI / 2, 0, 0]} />
+        <Lightformer form="rect" intensity={1.4} color="#fafaf5" position={[0, 8, 3]} scale={[14, 6, 1]} rotation={[-Math.PI / 2, 0, 0]} />
         <Lightformer form="rect" intensity={0.7} color="#cfe0e4" position={[-7, 3, -2]} scale={[6, 8, 1]} />
         <Lightformer form="rect" intensity={0.5} color="#c4ff57" position={[7, 2, 3]} scale={[5, 5, 1]} />
       </Environment>

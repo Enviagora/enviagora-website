@@ -1,0 +1,78 @@
+{%- comment -%}
+  Home Enviagora — monta o app React gerado por `npm run build:theme`
+  (assets/enviagora-home.js + .css). Os settings abaixo chegam ao app via
+  #enviagora-config; o resto do conteúdo vive em src/content/content.ts.
+{%- endcomment -%}
+{{ 'enviagora-home.css' | asset_url | stylesheet_tag }}
+<link rel="modulepreload" href="{{ 'enviagora-home.js' | asset_url }}">
+
+<script type="application/json" id="enviagora-config">
+  {
+    "hubspot": {
+      "portalId": {{ section.settings.hubspot_portal_id | json }},
+      "formId": {{ section.settings.hubspot_form_id | json }},
+      "region": {{ section.settings.hubspot_region | json }}
+    }
+  }
+</script>
+
+<div id="enviagora-home"></div>
+
+<noscript>
+  <div style="font-family:Satoshi,Arial,sans-serif;background:#123336;color:#FAFAF5;padding:64px 24px;text-align:center">
+    <h1 style="text-transform:uppercase;font-weight:500;letter-spacing:.02em">A única logística que funciona para sua marca</h1>
+    <p>Fulfillment para marcas de suplementos, cosméticos e nutracêuticos em escala. Do armazenamento ao envio.</p>
+    <p>Ative o JavaScript do navegador para falar com um especialista.</p>
+  </div>
+</noscript>
+
+<script type="module" src="{{ 'enviagora-home.js' | asset_url }}"></script>
+
+{% schema %}
+{
+  "name": "Home Enviagora",
+  "tag": "section",
+  "class": "enviagora-home-section",
+  "limit": 1,
+  "enabled_on": {
+    "templates": ["index"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Formulário de contato (HubSpot)"
+    },
+    {
+      "type": "paragraph",
+      "content": "Os leads vão para o formulário do HubSpot abaixo. Só altere se o formulário mudar no HubSpot."
+    },
+    {
+      "type": "text",
+      "id": "hubspot_portal_id",
+      "label": "Portal ID",
+      "default": "44097462"
+    },
+    {
+      "type": "text",
+      "id": "hubspot_form_id",
+      "label": "Form ID",
+      "default": "909bd17e-13cd-40b2-b996-96f5817b8587"
+    },
+    {
+      "type": "select",
+      "id": "hubspot_region",
+      "label": "Região",
+      "options": [
+        { "value": "na1", "label": "na1 (América do Norte)" },
+        { "value": "eu1", "label": "eu1 (Europa)" }
+      ],
+      "default": "na1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Home Enviagora"
+    }
+  ]
+}
+{% endschema %}

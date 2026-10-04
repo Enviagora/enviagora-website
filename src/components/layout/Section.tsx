@@ -1,15 +1,12 @@
 import type { ReactNode } from 'react';
 import { cn } from '@/lib/cn';
 
-type Tone = 'creme' | 'petroleo' | 'ceu' | 'lavanda' | 'coolgrey' | 'kraft' | 'white';
+type Tone = 'creme' | 'petroleo' | 'coolgrey' | 'white';
 
 const toneCls: Record<Tone, string> = {
   creme: 'bg-ea-creme text-ea-petroleo',
   white: 'bg-white text-ea-petroleo',
   coolgrey: 'bg-ea-coolgrey text-ea-petroleo',
-  ceu: 'bg-ea-ceu text-ea-petroleo',
-  lavanda: 'bg-ea-lavanda text-ea-petroleo',
-  kraft: 'bg-ea-kraft text-ea-petroleo',
   // `ea-on-dark` troca a cor do foco para neon (acessibilidade em fundo escuro).
   petroleo: 'bg-ea-petroleo text-ea-cremewm ea-on-dark',
 };

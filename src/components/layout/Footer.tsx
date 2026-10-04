@@ -18,7 +18,7 @@ export function Footer() {
         <div className="grid gap-12 lg:grid-cols-[1.4fr_1fr_1fr]">
           {/* Marca */}
           <div className="flex flex-col gap-5">
-            <Logo on="dark" className="h-7 w-auto self-start" />
+            <Logo on="dark" className="h-6 self-start" />
             <p className="ea-display max-w-xs text-2xl text-ea-cremewm">{footer.tagline}</p>
             <p className="max-w-xs text-sm text-ea-soft-dark">{footer.pitch}</p>
           </div>
