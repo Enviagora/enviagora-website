@@ -53,7 +53,8 @@ export function CdShowcase() {
             </p>
           </Reveal>
         </div>
-        <Reveal delay={0.1}>
+        <Reveal delay={0.1} className="flex flex-col gap-4">
+          <p className="max-w-xl text-lg font-bold leading-snug text-ea-cremewm sm:text-xl">{cd.statement}</p>
           <p className="max-w-xl text-base leading-relaxed text-ea-soft-dark">{cd.body}</p>
         </Reveal>
       </div>

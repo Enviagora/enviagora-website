@@ -90,9 +90,12 @@ export function Hero() {
 
       {/* Conteúdo (pointer-events-none deixa o mouse chegar na cena p/ parallax) */}
       <div className="ea-container-wide pointer-events-none relative z-10 flex min-h-[calc(100svh-7.5rem)] flex-col items-center gap-4 pb-6 pt-[3vh] text-center sm:gap-6 sm:pb-10 sm:pt-[9vh]">
-        {/* Kicker só no desktop — no mobile deixa o hero mais limpo. */}
-        <span className="ea-rise ea-kicker hidden items-center gap-2 text-ea-neon sm:inline-flex" style={delay(0.05)}>
-          <Arrow className="h-3.5 w-3.5" />
+        {/* Kicker = posicionamento ("maior galpão… marca própria"); no mobile, menor e em 2 linhas. */}
+        <span
+          className="ea-rise ea-kicker ea-balance inline-flex max-w-[30ch] items-start gap-2 text-[0.66rem] text-ea-neon sm:max-w-none sm:items-center sm:text-xs"
+          style={delay(0.05)}
+        >
+          <Arrow className="mt-px h-3 w-3 shrink-0 sm:mt-0 sm:h-3.5 sm:w-3.5" />
           {hero.kicker}
         </span>
 

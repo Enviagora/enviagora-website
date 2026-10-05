@@ -148,6 +148,7 @@ export function SavingsCalculator() {
                     </span>{' '}
                     {calculator.perYear}
                   </p>
+                  <p className="text-xs text-ea-soft-dark">{calculator.margin}</p>
                 </div>
 
                 {/* Gasto atual com frete; a fatia em neon é o que deixaria de gastar */}

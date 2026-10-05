@@ -42,7 +42,7 @@ export const nav = [
 
 export const hero = {
   // Eyebrow/kicker (material de branding — posicionamento do deck aprovado).
-  kicker: 'Fulfillment premium para marcas em escala',
+  kicker: 'O maior galpão logístico focado em marca própria do Brasil',
   // Assinatura verbal oficial da marca, com "única logística" em destaque.
   titlePre: 'A ',
   titleHighlight: 'única logística',
@@ -88,6 +88,73 @@ export const socialProof = {
   ],
 } as const;
 
+/** Canais de venda: tudo sai do mesmo estoque no CD (pedido do CEO: não parecer só TikTok). */
+export const channels = {
+  kicker: 'Todos os seus canais',
+  title: 'Todos os seus canais, uma operação só.',
+  subtitle:
+    'Loja própria e marketplaces saem do mesmo estoque no nosso CD — no prazo de cada canal e com o melhor frete da nossa rede.',
+  items: [
+    { logo: 'mercadolivre', name: 'Mercado Livre', tag: 'Normal e Full' },
+    { logo: 'shopee', name: 'Shopee' },
+    { logo: 'tiktok', name: 'TikTok Shop', tag: 'Nº 1 na América Latina' },
+    { logo: 'amazon', name: 'Amazon' },
+    { logo: 'magalu', name: 'Magalu' },
+    { logo: 'shein', name: 'SHEIN' },
+  ],
+  ownStore: {
+    title: 'Loja própria',
+    body: 'Shopify, Nuvemshop, Yampi e outras plataformas',
+    logos: ['shopify', 'nuvemshop', 'yampi'],
+    tag: 'Melhor frete da rede',
+  },
+  carriers: {
+    kicker: 'Coleta dedicada dentro do CD',
+    body: 'Transportadoras com equipe dedicada no nosso galpão: os pacotes são bipados e saem direto da expedição. Menos etapas, menos atraso.',
+    names: ['J&T Express', 'iMile'],
+  },
+} as const;
+
+/** As 5 maiores dores de quem vende online → como resolvemos (prova já publicada). */
+export const pains = {
+  kicker: 'O que a gente resolve',
+  title: 'As 5 maiores dores de quem vende online. E como a gente resolve cada uma.',
+  painLabel: 'A dor',
+  fixLabel: 'Como resolvemos',
+  items: [
+    {
+      pain: 'O frete e os impostos estão comendo a minha margem.',
+      fix: 'Frete negociado com a nossa rede de transportadoras e até 60% de redução de ICMS com incentivos fiscais.',
+      metric: 'até 40%',
+      metricLabel: 'de economia no frete',
+    },
+    {
+      pain: 'Todo dia tem pedido errado, troca e cliente reclamando.',
+      fix: 'Estoque endereçado e pedidos conferidos antes de sair do CD.',
+      metric: '99,6%',
+      metricLabel: 'de assertividade nos pedidos',
+    },
+    {
+      pain: 'Meus pedidos demoram para sair.',
+      fix: 'Operação 7 dias por semana, praticamente 24 horas, e coleta dedicada dentro do CD.',
+      metric: '92%',
+      metricLabel: 'dos pedidos enviados em até 24h',
+    },
+    {
+      pain: 'Na Black Friday (ou quando um vídeo viraliza), a operação trava.',
+      fix: 'Estrutura própria pronta para o pico: já despachamos mais de 1 milhão de pacotes por mês.',
+      metric: '15.000 m²',
+      metricLabel: 'de operação própria',
+    },
+    {
+      pain: 'Não sei direito o que tenho em estoque.',
+      fix: 'Controle de lote e validade e um painel em tempo real com estoque, pedidos e rastreio.',
+      metric: 'Ao vivo',
+      metricLabel: 'estoque e pedidos no painel',
+    },
+  ],
+} as const;
+
 export const niches = {
   title: 'Operação exclusiva e especializada em:',
   items: [
@@ -112,11 +179,12 @@ export const process = {
     kicker: 'CD Enviagora · Extrema/MG',
     metric: '15.000 m²',
     title: 'para sua marca crescer sem travar',
+    statement: 'Não terceirizamos a logística nem os galpões: é tudo nosso.',
     body: 'Você foca em vender; a gente garante que cada pedido saia certo e rápido. Campanha, live ou Black Friday: a mesma estrutura que já despacha mais de 1 milhão de pacotes por mês acompanha o seu ritmo.',
     // O que o cliente ganha (benefício no título, prova já publicada no texto).
     benefits: [
       { title: 'Menos troca e reclamação', body: '99,6% de assertividade nos pedidos.' },
-      { title: 'Seu cliente recebe antes', body: '92% dos pedidos enviados em até 24h.' },
+      { title: 'Seu cliente recebe antes', body: '92% dos pedidos enviados em até 24h, 7 dias por semana.' },
       { title: 'Pico de vendas sem ruptura', body: 'Espaço de sobra e estoque acompanhado ao vivo.' },
       { title: 'Produto regulado em dia', body: 'Galpões com ANVISA e controle de lote e validade.' },
     ],
@@ -177,7 +245,8 @@ export const calculator = {
   freightLabel: 'Quanto você paga de frete por pedido, em média?',
   refFreight: 9,
   maxSaving: 0.4,
-  resultLabel: 'Sua economia estimada',
+  resultLabel: 'Sua economia média estimada',
+  margin: 'Valor médio, com margem de erro de 5% a 10%.',
   perMonth: 'por mês',
   perYear: 'por ano',
   todayLabel: 'Seu gasto com frete hoje',
@@ -426,7 +495,7 @@ export const faq = {
     },
     {
       q: 'Quais são os horários de operação?',
-      a: 'O centro de fulfillment opera de segunda a sexta-feira, das 7h30 às 17h30, garantindo que os pedidos sejam processados e enviados dentro desse período',
+      a: 'Trabalhamos 7 dias por semana, praticamente 24 horas por dia, para que os pedidos sejam processados e enviados o quanto antes.',
     },
   ],
   footerBold: 'Ficou com dúvidas?',

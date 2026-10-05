@@ -1,46 +1,29 @@
 import { Store, ShoppingBag, Settings2 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { integrations } from '@/content/content';
-import { integrationLogos } from '@/content/integrationLogos';
 import { Section } from '@/components/layout/Section';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { Reveal } from '@/components/motion/Reveal';
 import { Button } from '@/components/ui/Button';
-import { TikTokGlyph } from '@/components/brand/TikTokGlyph';
+import { AppLogo } from '@/components/ui/AppLogo';
 
 const groupIcons: LucideIcon[] = [Store, ShoppingBag, Settings2];
 
-/** Um logo enquadrado como ícone de aplicativo: miolo centralizado com respiro. */
+/** Um logo da grade de integrações (ícone de aplicativo com leve elevação no hover). */
 function LogoTile({ slug }: { slug: string }) {
-  const logo = integrationLogos[slug];
-  if (!logo) return null;
   return (
     <li className="flex justify-center">
-      <span
-        title={logo.label}
-        className="flex aspect-square w-full max-w-[64px] items-center justify-center overflow-hidden rounded-[24%] p-[18%] shadow-ea-sm ring-1 ring-ea-petroleo/10 transition-transform duration-300 ease-ea will-change-transform hover:-translate-y-0.5"
-        style={{ backgroundColor: logo.bg ?? '#FFFFFF' }}
-      >
-        {/* O TikTok usa glyph próprio (nota branca) para aparecer no fundo escuro. */}
-        {slug === 'tiktok' ? (
-          <TikTokGlyph className="h-full w-full" />
-        ) : (
-          <img
-            src={logo.file}
-            alt={`Logo ${logo.label}`}
-            loading="lazy"
-            decoding="async"
-            className="h-full w-full object-contain"
-          />
-        )}
-      </span>
+      <AppLogo
+        slug={slug}
+        className="w-full max-w-[64px] shadow-ea-sm ring-1 ring-ea-petroleo/10 transition-transform duration-300 ease-ea will-change-transform hover:-translate-y-0.5"
+      />
     </li>
   );
 }
 
 export function Integrations() {
   return (
-    <Section id="integracoes" tone="creme">
+    <Section id="integracoes" tone="coolgrey">
       <SectionHeading
         kicker="Conecte sua operação"
         title={integrations.title}
