@@ -9,6 +9,8 @@ import { Pill } from '@/components/ui/Pill';
 import { Arrow } from '@/components/brand/Arrow';
 import { cn } from '@/lib/cn';
 import { CdShowcase } from '@/components/operation/CdShowcase';
+import { PainLead } from '@/components/ui/PainLead';
+import { Reveal } from '@/components/motion/Reveal';
 
 /* ==========================================================================
    Process — "A jornada de um pacote", do armazenamento ao envio.
@@ -60,10 +62,13 @@ export function Process() {
   return (
     <Section id="como-funciona" tone="petroleo">
       <div className="flex flex-col items-center gap-5">
+        <Reveal>
+          <PainLead text={process.pain} theme="dark" align="center" />
+        </Reveal>
         <Pill tone="dark" className="border border-ea-neon/30 !text-ea-neon">
           {process.local}
         </Pill>
-        <SectionHeading title={process.title} align="center" theme="dark" className="mx-auto" />
+        <SectionHeading title={process.title} subtitle={process.subtitle} align="center" theme="dark" className="mx-auto" />
       </div>
 
       <div ref={wrapRef} className="mt-16 md:mt-24">

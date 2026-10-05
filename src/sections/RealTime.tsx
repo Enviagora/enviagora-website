@@ -4,6 +4,7 @@ import { SectionHeading } from '@/components/ui/SectionHeading';
 import { Reveal } from '@/components/motion/Reveal';
 import { Arrow } from '@/components/brand/Arrow';
 import { LiveDashboard } from '@/components/realtime/LiveDashboard';
+import { PainLead } from '@/components/ui/PainLead';
 
 /* ==========================================================================
    Visibilidade total — texto + recursos em cima e o painel ao vivo em largura
@@ -15,6 +16,9 @@ export function RealTime() {
     <Section tone="coolgrey">
       <div className="grid gap-10 lg:grid-cols-[1fr_1fr] lg:items-end lg:gap-16">
         <div className="flex flex-col gap-6">
+          <Reveal>
+            <PainLead text={realTime.pain} />
+          </Reveal>
           <SectionHeading kicker="Visibilidade total" title={realTime.title} align="left" />
           <Reveal delay={0.05}>
             <p className="max-w-xl text-base leading-relaxed text-ea-soft">{realTime.body}</p>

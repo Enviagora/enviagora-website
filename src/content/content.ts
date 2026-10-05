@@ -90,10 +90,11 @@ export const socialProof = {
 
 /** Canais de venda: tudo sai do mesmo estoque no CD (pedido do CEO: não parecer só TikTok). */
 export const channels = {
+  pain: 'Meus pedidos demoram para sair.',
   kicker: 'Todos os seus canais',
   title: 'Todos os seus canais, uma operação só.',
   subtitle:
-    'Loja própria e marketplaces saem do mesmo estoque no nosso CD — no prazo de cada canal e com o melhor frete da nossa rede.',
+    'Loja própria e marketplaces saem do mesmo estoque no nosso CD, 7 dias por semana — no prazo de cada canal e com o melhor frete da nossa rede.',
   items: [
     { logo: 'mercadolivre', name: 'Mercado Livre', tag: 'Normal e Full' },
     { logo: 'shopee', name: 'Shopee' },
@@ -115,46 +116,6 @@ export const channels = {
   },
 } as const;
 
-/** As 5 maiores dores de quem vende online → como resolvemos (prova já publicada). */
-export const pains = {
-  kicker: 'O que a gente resolve',
-  title: 'As 5 maiores dores de quem vende online. E como a gente resolve cada uma.',
-  painLabel: 'A dor',
-  fixLabel: 'Como resolvemos',
-  items: [
-    {
-      pain: 'O frete e os impostos estão comendo a minha margem.',
-      fix: 'Frete negociado com a nossa rede de transportadoras e até 60% de redução de ICMS com incentivos fiscais.',
-      metric: 'até 40%',
-      metricLabel: 'de economia no frete',
-    },
-    {
-      pain: 'Todo dia tem pedido errado, troca e cliente reclamando.',
-      fix: 'Estoque endereçado e pedidos conferidos antes de sair do CD.',
-      metric: '99,6%',
-      metricLabel: 'de assertividade nos pedidos',
-    },
-    {
-      pain: 'Meus pedidos demoram para sair.',
-      fix: 'Operação 7 dias por semana, praticamente 24 horas, e coleta dedicada dentro do CD.',
-      metric: '92%',
-      metricLabel: 'dos pedidos enviados em até 24h',
-    },
-    {
-      pain: 'Na Black Friday (ou quando um vídeo viraliza), a operação trava.',
-      fix: 'Estrutura própria pronta para o pico: já despachamos mais de 1 milhão de pacotes por mês.',
-      metric: '15.000 m²',
-      metricLabel: 'de operação própria',
-    },
-    {
-      pain: 'Não sei direito o que tenho em estoque.',
-      fix: 'Controle de lote e validade e um painel em tempo real com estoque, pedidos e rastreio.',
-      metric: 'Ao vivo',
-      metricLabel: 'estoque e pedidos no painel',
-    },
-  ],
-} as const;
-
 export const niches = {
   title: 'Operação exclusiva e especializada em:',
   items: [
@@ -172,10 +133,13 @@ export const niches = {
 } as const;
 
 export const process = {
+  pain: 'Todo dia tem pedido errado, troca e cliente reclamando.',
   title: 'Cuidamos de todo o processo, do armazenamento ao envio.',
+  subtitle: '99,6% de assertividade: cada pedido conferido antes de sair do CD.',
   local: 'CD ENVIAGORA · EXTREMA/MG',
   // Bloco com as fotos reais do CD.
   cd: {
+    pain: 'Na Black Friday (ou quando um vídeo viraliza), a operação trava.',
     kicker: 'CD Enviagora · Extrema/MG',
     metric: '15.000 m²',
     title: 'para sua marca crescer sem travar',
@@ -217,6 +181,7 @@ export const process = {
 } as const;
 
 export const logAlliance = {
+  pain: 'O frete e os impostos estão comendo a minha margem.',
   kicker: 'Economia no frete',
   title: 'Tenha acesso às melhores transportadoras',
   subtitle: 'Uma rede exclusiva de transportadoras selecionadas.',
@@ -278,6 +243,7 @@ export const tiktokShop = {
 } as const;
 
 export const realTime = {
+  pain: 'Não sei direito o que tenho em estoque.',
   title: 'Acompanhamento em tempo real da sua operação',
   body: 'Tenha visibilidade total da sua operação com atualizações em tempo real sobre pedidos. Acompanhe o andamento de cada envio, monitore o estoque dos seus produtos no nosso centro de distribuição e identifique pontos de atenção com facilidade. Tudo isso em um painel claro e intuitivo!',
   features: [

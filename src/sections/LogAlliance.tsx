@@ -4,6 +4,7 @@ import { SectionHeading } from '@/components/ui/SectionHeading';
 import { Reveal } from '@/components/motion/Reveal';
 import { FreightQuoteLive } from '@/components/conversion/FreightQuoteLive';
 import { SavingsCalculator } from '@/components/conversion/SavingsCalculator';
+import { PainLead } from '@/components/ui/PainLead';
 
 /* ==========================================================================
    Economia — LogAlliance: a promessa (até 40% no frete), os benefícios da rede,
@@ -16,6 +17,9 @@ export function LogAlliance() {
     <Section id="economia" tone="creme">
       <div className="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:items-end lg:gap-16">
         <div className="flex flex-col gap-6">
+          <Reveal>
+            <PainLead text={logAlliance.pain} />
+          </Reveal>
           <SectionHeading kicker={logAlliance.kicker} title={logAlliance.title} subtitle={logAlliance.subtitle} align="left" />
           <Reveal delay={0.05}>
             <p className="max-w-lg text-base leading-relaxed text-ea-soft">{logAlliance.intro}</p>

@@ -5,6 +5,7 @@ import { Section } from '@/components/layout/Section';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { Reveal } from '@/components/motion/Reveal';
 import { AppLogo } from '@/components/ui/AppLogo';
+import { PainLead } from '@/components/ui/PainLead';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 /* ==========================================================================
@@ -59,6 +60,9 @@ export function Channels() {
     <Section id="canais" tone="petroleo">
       <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-16">
         <div className="flex flex-col gap-8">
+          <Reveal>
+            <PainLead text={channels.pain} theme="dark" />
+          </Reveal>
           <SectionHeading kicker={channels.kicker} title={channels.title} subtitle={channels.subtitle} align="left" theme="dark" />
 
           {/* Coleta dedicada (desktop: aqui; celular: depois dos canais) */}

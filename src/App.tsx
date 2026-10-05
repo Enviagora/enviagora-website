@@ -8,7 +8,6 @@ import { useConversionTracking } from '@/hooks/useConversionTracking';
 import { Hero } from '@/sections/Hero';
 import { SocialProof } from '@/sections/SocialProof';
 import { Channels } from '@/sections/Channels';
-import { Pains } from '@/sections/Pains';
 import { TikTokShop } from '@/sections/TikTokShop';
 import { Niches } from '@/sections/Niches';
 import { Process } from '@/sections/Process';
@@ -36,14 +35,14 @@ export default function App() {
       <TopBanner />
       <Header />
 
-      {/* Narrativa: promessa + prova → todos os canais → dores resolvidas →
-          para quem → como funciona → economia → tecnologia → TikTok Shop →
-          integrações → resultados → contato → objeções. */}
+      {/* Narrativa: promessa + prova → todos os canais → para quem → como
+          funciona → economia → tecnologia → TikTok Shop → integrações →
+          resultados → contato → objeções. As dores do cliente abrem as seções
+          que as resolvem (PainLead), ao longo da página. */}
       <main id="conteudo">
         <Hero />
         <SocialProof />
         <Channels />
-        <Pains />
         <Niches />
         <Process />
         <LogAlliance />
