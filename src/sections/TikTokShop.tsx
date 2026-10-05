@@ -31,6 +31,11 @@ const BLOCK_BG = '#C4FF57';
 const CURVE = 'M0,146 C80,146 150,144 210,132 C258,122 292,98 320,64 C342,38 366,16 400,6';
 const CURVE_AREA = `${CURVE} L400,160 L0,160 Z`;
 
+// Curva da faixa mobile (100 de altura): baixa à esquerda, dispara na ponta.
+// Termina antes da borda (o ponto da ponta não fica cortado pelo raio do card).
+const BAND_CURVE = 'M0,94 C80,94 160,92 215,82 C265,72 298,52 322,35 C342,21 358,12 372,8';
+const BAND_AREA = `${BAND_CURVE} L372,100 L0,100 Z`;
+
 // Partículas de engajamento que sobem pelo card (corações, notas, pacotes).
 type Particle = { left: string; size: number; delay: number; dur: number; drift: number; Icon: LucideIcon };
 const PARTICLES: Particle[] = [
@@ -47,6 +52,78 @@ const PARTICLES: Particle[] = [
   { left: '48%', size: 24, delay: 5.6, dur: 13, drift: -10, Icon: Heart },
   { left: '68%', size: 12, delay: 4.8, dur: 12, drift: 12, Icon: Package },
 ];
+
+/** Partículas da faixa mobile: nascem perto da ponta da curva e sobem. */
+const BAND_PARTICLES: { left: string; size: number; delay: number; Icon: LucideIcon }[] = [
+  { left: '66%', size: 17, delay: 0, Icon: Heart },
+  { left: '77%', size: 14, delay: 0.8, Icon: Music2 },
+  { left: '86%', size: 18, delay: 1.6, Icon: Package },
+  { left: '72%', size: 13, delay: 2.4, Icon: Heart },
+  { left: '90%', size: 14, delay: 3.1, Icon: Music2 },
+];
+
+/**
+ * Mobile: faixa animada sob o número (sangra até as bordas do card). A curva
+ * de crescimento se desenha de tempos em tempos, a ponta pulsa e as
+ * partículas sobem dali — tudo dentro da faixa, sem cobrir texto.
+ */
+function ViralBand() {
+  return (
+    <div aria-hidden className="relative -mx-6 mt-3 h-24 overflow-hidden sm:hidden">
+      <svg viewBox="0 0 400 100" preserveAspectRatio="none" className="absolute inset-0 h-full w-full">
+        <defs>
+          <linearGradient id="tt-band" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#123336" stopOpacity="0.16" />
+            <stop offset="100%" stopColor="#123336" stopOpacity="0" />
+          </linearGradient>
+        </defs>
+        <motion.path
+          d={BAND_AREA}
+          fill="url(#tt-band)"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1, delay: 0.6, ease: EASE_EA }}
+        />
+        <motion.path
+          d={BAND_CURVE}
+          fill="none"
+          stroke="#123336"
+          strokeOpacity={0.55}
+          strokeWidth={2}
+          strokeLinecap="round"
+          vectorEffect="non-scaling-stroke"
+          initial={{ pathLength: 0 }}
+          whileInView={{ pathLength: [0, 1, 1] }}
+          viewport={{ once: true }}
+          transition={{ duration: 6, times: [0, 0.3, 1], repeat: Infinity, ease: EASE_EA }}
+        />
+      </svg>
+
+      {/* Ponta da curva: o ponto que "dispara" */}
+      <span className="absolute right-[7%] top-[8%] flex h-3 w-3 -translate-y-1/2 translate-x-1/2">
+        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-ea-petroleo opacity-40" />
+        <span className="relative inline-flex h-3 w-3 rounded-full bg-ea-petroleo ring-4 ring-ea-petroleo/15" />
+      </span>
+
+      {BAND_PARTICLES.map((p, i) => {
+        const Icon = p.Icon;
+        return (
+          <motion.span
+            key={i}
+            className="absolute bottom-0 text-ea-petroleo/70"
+            style={{ left: p.left }}
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: [20, -70], opacity: [0, 0.9, 0], rotate: [0, i % 2 ? 14 : -14] }}
+            transition={{ duration: 3.4, delay: p.delay, repeat: Infinity, ease: 'easeOut' }}
+          >
+            <Icon size={p.size} strokeWidth={2.2} />
+          </motion.span>
+        );
+      })}
+    </div>
+  );
+}
 
 export function TikTokShop() {
   return (
@@ -153,16 +230,17 @@ export function TikTokShop() {
 
           {/* Stat gigante + provas + CTA */}
           <div className="mt-6 grid gap-6 sm:mt-10 sm:gap-8 lg:mt-12 lg:grid-cols-[auto_1fr] lg:items-center lg:gap-14">
-            {/* Mobile: número em cartão escuro (contraste máximo); desktop: solto no neon */}
-            <div className="flex flex-col rounded-ea bg-ea-petroleo px-5 py-4 sm:rounded-none sm:bg-transparent sm:p-0">
+            <div className="flex flex-col">
               <span className="relative inline-flex w-fit">
-                <span className="ea-metric text-[clamp(2.6rem,12vw,6.5rem)] text-ea-neon sm:text-ea-petroleo">
+                <span className="ea-metric text-[clamp(2.8rem,13vw,6.5rem)] text-ea-petroleo">
                   <CountUp value={tiktokShop.stat.value} suffix={tiktokShop.stat.suffix} />
                 </span>
               </span>
-              <span className="mt-1 text-xs font-semibold uppercase tracking-label text-ea-cremewm/80 sm:text-sm sm:text-ea-petroleo/70">
+              <span className="mt-1 text-xs font-semibold uppercase tracking-label text-ea-petroleo/70 sm:text-sm">
                 {tiktokShop.stat.label}
               </span>
+              {/* Mobile: a curva viral ganha uma faixa própria sob o número */}
+              <ViralBand />
             </div>
 
             <div className="flex flex-col gap-6">
