@@ -4,12 +4,24 @@ import { SectionHeading } from '@/components/ui/SectionHeading';
 import { Reveal } from '@/components/motion/Reveal';
 import { Pill } from '@/components/ui/Pill';
 import { Arrow } from '@/components/brand/Arrow';
-import { ProductArt } from '@/components/brand/ProductArt';
+import suplementos720 from '@/assets/nichos/suplementos-720.webp';
+import suplementos1280 from '@/assets/nichos/suplementos-1280.webp';
+import beleza720 from '@/assets/nichos/beleza-720.webp';
+import beleza1280 from '@/assets/nichos/beleza-1280.webp';
 
+// Fotos de produtos reais de marcas operadas pela Enviagora.
 const meta = [
-  { art: 'suplementos', tags: ['suplementos', 'nutracêuticos', 'performance'] },
-  { art: 'beleza', tags: ['beleza', 'cosméticos', 'wellness'] },
-] as const;
+  {
+    photo: { src: suplementos1280, srcSet: `${suplementos720} 720w, ${suplementos1280} 1280w` },
+    alt: 'Suplementos e nutracêuticos de marcas clientes: gomas, creatina, magnésio, probióticos, greens e colágeno',
+    tags: ['suplementos', 'nutracêuticos', 'performance'],
+  },
+  {
+    photo: { src: beleza1280, srcSet: `${beleza720} 720w, ${beleza1280} 1280w` },
+    alt: 'Cosméticos de marcas clientes: creme, clareador, sérum, protetores solares, body splash e desodorante',
+    tags: ['beleza', 'cosméticos', 'wellness'],
+  },
+];
 
 export function Niches() {
   return (
@@ -18,14 +30,23 @@ export function Niches() {
 
       <div className="mt-14 grid gap-6 md:grid-cols-2">
         {niches.items.map((item, i) => {
-          const { art, tags } = meta[i];
+          const { photo, alt, tags } = meta[i];
           return (
             <Reveal key={item.title} delay={i * 0.08}>
-              <article className="flex h-full flex-col overflow-hidden rounded-ea-lg border border-ea-petroleo/15 bg-white">
-                {/* Vitrine: o tipo de produto que a operação manuseia */}
-                <div className="relative border-b border-ea-petroleo/10 bg-ea-coolgrey/50 px-8 pb-4 pt-8 text-ea-petroleo sm:px-12">
-                  <Arrow className="pointer-events-none absolute -right-6 -top-6 h-32 w-32 text-ea-petroleo/[0.05]" />
-                  <ProductArt kind={art} className="relative mx-auto max-w-[320px]" />
+              <article className="group flex h-full flex-col overflow-hidden rounded-ea-lg border border-ea-petroleo/15 bg-white">
+                {/* Vitrine: produtos reais que a operação manuseia */}
+                <div className="relative overflow-hidden border-b border-ea-petroleo/10 bg-[#F1EEE8]">
+                  <img
+                    src={photo.src}
+                    srcSet={photo.srcSet}
+                    sizes="(min-width: 1184px) 580px, (min-width: 768px) 50vw, 100vw"
+                    width={1280}
+                    height={525}
+                    alt={alt}
+                    loading="lazy"
+                    decoding="async"
+                    className="aspect-[1958/803] w-full object-cover transition-transform duration-700 ease-ea group-hover:scale-[1.03]"
+                  />
                 </div>
 
                 <div className="flex flex-1 flex-col gap-6 p-8 sm:p-10">

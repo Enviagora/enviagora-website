@@ -56,6 +56,27 @@
   </style>
 </noscript>
 
+{%- comment -%} Dados da empresa para buscadores (endereço e CNPJ do rodapé). {%- endcomment -%}
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Enviagora",
+    "url": {{ shop.url | json }},
+    "logo": {{ 'enviagora-logo-escuro.svg' | asset_url | prepend: 'https:' | json }},
+    "taxID": "49.933.678/0001-16",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Av. Joaquim Lourenço de Lima, 124 — Dist. Industrial Vargem do João Pinto",
+      "addressLocality": "Extrema",
+      "addressRegion": "MG",
+      "postalCode": "37644-020",
+      "addressCountry": "BR"
+    },
+    "sameAs": ["https://www.instagram.com/enviagorabr", "https://www.linkedin.com/company/enviagora/"]
+  }
+</script>
+
 <script type="module" src="{{ 'enviagora-home.js' | asset_url }}"></script>
 
 {% schema %}

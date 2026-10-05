@@ -358,11 +358,12 @@ export const footer = {
       ],
     },
   ],
-  // TODO(cliente): e-mail, telefone e CNPJ reais (campos vazios não aparecem).
+  // E-mail e telefone vazios não aparecem. CNPJ e endereço são obrigatórios no rodapé.
   contato: {
-    email: '', // preencher
-    telefone: '', // preencher
-    cnpj: '', // preencher
+    email: '',
+    telefone: '',
+    cnpj: '49.933.678/0001-16',
+    endereco: 'Av. Joaquim Lourenço de Lima, 124, Dist. Industrial Vargem do João Pinto, 37644-020, Extrema/MG',
   },
   legal: '© 2026 Enviagora. Todos os direitos reservados.',
   legalLinks: [

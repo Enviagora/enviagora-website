@@ -30,7 +30,12 @@ export function Footer() {
   const { blogUrl } = getSiteConfig();
 
   // Campos de contato podem estar vazios no conteúdo (aguardando os dados reais).
-  const { email, telefone, cnpj } = footer.contato as { email: string; telefone: string; cnpj: string };
+  const { email, telefone, cnpj, endereco } = footer.contato as {
+    email: string;
+    telefone: string;
+    cnpj: string;
+    endereco: string;
+  };
 
   return (
     <footer ref={ref} className="ea-on-dark relative overflow-hidden bg-ea-petroleo text-ea-cremewm">
@@ -120,12 +125,20 @@ export function Footer() {
           </div>
         )}
 
-        {/* Barra legal */}
-        <div className="mt-8 flex flex-col gap-3 border-t border-ea-cremewm/10 pt-6 text-xs text-ea-soft-dark sm:flex-row sm:items-center sm:justify-between">
-          <p>
-            {footer.legal}
-            {cnpj && <span className="ml-2">CNPJ {cnpj}</span>}
-          </p>
+        {/* Barra legal: razão social, CNPJ e endereço (obrigatórios) */}
+        <div className="mt-8 flex flex-col gap-4 border-t border-ea-cremewm/10 pt-6 text-xs text-ea-soft-dark lg:flex-row lg:items-end lg:justify-between">
+          <div className="flex flex-col gap-1.5">
+            <p>
+              {footer.legal}
+              {cnpj && <span className="whitespace-nowrap"> · CNPJ {cnpj}</span>}
+            </p>
+            {endereco && (
+              <p className="flex items-start gap-1.5">
+                <MapPin className="mt-px h-3.5 w-3.5 shrink-0" aria-hidden />
+                <span>{endereco}</span>
+              </p>
+            )}
+          </div>
           <ul className="flex flex-wrap gap-x-5 gap-y-1">
             {footer.legalLinks.map((link) => (
               <li key={link.label}>
