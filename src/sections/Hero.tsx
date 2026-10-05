@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useState, type CSSProperties } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState, type CSSProperties } from 'react';
 import { motion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 import { hero, reassurance } from '@/content/content';
@@ -17,6 +17,17 @@ export function Hero() {
   const reduce = useReducedMotion();
   const [enable3d, setEnable3d] = useState(false);
   const [sceneReady, setSceneReady] = useState(false);
+  const [onScreen, setOnScreen] = useState(true);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  // Hero fora da tela → a cena 3D pausa (não desenha quadros à toa).
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el || !('IntersectionObserver' in window)) return;
+    const io = new IntersectionObserver(([e]) => setOnScreen(e.isIntersecting));
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
 
   // A foto da cena (no HTML) pinta junto com o texto. O 3D ao vivo só começa
   // depois que a página terminou de carregar e o navegador ficou ocioso, para
@@ -46,6 +57,7 @@ export function Hero() {
 
   return (
     <section
+      ref={sectionRef}
       id="top"
       className="ea-on-dark relative -mt-16 flex min-h-[100svh] items-start overflow-hidden bg-ea-petroleo pt-16 text-ea-cremewm sm:-mt-[70px] sm:pt-[70px]"
     >
@@ -59,7 +71,7 @@ export function Hero() {
           >
             <SceneErrorBoundary fallback={null}>
               <Suspense fallback={null}>
-                <PackageScene onReady={() => setSceneReady(true)} />
+                <PackageScene active={onScreen} onReady={() => setSceneReady(true)} />
               </Suspense>
             </SceneErrorBoundary>
           </div>

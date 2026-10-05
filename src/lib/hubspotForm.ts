@@ -14,6 +14,12 @@ export const HS_FIELDS = {
   firstName: '0-1/firstname',
   lastName: '0-1/lastname',
   email: '0-1/email',
+  phone: '0-1/phone',
+  website: '0-1/website',
+  erp: '0-1/erp_used',
+  segment: '0-1/product_segment',
+  consentCommunications: 'LEGAL_CONSENT.subscription_type_3362838547',
+  consentProcessing: 'LEGAL_CONSENT.processing',
 } as const;
 
 /** Evento de janela disparado após um envio bem-sucedido do formulário. */
@@ -42,7 +48,7 @@ type FormEventDetail = { formId?: string; instanceId?: string };
 const isOurs = (e: Event) =>
   (e as CustomEvent<FormEventDetail>).detail?.formId === getSiteConfig().hubspot.formId;
 
-let pendingPrefill: Record<string, string> = {};
+let pendingPrefill: Record<string, string | boolean> = {};
 let formReady = false;
 let installed = false;
 
@@ -50,7 +56,7 @@ function applyPrefill() {
   const forms = window.HubSpotFormsV4?.getForms?.() ?? [];
   const form = forms.find((f) => f.getFormId() === getSiteConfig().hubspot.formId);
   if (!form) return false;
-  for (const [name, value] of Object.entries(pendingPrefill)) form.setFieldValue(name, value);
+  for (const [name, value] of Object.entries(pendingPrefill)) form.setFieldValue(name, value as string);
   pendingPrefill = {};
   return true;
 }
@@ -97,8 +103,15 @@ export function installHubSpotFormBridge() {
   });
 }
 
-/** Pré-preenche um campo do formulário (agora, ou assim que ele carregar). */
-export function prefillField(name: string, value: string) {
-  pendingPrefill[name] = value;
+/** Evento de janela para o formulário próprio receber pré-preenchimentos. */
+export const PREFILL_EVENT = 'enviagora:prefill';
+
+/**
+ * Pré-preenche um campo: no formulário próprio (via evento) e no do HubSpot
+ * (agora, ou assim que ele carregar — usado no plano B).
+ */
+export function prefillField(name: string, value: string | boolean) {
+  pendingPrefill[name] = value as string;
   if (formReady) applyPrefill();
+  window.dispatchEvent(new CustomEvent(PREFILL_EVENT, { detail: { name, value } }));
 }

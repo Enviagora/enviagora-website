@@ -49,7 +49,7 @@ function ReadySignal({ onReady }: { onReady?: () => void }) {
   return null;
 }
 
-export default function PackageScene({ onReady }: { onReady?: () => void }) {
+export default function PackageScene({ onReady, active = true }: { onReady?: () => void; active?: boolean }) {
   const mobile = isMobile();
   const tilt = useDeviceTilt(mobile);
   // Qualidade adaptativa: se o aparelho não sustenta a taxa de quadros, a cena
@@ -60,6 +60,8 @@ export default function PackageScene({ onReady }: { onReady?: () => void }) {
 
   return (
     <Canvas
+      // Fora da tela, para de desenhar (bateria/CPU); volta ao reaparecer.
+      frameloop={active ? 'always' : 'never'}
       dpr={[1, maxDpr]}
       shadows={mobile ? false : 'soft'}
       gl={{ antialias: true, powerPreference: 'high-performance', stencil: false }}

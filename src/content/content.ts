@@ -277,6 +277,79 @@ export const contactForm = {
 } as const;
 
 
+/**
+ * Formulário próprio (2 etapas). Os VALORES das opções são exatamente os do
+ * formulário no HubSpot (é o que vai para o CRM); o texto exibido pode diferir
+ * (ex.: o HubSpot traduziu "Tiny" como "Pequeno" — aqui aparece "Tiny").
+ */
+export const leadForm = {
+  steps: ['Seus dados', 'Sua operação'],
+  labels: {
+    firstname: 'Nome',
+    lastname: 'Sobrenome',
+    email: 'E-mail corporativo',
+    phone: 'WhatsApp ou telefone',
+    website: 'Site da loja',
+    orderVolume: 'Pedidos por mês',
+    erp: 'ERP utilizado',
+    segment: 'Segmento do produto',
+    need: 'Principal necessidade',
+  },
+  placeholders: {
+    firstname: 'Seu nome',
+    lastname: 'Seu sobrenome',
+    email: 'voce@suamarca.com.br',
+    phone: '(11) 99999-9999',
+    website: 'suamarca.com.br',
+    select: 'Selecione',
+  },
+  orderVolume: ['Ainda não opero', 'Até 999', '1.000 a 2.999', '3.000 a 4.999', '5.000 a 9.999', '10.000 a 20.000', 'Mais de 20.000'],
+  erp: [
+    { label: 'Bling', value: 'Bling' },
+    { label: 'Tiny', value: 'Tiny' },
+    { label: 'Omie', value: 'Omie' },
+    { label: 'Sankhya', value: 'Sankhya' },
+    { label: 'TOTVS', value: 'TOTVS' },
+    { label: 'Linx', value: 'Linx' },
+    { label: 'Outro ERP', value: 'Outro ERP' },
+    { label: 'Não utilizo ERP', value: 'Não utiliza ERP' },
+    { label: 'Não sei informar', value: 'Não sabe informar' },
+  ],
+  segment: [
+    'Suplementos, nutracêuticos e cosméticos',
+    'Alimentos e bebidas',
+    'Moda e acessórios',
+    'Casa e decoração',
+    'Eletrônicos',
+    'Pet',
+    'Outro',
+  ],
+  need: [
+    'Terceirizar a operação de fulfillment',
+    'Reduzir custo de frete',
+    'Ganhar escala e capacidade operacional',
+    'Melhorar armazenagem e controle de estoque',
+    'Controlar lotes e validades',
+    'Melhorar embalagem e experiência de unboxing',
+    'Integrar loja, ERP e operação logística',
+    'Outra necessidade',
+  ],
+  next: 'Continuar',
+  back: 'Voltar',
+  submit: 'Falar com um especialista',
+  sending: 'Enviando…',
+  errors: {
+    required: 'Campo obrigatório',
+    email: 'Informe um e-mail válido',
+    phone: 'Informe DDD + número',
+    website: 'Informe o endereço do site',
+    consent: 'Precisamos do seu consentimento para continuar',
+    generic: 'Não foi possível enviar agora. Tente novamente em instantes.',
+  },
+  fallbackTitle: 'Falta só confirmar',
+  fallbackBody: 'Confira os dados abaixo (já preenchidos) e clique em Enviar para concluir.',
+} as const;
+
 export const faq = {
   title: 'Perguntas frequentes',
   items: [

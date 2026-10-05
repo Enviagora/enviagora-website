@@ -5,7 +5,7 @@ import { comoComecar, contactForm } from '@/content/content';
 import { Section } from '@/components/layout/Section';
 import { Reveal } from '@/components/motion/Reveal';
 import { Arrow } from '@/components/brand/Arrow';
-import { HubSpotForm } from '@/components/forms/HubSpotForm';
+import { LeadForm } from '@/components/forms/LeadForm';
 import { LEAD_EVENT, type LeadDetail } from '@/lib/hubspotForm';
 import { meetingsEmbedUrl } from '@/lib/siteConfig';
 import { EASE_EA } from '@/lib/motion';
@@ -97,14 +97,14 @@ export function ContactForm() {
 
         </div>
 
-        {/* Formulário oficial do HubSpot. Ele foi estilizado no HubSpot para fundo
-            escuro (rótulos claros), por isso a superfície é verde profundo. */}
+        {/* Formulário próprio (envia para o formulário do HubSpot pela API; se
+            o HubSpot recusar, ele mesmo mostra o formulário oficial preenchido). */}
         <Reveal delay={0.1}>
           <div className="rounded-ea-lg border border-ea-cremewm/10 bg-ea-petroleo-2 p-5 sm:p-8">
-            {/* O frame continua montado (só escondido) após o envio: o embed do
-                HubSpot não gosta de ter o nó removido no meio do fluxo. */}
+            {/* Continua montado (só escondido) após o envio: no plano B o embed
+                do HubSpot não gosta de ter o nó removido no meio do fluxo. */}
             <div className={lead ? 'hidden' : undefined}>
-              <HubSpotForm className="min-h-[640px]" />
+              <LeadForm />
             </div>
             <AnimatePresence>{lead && <LeadSuccess lead={lead} />}</AnimatePresence>
           </div>

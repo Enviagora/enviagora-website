@@ -37,20 +37,26 @@ O Shopify ignora as pastas que não são de tema, então as duas convivem na mes
 
 ### Formulário de contato
 
-É o **formulário oficial do HubSpot** (portal `44097462`, form
-`909bd17e-13cd-40b2-b996-96f5817b8587`, região `na1`) — o mesmo do site atual, então os
-leads caem no CRM com as mesmas notificações e workflows. Ele roda num iframe do HubSpot:
-campos, textos e cores do formulário se ajustam **no HubSpot**, não aqui.
+O formulário da home é **nosso** (`src/components/forms/LeadForm.tsx`, 2 etapas, visual da
+marca), mas envia para o **mesmo formulário do HubSpot** (portal `44097462`, form
+`909bd17e-13cd-40b2-b996-96f5817b8587`) pela API pública de envios (`src/lib/hubspotSubmit.ts`).
+Os leads caem no CRM como antes, com as mesmas notificações e workflows, ligados à visita
+(cookie `hubspotutk`) e com os consentimentos da LGPD.
 
-Em volta dele (`src/lib/hubspotForm.ts`, via eventos globais do embed v4):
-- **Lead no envio:** `fbq('track', 'Lead')` no Meta Pixel + evento `enviagora_lead` no
-  `dataLayer` (com a faixa de pedidos/mês; nada de dado pessoal no pixel).
-- **Depois do envio:** confirmação + agenda do HubSpot Meetings (se configurada).
-- **Simulador de economia** (`#economia`): compara o frete atual da marca com o frete
-  médio da Enviagora (≈ R$ 9 para todo o Brasil — `calculator.oursValue`); o CTA
-  pré-preenche "Pedidos por mês" e "Principal necessidade = Reduzir custo de frete".
-- **Cliques em CTA:** `enviagora_cta_click` no `dataLayer` e `CTAClick` no Meta, com a
-  seção de origem (hero, header, barra mobile, FAQ…).
+- **Importante:** o HubSpot recusa envios por API enquanto o formulário tiver **CAPTCHA**
+  ligado. Desligue em HubSpot › Marketing › Formulários › (formulário) › Opções/Configurações ›
+  CAPTCHA. A proteção anti-spam passa a ser nossa (campo-isca + tempo mínimo de preenchimento).
+- **Plano B automático:** se o HubSpot recusar (CAPTCHA ligado, instabilidade, rede), a página
+  mostra o formulário oficial do HubSpot já preenchido com o que a pessoa digitou — ela só
+  confirma. Nenhum lead se perde.
+- **Valores das opções** (pedidos/mês, ERP, segmento, necessidade) são exatamente os do HubSpot;
+  ao mudar opções lá, atualize `leadForm` em `src/content/content.ts`.
+- **Rastreamento:** `fbq('track', 'Lead')` + `enviagora_lead` no `dataLayer` no envio;
+  `enviagora_form_step` (etapa 2) e `enviagora_form_fallback` (plano B) para o funil.
+- **Depois do envio:** confirmação + agenda do HubSpot Meetings (se configurada na seção).
+- **Simulador de economia** (`#economia`): o CTA pré-preenche pedidos/mês e "Reduzir custo de
+  frete" no formulário.
+- **Cliques em CTA:** `enviagora_cta_click` no `dataLayer` e `CTAClick` no Meta.
 
 ---
 
@@ -129,10 +135,10 @@ Itens que dependem de dados reais — o site não inventa nenhum deles:
   aparece.
 - **HubSpot Meetings:** colar o link do agendador no setting da seção para a agenda
   aparecer logo após o envio do formulário.
-- **HubSpot › rótulos traduzidos errado:** no campo de ERP "Tiny" aparece como "Pequeno" e
-  "Linx" como "Doninha"; no segmento "Pet" aparece "Cinco". Corrigir no editor do formulário.
-- **HubSpot › formulário em 2 etapas:** dá para dividir em "contato" e "operação" no
-  próprio editor do HubSpot — formulários longos convertem menos em uma etapa só.
+- **HubSpot › desligar o CAPTCHA do formulário** (ver "Formulário de contato"): sem isso o
+  formulário próprio sempre cai no plano B.
+- **HubSpot › rótulos traduzidos errado** (só aparecem no plano B): "Tiny" → "Pequeno",
+  "Linx" → "Doninha", "Pet" → "Cinco". Corrigir no editor do formulário.
 - **Fotos:** o bloco do CD (15.000 m² em Extrema/MG) usa as fotos de porta-paletes e
   corredor enviadas em out/2026 (`src/assets/operacao/`). Fotos de separação, embalagem e
   expedição em alta deixariam o site ainda mais completo.
