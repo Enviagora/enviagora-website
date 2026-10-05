@@ -1,0 +1,83 @@
+{%- comment -%}
+  Rodapé da marca para as páginas fora da home React (blog e artigos).
+{%- endcomment -%}
+{%- liquid
+  assign ea_home = routes.root_url
+  if ea_home == '/'
+    assign ea_home = ''
+  endif
+  assign ea_blog_url = blog.url | default: '/blogs/posts'
+-%}
+<style>
+  .ea-sf { letter-spacing: 0; background: #123336; color: #fafaf5; font-family: 'Satoshi', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif; position: relative; overflow: hidden; }
+  .ea-sf a { color: inherit; text-decoration: none; }
+  .ea-sf__in { max-width: 1280px; margin: 0 auto; padding: 64px clamp(20px, 5vw, 48px) 32px; position: relative; }
+  .ea-sf__grid { display: grid; gap: 40px; }
+  .ea-sf__brand img { height: 22px; width: auto; display: block; }
+  .ea-sf__tag { margin: 17.6px 0 8px; font-size: 22.4px; font-weight: 500; text-transform: uppercase; letter-spacing: .02em; line-height: 1.15; max-width: 16ch; }
+  .ea-sf__pitch { margin: 0; color: #b0c2bf; font-size: 14.4px; max-width: 32ch; }
+  .ea-sf__title { display: block; color: #c4ff57; font-size: 11.5px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; margin-bottom: 16px; }
+  .ea-sf ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10.4px; }
+  .ea-sf li a { color: #b0c2bf; font-size: 14.4px; transition: color .2s; }
+  .ea-sf li a:hover { color: #fafaf5; }
+  .ea-sf__cta { display: inline-flex; align-items: center; gap: 9.6px; margin-top: 24px; background: #c4ff57; color: #123336 !important; border-radius: 8px; padding: 13.6px 18.4px; font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+  .ea-sf__cta svg { width: .85em; height: .85em; }
+  .ea-sf__legal { margin-top: 48px; padding-top: 24px; border-top: 1px solid rgba(250,250,245,.1); display: flex; flex-wrap: wrap; gap: 12px 24px; justify-content: space-between; color: #b0c2bf; font-size: 12px; }
+  .ea-sf__legal ul { display: flex; flex-wrap: wrap; gap: 8px 20px; }
+  .ea-sf__legal li a { font-size: 12px; }
+  .ea-sf__mark { position: absolute; right: -48px; top: -64px; width: 352px; height: 352px; color: rgba(196,255,87,.06); pointer-events: none; }
+  @media (min-width: 990px) { .ea-sf__grid { grid-template-columns: 1.4fr 1fr 1fr; } }
+</style>
+
+<footer class="ea-sf">
+  {%- render 'enviagora-arrow', class: 'ea-sf__mark' -%}
+  <div class="ea-sf__in">
+    <div class="ea-sf__grid">
+      <div class="ea-sf__brand">
+        <img src="{{ 'enviagora-logo-escuro.svg' | asset_url }}" alt="Enviagora" width="214" height="22" loading="lazy">
+        <p class="ea-sf__tag">A única logística que funciona.</p>
+        <p class="ea-sf__pitch">Fulfillment estratégico para e-commerces em escala.</p>
+        <a class="ea-sf__cta" href="{{ ea_home }}/#contato">
+          Falar com um especialista
+          {%- render 'enviagora-arrow' -%}
+        </a>
+      </div>
+      <nav aria-label="Operação">
+        <span class="ea-sf__title">Operação</span>
+        <ul>
+          <li><a href="{{ ea_home }}/#operacao">Operação exclusiva</a></li>
+          <li><a href="{{ ea_home }}/#como-funciona">Como funciona</a></li>
+          <li><a href="{{ ea_home }}/#economia">Economia no frete</a></li>
+          <li><a href="{{ ea_home }}/#integracoes">Integrações</a></li>
+          <li><a href="{{ ea_home }}/#faq">Perguntas frequentes</a></li>
+        </ul>
+      </nav>
+      <nav aria-label="Conteúdo">
+        <span class="ea-sf__title">Conteúdo</span>
+        <ul>
+          <li><a href="{{ ea_blog_url }}">Blog</a></li>
+          <li><a href="https://www.instagram.com/enviagorabr" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+          <li><a href="https://www.linkedin.com/company/enviagora/" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="ea-sf__legal">
+      <span>© {{ 'now' | date: '%Y' }} Enviagora. Todos os direitos reservados.</span>
+      <ul>
+        <li><a href="/policies/privacy-policy">Política de Privacidade</a></li>
+        <li><a href="/policies/terms-of-service">Termos de Uso</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Rodapé Enviagora",
+  "tag": "div",
+  "class": "enviagora-site-footer-section",
+  "settings": [],
+  "presets": [{ "name": "Rodapé Enviagora" }]
+}
+{% endschema %}

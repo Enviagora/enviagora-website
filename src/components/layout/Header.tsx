@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { cn } from '@/lib/cn';
-import { nav, hero } from '@/content/content';
+import { BLOG_HREF, nav, hero } from '@/content/content';
+import { getSiteConfig } from '@/lib/siteConfig';
 import { Logo } from '@/components/brand/Logo';
 import { Button } from '@/components/ui/Button';
 
@@ -26,6 +27,8 @@ export function Header() {
 
   // Barra flutua sobre o hero escuro → conteúdo claro no topo; escuro ao rolar.
   const dark = !scrolled;
+  const { blogUrl } = getSiteConfig();
+  const hrefOf = (href: string) => (href === BLOG_HREF ? blogUrl : href);
 
   return (
     <header className="ea-on-dark sticky top-0 z-50 pt-2 sm:pt-3">
@@ -42,11 +45,11 @@ export function Header() {
             <Logo on={dark ? 'dark' : 'light'} className="h-[17px] sm:h-5" />
           </a>
 
-          <nav className="hidden items-center gap-8 lg:flex" aria-label="Navegação principal">
+          <nav className="hidden items-center gap-7 lg:flex" aria-label="Navegação principal">
             {nav.map((item) => (
               <a
                 key={item.href}
-                href={item.href}
+                href={hrefOf(item.href)}
                 className={cn(
                   'relative text-sm font-medium transition-colors duration-200 after:absolute after:-bottom-1.5 after:left-0 after:h-px after:w-0 after:transition-all after:duration-300 hover:after:w-full',
                   dark
@@ -103,7 +106,7 @@ export function Header() {
               {nav.map((item, i) => (
                 <motion.a
                   key={item.href}
-                  href={item.href}
+                  href={hrefOf(item.href)}
                   onClick={() => setOpen(false)}
                   className="ea-display border-b border-ea-cremewm/10 py-4 text-3xl text-ea-cremewm"
                   initial={{ opacity: 0, x: -16 }}

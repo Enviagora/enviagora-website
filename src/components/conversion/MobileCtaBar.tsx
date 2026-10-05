@@ -2,8 +2,6 @@ import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { hero } from '@/content/content';
 import { Button } from '@/components/ui/Button';
-import { WhatsAppIcon } from '@/components/brand/WhatsAppIcon';
-import { whatsappHref } from '@/lib/siteConfig';
 import { EASE_EA } from '@/lib/motion';
 
 /**
@@ -13,10 +11,8 @@ import { EASE_EA } from '@/lib/motion';
  */
 export function MobileCtaBar() {
   const [show, setShow] = useState(false);
-  const [wa, setWa] = useState<string | null>(null);
 
   useEffect(() => {
-    setWa(whatsappHref());
     const heroEl = document.getElementById('top');
     const blockers = [document.getElementById('contato'), document.querySelector('footer')].filter(
       (el): el is HTMLElement => !!el,
@@ -56,22 +52,10 @@ export function MobileCtaBar() {
           exit={{ y: '100%' }}
           transition={{ duration: 0.35, ease: EASE_EA }}
         >
-          <div className="flex items-stretch gap-2" data-track="mobile-bar">
+          <div className="flex items-stretch" data-track="mobile-bar">
             <Button href="#contato" className="flex-1" withArrow>
               {hero.cta}
             </Button>
-            {wa && (
-              <a
-                href={wa}
-                target="_blank"
-                rel="noopener noreferrer"
-                data-track="mobile-bar-whatsapp"
-                aria-label="Conversar no WhatsApp"
-                className="flex w-12 shrink-0 items-center justify-center rounded-ea-sm border border-ea-cremewm/40 text-ea-cremewm transition-colors hover:border-ea-neon hover:text-ea-neon"
-              >
-                <WhatsAppIcon className="h-5 w-5" />
-              </a>
-            )}
           </div>
         </motion.div>
       )}

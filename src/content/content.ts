@@ -13,21 +13,31 @@ export const site = {
   domain: 'enviagora.com.br',
   url: 'https://enviagora.com.br',
   tagline: 'A única logística que funciona.',
-  social: '@enviagora',
-  locais: ['Extrema/MG', 'Barueri/SP'],
+  social: '@enviagorabr',
+  instagram: 'https://www.instagram.com/enviagorabr',
+  linkedin: 'https://www.linkedin.com/company/enviagora/',
+  // Centro de distribuição (único): Extrema/MG.
+  cd: { local: 'Extrema/MG', area: '15.000 m²' },
 } as const;
 
-/** Barra fina no topo. */
-export const topBanner =
-  'Exclusivo para marcas de suplementos, cosméticos e nutracêuticos com +5.000 envios/mês';
+/** Barra fina no topo: versão completa (desktop) e curta (mobile, 1 linha). */
+export const topBanner = {
+  lead: 'Fulfillment exclusivo para suplementos, cosméticos e nutracêuticos',
+  short: 'Exclusivo para marcas com',
+  highlight: '+5.000 envios/mês',
+} as const;
 
-/** Navegação (âncoras internas do one-pager). Labels curtos, premium. */
+/** Marca o link do blog: a URL real vem do tema (`getSiteConfig().blogUrl`). */
+export const BLOG_HREF = 'blog';
+
+/** Navegação (âncoras internas do one-pager + blog). Labels curtos, premium. */
 export const nav = [
   { label: 'Operação', href: '#operacao' },
   { label: 'Como funciona', href: '#como-funciona' },
   { label: 'Economia', href: '#economia' },
   { label: 'Integrações', href: '#integracoes' },
   { label: 'Dúvidas', href: '#faq' },
+  { label: 'Blog', href: BLOG_HREF },
 ] as const;
 
 export const hero = {
@@ -44,7 +54,7 @@ export const hero = {
     { value: '+1M', label: 'pacotes por mês' },
     { value: '99,6%', label: 'de assertividade nos pedidos' },
     { value: '92%', label: 'dos pedidos enviados em até 24h' },
-    { value: '2 CDs', label: 'Extrema/MG e Barueri/SP' },
+    { value: '15.000 m²', label: 'de CD em Extrema/MG' },
   ],
   cta: 'Falar com um especialista',
   ctaSecondary: 'Calcular minha economia',
@@ -87,9 +97,18 @@ export const niches = {
 export const process = {
   title: 'Cuidamos de todo o processo, do armazenamento ao envio.',
   local: 'CD ENVIAGORA · EXTREMA/MG',
-  // Legenda da foto real do galpão (a mesma usada no site atual).
-  photoCaption: 'Operação própria',
-  photoNote: 'Centros de distribuição em Extrema/MG e Barueri/SP',
+  // Bloco com as fotos reais do CD.
+  cd: {
+    kicker: 'CD Enviagora · Extrema/MG',
+    metric: '15.000 m²',
+    title: 'de operação própria',
+    body: 'Porta-paletes de alta capacidade, corredores endereçados e controle de lotes e validades — a estrutura que sustenta mais de 1 milhão de pacotes por mês.',
+    facts: ['Galpões com ANVISA', 'Estoque endereçado por corredor', 'Operação de segunda a sexta, 7h30–17h30'],
+    photos: [
+      { caption: 'Porta-paletes', alt: 'Porta-paletes de vários níveis no CD da Enviagora em Extrema/MG, com banners da marca' },
+      { caption: 'Corredores endereçados', alt: 'Corredor entre porta-paletes no CD da Enviagora, com sinalização de corredores C e D' },
+    ],
+  },
   steps: [
     {
       title: 'Armazenamos',
@@ -113,7 +132,6 @@ export const logAlliance = {
   brand: 'LogAlliance',
   intro:
     'Para cada envio, cotamos o frete em várias transportadoras da rede e usamos sempre a mais barata da região. Sem taxas escondidas.',
-  savingBadge: { label: 'Economia no frete', value: 'até 40%' },
   benefits: [
     { title: 'Até 40% de desconto em fretes', body: 'Desde o primeiro envio, graças à força de negociação coletiva da Enviagora.' },
     { title: 'Sem taxas escondidas', body: 'Você paga direto à transportadora, sem comissões, intermediações ou surpresas no final do mês.' },
@@ -123,20 +141,26 @@ export const logAlliance = {
 } as const;
 
 /**
- * Simulador de economia no frete. Usa só a promessa já publicada (até 40% com a
- * LogAlliance) e deixa claro que é estimativa.
+ * Simulador de economia no frete: compara o frete atual da marca com o frete
+ * médio da Enviagora (cerca de R$ 9 por pedido para todo o Brasil).
  */
 export const calculator = {
   kicker: 'Simulador',
   title: 'Quanto você economizaria no frete?',
   ordersLabel: 'Pedidos por mês',
-  freightLabel: 'Frete médio por pedido hoje',
-  freightHint: 'Ajuste para o seu frete atual',
+  ordersMin: 'mínimo 5.000',
+  freightLabel: 'Seu frete médio por pedido hoje',
+  oursLabel: 'Frete médio Enviagora',
+  oursValue: 9,
+  oursNote: 'para todo o Brasil',
+  todayLabel: 'Seu frete hoje',
   resultLabel: 'Economia estimada no frete',
+  perOrder: 'por pedido',
   perYear: 'por ano',
+  lowNote:
+    'Seu frete já está perto da nossa média. Um especialista pode avaliar prazo de entrega, incentivos fiscais e o custo total da operação.',
   disclaimer:
-    'Estimativa com base no desconto de até 40% da LogAlliance. O valor real depende de peso, dimensões, regiões de destino e mix de pedidos.',
-  minNote: 'Nossa cobrança mínima é de 3.000 pedidos por mês.',
+    'Estimativa com base no frete médio de cerca de R$ 9 por pedido na rede LogAlliance. O valor real depende de peso, dimensões, destinos e mix de pedidos.',
   cta: 'Quero essa economia',
   tax: {
     value: 'Até 60%',
@@ -238,26 +262,13 @@ export const contactForm = {
   kicker: 'Leve sua operação para o próximo nível!',
   title: 'Estamos selecionando marcas com +5.000 envios/mês que buscam uma logística 5 estrelas',
   instruction: 'Preencha seus dados abaixo para entrar em contato com um especialista:',
-  // Alternativa ao formulário (copy do site atual: "Se preferir, converse
-  // conosco imediatamente pelo WhatsApp").
-  whatsappPre: 'Se preferir,',
-  whatsappCta: 'converse com a gente pelo WhatsApp',
   success: {
     title: 'Recebemos seus dados!',
     body: 'Um especialista da Enviagora vai entrar em contato para entender a sua operação.',
     scheduleTitle: 'Quer adiantar? Escolha um horário para conversar:',
-    whatsappTitle: 'Quer adiantar a conversa?',
-    whatsappCta: 'Falar agora no WhatsApp',
   },
 } as const;
 
-/** Mensagem do WhatsApp após o envio (mesmo formato do fluxo atual do site). */
-export function leadWhatsappMessage(lead: { firstName?: string; orderVolume?: string }) {
-  const inicio = lead.firstName ? `Olá! Sou ${lead.firstName}, acabei` : 'Olá! Acabei';
-  const v = lead.orderVolume ?? '';
-  const volume = !v ? '' : /^\d|^at|^mais/i.test(v) ? ` Fazemos ${v.charAt(0).toLowerCase()}${v.slice(1)} envios por mês.` : ` ${v}.`;
-  return `${inicio} de preencher o formulário no site e gostaria de falar com um consultor.${volume}`;
-}
 
 export const faq = {
   title: 'Perguntas frequentes',
@@ -311,7 +322,7 @@ export const faq = {
     },
     {
       q: 'O fulfillment é para empresas de diferentes tamanhos?',
-      a: 'Sim, atendemos empresas de diferentes tamanhos, mas tenha em mente que a nossa cobrança mínima é de 3.000 pedidos mensais.',
+      a: 'Sim, atendemos empresas de diferentes tamanhos, mas tenha em mente que a nossa cobrança mínima é de 5.000 pedidos mensais.',
     },
     {
       q: 'Quais são os horários de operação?',
@@ -339,25 +350,22 @@ export const footer = {
       ],
     },
     {
-      title: 'Centros de distribuição',
+      title: 'Conteúdo',
       links: [
-        // Sem link: são informação, não navegação.
-        { label: 'Extrema/MG', href: '' },
-        { label: 'Barueri/SP', href: '' },
+        { label: 'Blog', href: BLOG_HREF },
+        { label: 'Instagram', href: site.instagram },
+        { label: 'LinkedIn', href: site.linkedin },
       ],
     },
   ],
-  // TODO(cliente): substituir por dados reais (não inventados).
+  // TODO(cliente): e-mail, telefone e CNPJ reais (campos vazios não aparecem).
   contato: {
-    instagram: '@enviagora',
-    site: 'enviagora.com.br',
     email: '', // preencher
     telefone: '', // preencher
     cnpj: '', // preencher
   },
   legal: '© 2026 Enviagora. Todos os direitos reservados.',
   legalLinks: [
-    // TODO(cliente): apontar para as páginas reais quando existirem.
     { label: 'Política de Privacidade', href: '/policies/privacy-policy' },
     { label: 'Termos de Uso', href: '/policies/terms-of-service' },
   ],

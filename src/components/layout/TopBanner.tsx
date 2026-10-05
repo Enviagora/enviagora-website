@@ -1,13 +1,20 @@
-import { Package } from 'lucide-react';
 import { topBanner } from '@/content/content';
+import { Arrow } from '@/components/brand/Arrow';
 
-/** Barra fina no topo — exclusividade da operação (copy verbatim). */
+/**
+ * Barra fina no topo — exclusividade da operação. No mobile vira a versão curta,
+ * sempre em uma linha; o volume mínimo fica em destaque (neon sobre escuro).
+ */
 export function TopBanner() {
   return (
     <div className="ea-on-dark bg-ea-petroleo text-ea-cremewm">
-      <div className="ea-container-wide flex items-center justify-center gap-2.5 py-2.5 text-center">
-        <Package className="h-4 w-4 shrink-0 text-ea-neon" aria-hidden />
-        <p className="text-[0.78rem] font-medium leading-snug sm:text-sm">{topBanner}</p>
+      <div className="ea-container-wide flex items-center justify-center gap-2 py-2.5 text-center">
+        <Arrow className="h-3 w-3 text-ea-neon" />
+        <p className="whitespace-nowrap text-[0.74rem] font-medium leading-none tracking-[0.01em] sm:text-[0.8rem]">
+          <span className="hidden md:inline">{topBanner.lead} · </span>
+          <span className="md:hidden">{topBanner.short} </span>
+          <strong className="font-bold text-ea-neon">{topBanner.highlight}</strong>
+        </p>
       </div>
     </div>
   );

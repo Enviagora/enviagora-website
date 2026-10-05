@@ -5,7 +5,7 @@ import { installHubSpotFormBridge } from '@/lib/hubspotForm';
 /** Âncoras/links que contam como CTA de conversão. */
 function isCta(a: HTMLAnchorElement) {
   const href = a.getAttribute('href') ?? '';
-  return href.startsWith('#contato') || href.startsWith('#economia') || href.includes('wa.me/');
+  return href.startsWith('#contato') || href.startsWith('#economia');
 }
 
 /**

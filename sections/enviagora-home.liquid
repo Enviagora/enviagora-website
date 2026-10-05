@@ -8,6 +8,32 @@
 {{ 'enviagora-home.css' | asset_url | stylesheet_tag }}
 <link rel="modulepreload" href="{{ 'enviagora-home.js' | asset_url }}">
 
+{%- liquid
+  # Link do blog: o escolhido no editor › o item "blog" dos menus da loja › /blogs/posts.
+  assign blog_url = section.settings.blog.url
+  if blog_url == blank
+    for link in linklists.main-menu.links
+      if link.type == 'blog_link'
+        assign blog_url = link.url
+        break
+      endif
+    endfor
+  endif
+  if blog_url == blank
+    for link in linklists.footer.links
+      if link.type == 'blog_link'
+        assign blog_url = link.url
+        break
+      endif
+    endfor
+  endif
+  if blog_url == blank
+    assign blog_url = blogs.posts.url
+  endif
+  if blog_url == blank
+    assign blog_url = '/blogs/posts'
+  endif
+-%}
 <script type="application/json" id="enviagora-config">
   {
     "hubspot": {
@@ -16,15 +42,12 @@
       "region": {{ section.settings.hubspot_region | json }},
       "meetingsUrl": {{ section.settings.meetings_url | json }}
     },
-    "whatsapp": {
-      "number": {{ section.settings.whatsapp_number | json }},
-      "message": {{ section.settings.whatsapp_message | json }}
-    }
+    "blogUrl": {{ blog_url | json }}
   }
 </script>
 
 {%- comment -%} Sem espaços entre a div e o snippet: o conteúdo precisa bater com o React. {%- endcomment -%}
-<div id="enviagora-home">{%- render 'enviagora-home-ssr' -%}</div>
+<div id="enviagora-home">{%- render 'enviagora-home-ssr', blog_url: blog_url -%}</div>
 
 <noscript>
   {%- comment -%} Sem JS, as animações de entrada não rodam — mostra tudo. {%- endcomment -%}
@@ -83,20 +106,13 @@
     },
     {
       "type": "header",
-      "content": "WhatsApp comercial"
+      "content": "Blog"
     },
     {
-      "type": "text",
-      "id": "whatsapp_number",
-      "label": "Número (com DDI e DDD, só dígitos)",
-      "info": "Ex.: 5535936180694. Deixe vazio para esconder todos os botões de WhatsApp.",
-      "default": "5535936180694"
-    },
-    {
-      "type": "textarea",
-      "id": "whatsapp_message",
-      "label": "Mensagem inicial",
-      "default": "Olá! Quero falar com um especialista da Enviagora sobre a minha operação."
+      "type": "blog",
+      "id": "blog",
+      "label": "Blog do menu",
+      "info": "Opcional. Sem escolha, o link usa o blog do menu principal da loja (ou /blogs/posts)."
     }
   ],
   "presets": [

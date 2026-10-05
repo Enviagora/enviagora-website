@@ -23,8 +23,12 @@ O Shopify ignora as pastas que não são de tema, então as duas convivem na mes
   home já vem **pré-renderizado** do snippet `enviagora-home-ssr` (gerado no build): a
   página pinta e é indexável antes do JavaScript, e o React só "hidrata" esse HTML.
 - **Settings da seção** (editor de tema › Home Enviagora): IDs do formulário HubSpot,
-  link do **HubSpot Meetings** (opcional) e **WhatsApp comercial** (número + mensagem;
-  vazio = esconde todos os botões de WhatsApp).
+  link do **HubSpot Meetings** (opcional) e o **blog** do menu (opcional).
+- **Blog:** o link "Blog" da home é resolvido no Liquid — blog escolhido no setting › item
+  de blog dos menus da loja › `/blogs/posts`. As páginas de blog e de artigo
+  (`templates/blog.json`, `templates/article.json`) usam as seções
+  `enviagora-site-header` e `enviagora-site-footer`: header e rodapé da marca em
+  Liquid puro, que também aplicam a identidade (Satoshi, cores) sobre o blog do Dawn.
 - `snippets/enviagora-tracking.liquid` concentra o **HubSpot tracking** (portal 44097462)
   e o **Meta Pixel** (410733041890285); é usado pelos dois layouts.
 - As **demais páginas** (GemPages, `/pages/plataforma`, contato, políticas…) continuam no
@@ -40,10 +44,10 @@ campos, textos e cores do formulário se ajustam **no HubSpot**, não aqui.
 Em volta dele (`src/lib/hubspotForm.ts`, via eventos globais do embed v4):
 - **Lead no envio:** `fbq('track', 'Lead')` no Meta Pixel + evento `enviagora_lead` no
   `dataLayer` (com a faixa de pedidos/mês; nada de dado pessoal no pixel).
-- **Depois do envio:** confirmação + agenda do HubSpot Meetings (se configurada) ou botão de
-  WhatsApp com mensagem pronta (nome + volume), como o fluxo atual do site.
-- **Simulador de economia** (`#economia`): o CTA pré-preenche "Pedidos por mês" e
-  "Principal necessidade = Reduzir custo de frete" no formulário.
+- **Depois do envio:** confirmação + agenda do HubSpot Meetings (se configurada).
+- **Simulador de economia** (`#economia`): compara o frete atual da marca com o frete
+  médio da Enviagora (≈ R$ 9 para todo o Brasil — `calculator.oursValue`); o CTA
+  pré-preenche "Pedidos por mês" e "Principal necessidade = Reduzir custo de frete".
 - **Cliques em CTA:** `enviagora_cta_click` no `dataLayer` e `CTAClick` no Meta, com a
   seção de origem (hero, header, barra mobile, FAQ…).
 
@@ -114,17 +118,13 @@ Itens que dependem de dados reais — o site não inventa nenhum deles:
   aparece.
 - **HubSpot Meetings:** colar o link do agendador no setting da seção para a agenda
   aparecer logo após o envio do formulário.
-- **WhatsApp:** o padrão é o número usado hoje no formulário do site
-  (`5535936180694`); confirme se é o comercial certo (setting da seção).
-- **Mínimo de pedidos:** o FAQ diz "cobrança mínima de 3.000 pedidos" e o topo/contato
-  falam em "+5.000 envios/mês". Definir um número e alinhar `faq`, `topBanner`,
-  `contactForm` e `calculator.minNote` em `src/content/content.ts`.
 - **HubSpot › rótulos traduzidos errado:** no campo de ERP "Tiny" aparece como "Pequeno" e
   "Linx" como "Doninha"; no segmento "Pet" aparece "Cinco". Corrigir no editor do formulário.
 - **HubSpot › formulário em 2 etapas:** dá para dividir em "contato" e "operação" no
   próprio editor do HubSpot — formulários longos convertem menos em uma etapa só.
-- **Fotos:** a seção "Como funciona" usa a foto real do galpão do site atual. Fotos de
-  operação (separação, embalagem, expedição) em alta deixam o site ainda mais premium.
+- **Fotos:** o bloco do CD (15.000 m² em Extrema/MG) usa as fotos de porta-paletes e
+  corredor enviadas em out/2026 (`src/assets/operacao/`). Fotos de separação, embalagem e
+  expedição em alta deixariam o site ainda mais completo.
 - **HubSpot › formulário:** os textos de consentimento (LGPD) estão em cinza escuro sobre
   fundo escuro — quase invisíveis; o telefone vem com 🇺🇸 +1 como país padrão. Ajustar no
   editor de formulário do HubSpot (cor do texto rico / país padrão Brasil).

@@ -1,0 +1,146 @@
+{%- comment -%}
+  Header da marca para as páginas fora da home React (blog e artigos).
+  Leve (só HTML/CSS) e com a mesma navegação da home. Também aplica a
+  identidade Caminho 02 (Satoshi, verde profundo, creme) sobre as seções do
+  Dawn usadas no blog.
+{%- endcomment -%}
+{%- liquid
+  assign ea_home = routes.root_url
+  if ea_home == '/'
+    assign ea_home = ''
+  endif
+  assign ea_blog_url = blog.url | default: '/blogs/posts'
+-%}
+<link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f%5B%5D=satoshi@300,400,500,700&display=swap">
+
+<style>
+  :root {
+    --ea-petroleo: #123336;
+    --ea-petroleo-2: #1b4448;
+    --ea-neon: #c4ff57;
+    --ea-neon-300: #d5ff8b;
+    --ea-creme: #fafaf5;
+    --ea-nevoa: #dee3e0;
+    --ea-soft: #2a5b5f;
+    --font-body-family: 'Satoshi', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+    --font-heading-family: 'Satoshi', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+    --font-body-weight: 400;
+    --font-heading-weight: 500;
+  }
+  /* Esquema de cores do Dawn → creme + verde profundo */
+  body,
+  .gradient,
+  .color-background-1,
+  .color-background-2,
+  .color-scheme-1,
+  .color-scheme-2 {
+    --color-background: 250, 250, 245;
+    --gradient-background: #fafaf5;
+    --color-foreground: 18, 51, 54;
+    --color-link: 18, 51, 54;
+    --color-button: 196, 255, 87;
+    --color-button-text: 18, 51, 54;
+    --color-secondary-button: 250, 250, 245;
+    --color-secondary-button-text: 18, 51, 54;
+    --color-shadow: 18, 51, 54;
+    --color-badge-background: 250, 250, 245;
+    --color-badge-border: 18, 51, 54;
+  }
+  html, body { background: #123336; }
+  body { font-family: var(--font-body-family); color: var(--ea-petroleo); }
+  #MainContent { background: var(--ea-creme); }
+  h1, h2, h3, .h0, .h1, .h2, .h3, .article-template__title, .main-blog h1, .card__heading {
+    font-family: var(--font-heading-family);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: var(--ea-petroleo);
+  }
+  .main-blog h1, .article-template__title { text-transform: uppercase; line-height: 1.1; }
+  .article-template__title { font-size: clamp(32px, 4.2vw, 54.4px); }
+  .rte a { color: var(--ea-petroleo); text-decoration-color: var(--ea-neon); text-decoration-thickness: 2px; text-underline-offset: 3px; }
+  .rte blockquote { border-left: 3px solid var(--ea-neon); }
+  /* Cards do blog: planos, borda fina, raio da marca */
+  .blog-articles .card-wrapper .card,
+  .article-card {
+    --border-radius: 16px;
+    --border-width: 1px;
+    --border-opacity: 0.12;
+    --shadow-opacity: 0;
+  }
+  .article-card .card__heading { text-transform: none; letter-spacing: 0; font-weight: 700; }
+  .article-card:hover .card__heading { text-decoration: underline; text-decoration-color: var(--ea-neon); text-decoration-thickness: 2px; }
+
+  /* Header */
+  .ea-sh, .ea-sf { letter-spacing: 0; }
+  .ea-sh { position: sticky; top: 0; z-index: 50; background: var(--ea-petroleo); color: var(--ea-creme); font-family: var(--font-body-family); }
+  .ea-sh__bar { max-width: 1280px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 48px); height: 68px; display: flex; align-items: center; gap: 32px; justify-content: space-between; }
+  .ea-sh__logo img { display: block; height: 19px; width: auto; }
+  .ea-sh__nav { display: none; gap: 28px; }
+  .ea-sh a { color: inherit; text-decoration: none; }
+  .ea-sh__nav a { font-size: 14px; font-weight: 500; color: rgba(250, 250, 245, 0.8); transition: color .2s; }
+  .ea-sh__nav a:hover, .ea-sh__nav a[aria-current="page"] { color: var(--ea-creme); }
+  .ea-sh__nav a[aria-current="page"] { box-shadow: inset 0 -2px 0 var(--ea-neon); padding-bottom: 4px; }
+  .ea-sh__cta { display: none; align-items: center; gap: 9.6px; background: var(--ea-neon); color: var(--ea-petroleo) !important; border-radius: 8px; padding: 12px 17.6px; font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; transition: background .2s; }
+  .ea-sh__cta:hover { background: var(--ea-neon-300); }
+  .ea-sh__arrow { width: .85em; height: .85em; flex-shrink: 0; }
+  .ea-sh__menu { position: relative; }
+  .ea-sh__menu summary { list-style: none; cursor: pointer; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; }
+  .ea-sh__menu summary::-webkit-details-marker { display: none; }
+  .ea-sh__menu summary span, .ea-sh__menu summary span::before, .ea-sh__menu summary span::after { content: ''; display: block; width: 20px; height: 2px; background: var(--ea-creme); position: relative; }
+  .ea-sh__menu summary span::before { position: absolute; top: -6px; }
+  .ea-sh__menu summary span::after { position: absolute; top: 6px; }
+  .ea-sh__panel { position: fixed; inset: 68px 0 auto 0; background: var(--ea-petroleo); padding: 16px clamp(20px, 5vw, 48px) 32px; border-top: 1px solid rgba(250,250,245,.1); display: flex; flex-direction: column; }
+  .ea-sh__panel a { padding: 14.4px 0; border-bottom: 1px solid rgba(250,250,245,.1); font-size: 21.6px; font-weight: 500; text-transform: uppercase; letter-spacing: .02em; }
+  .ea-sh__panel .ea-sh__cta { display: inline-flex; align-self: flex-start; margin-top: 24px; border: 0; font-size: 12px; font-weight: 700; letter-spacing: .14em; padding: 14px 19px; }
+  @media (min-width: 990px) {
+    .ea-sh__nav, .ea-sh__cta { display: flex; }
+    .ea-sh__menu { display: none; }
+  }
+</style>
+
+<header class="ea-sh">
+  <div class="ea-sh__bar">
+    <a class="ea-sh__logo" href="{{ routes.root_url }}" aria-label="Enviagora — início">
+      <img src="{{ 'enviagora-logo-escuro.svg' | asset_url }}" alt="Enviagora" width="184" height="19">
+    </a>
+
+    <nav class="ea-sh__nav" aria-label="Navegação principal">
+      <a href="{{ ea_home }}/#operacao">Operação</a>
+      <a href="{{ ea_home }}/#como-funciona">Como funciona</a>
+      <a href="{{ ea_home }}/#economia">Economia</a>
+      <a href="{{ ea_home }}/#integracoes">Integrações</a>
+      <a href="{{ ea_blog_url }}"{% if template.name == 'blog' or template.name == 'article' %} aria-current="page"{% endif %}>Blog</a>
+    </nav>
+
+    <a class="ea-sh__cta" href="{{ ea_home }}/#contato">
+      Falar com um especialista
+      {%- render 'enviagora-arrow', class: 'ea-sh__arrow' -%}
+    </a>
+
+    <details class="ea-sh__menu">
+      <summary aria-label="Abrir menu"><span></span></summary>
+      <nav class="ea-sh__panel" aria-label="Navegação mobile">
+        <a href="{{ ea_home }}/#operacao">Operação</a>
+        <a href="{{ ea_home }}/#como-funciona">Como funciona</a>
+        <a href="{{ ea_home }}/#economia">Economia</a>
+        <a href="{{ ea_home }}/#integracoes">Integrações</a>
+        <a href="{{ ea_blog_url }}">Blog</a>
+        <a class="ea-sh__cta" href="{{ ea_home }}/#contato">
+          Falar com um especialista
+          {%- render 'enviagora-arrow', class: 'ea-sh__arrow' -%}
+        </a>
+      </nav>
+    </details>
+  </div>
+</header>
+
+{% schema %}
+{
+  "name": "Header Enviagora",
+  "tag": "div",
+  "class": "enviagora-site-header-section",
+  "settings": [],
+  "presets": [{ "name": "Header Enviagora" }]
+}
+{% endschema %}

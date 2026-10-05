@@ -57,8 +57,15 @@
     }
   }
 
+  /* Fundo da página em verde profundo: é a cor que o Safari do iPhone usa na
+     barra de status/rolagem elástica (casa com a barra do topo e o rodapé).
+     Cada seção pinta o próprio fundo. */
+  html,
   body {
-    background-color: var(--ea-bg);
+    background-color: var(--ea-petroleo);
+  }
+
+  body {
     color: var(--ea-text);
     font-family: theme('fontFamily.sans');
     font-weight: 400;

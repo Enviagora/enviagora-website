@@ -1,20 +1,18 @@
 import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Check } from 'lucide-react';
-import { comoComecar, contactForm, leadWhatsappMessage } from '@/content/content';
+import { comoComecar, contactForm } from '@/content/content';
 import { Section } from '@/components/layout/Section';
 import { Reveal } from '@/components/motion/Reveal';
 import { Arrow } from '@/components/brand/Arrow';
-import { WhatsAppIcon } from '@/components/brand/WhatsAppIcon';
 import { HubSpotForm } from '@/components/forms/HubSpotForm';
 import { LEAD_EVENT, type LeadDetail } from '@/lib/hubspotForm';
-import { meetingsEmbedUrl, whatsappHref } from '@/lib/siteConfig';
+import { meetingsEmbedUrl } from '@/lib/siteConfig';
 import { EASE_EA } from '@/lib/motion';
 
-/** Depois do envio: confirmação + próximo passo (agenda ou WhatsApp). */
+/** Depois do envio: confirmação + agenda do HubSpot Meetings (se configurada). */
 function LeadSuccess({ lead }: { lead: LeadDetail }) {
   const meetings = meetingsEmbedUrl(lead);
-  const wa = whatsappHref(leadWhatsappMessage(lead));
   const { success } = contactForm;
   const ref = useRef<HTMLDivElement>(null);
 
@@ -40,7 +38,7 @@ function LeadSuccess({ lead }: { lead: LeadDetail }) {
         <p className="text-base text-ea-soft-dark">{success.body}</p>
       </div>
 
-      {meetings ? (
+      {meetings && (
         <div className="flex flex-col gap-3 border-t border-ea-cremewm/10 pt-6">
           <span className="ea-kicker text-ea-neon">{success.scheduleTitle}</span>
           <iframe
@@ -50,31 +48,15 @@ function LeadSuccess({ lead }: { lead: LeadDetail }) {
             loading="lazy"
           />
         </div>
-      ) : wa ? (
-        <div className="flex flex-col items-start gap-3 border-t border-ea-cremewm/10 pt-6" data-track="form-success">
-          <span className="text-sm text-ea-cremewm">{success.whatsappTitle}</span>
-          <a
-            href={wa}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2.5 rounded-ea-sm bg-ea-neon px-6 py-3.5 text-sm font-bold uppercase tracking-label text-ea-petroleo transition-colors hover:bg-ea-neon-300"
-          >
-            <WhatsAppIcon className="h-4 w-4" />
-            {success.whatsappCta}
-          </a>
-        </div>
-      ) : null}
+      )}
     </motion.div>
   );
 }
 
 export function ContactForm() {
   const [lead, setLead] = useState<LeadDetail | null>(null);
-  // Config do tema só existe no navegador → links dependentes dela entram após montar.
-  const [wa, setWa] = useState<string | null>(null);
 
   useEffect(() => {
-    setWa(whatsappHref());
     const onLead = (e: Event) => setLead((e as CustomEvent<LeadDetail>).detail ?? {});
     window.addEventListener(LEAD_EVENT, onLead);
     return () => window.removeEventListener(LEAD_EVENT, onLead);
@@ -113,20 +95,6 @@ export function ContactForm() {
             </div>
           </Reveal>
 
-          {wa && (
-            <p className="text-sm text-ea-soft-dark" data-track="contact-whatsapp">
-              {contactForm.whatsappPre}{' '}
-              <a
-                href={wa}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 font-bold text-ea-cremewm underline decoration-ea-neon decoration-2 underline-offset-4 transition-colors hover:text-ea-neon"
-              >
-                <WhatsAppIcon className="h-4 w-4" />
-                {contactForm.whatsappCta}
-              </a>
-            </p>
-          )}
         </div>
 
         {/* Formulário oficial do HubSpot. Ele foi estilizado no HubSpot para fundo

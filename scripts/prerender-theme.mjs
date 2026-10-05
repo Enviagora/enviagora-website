@@ -35,6 +35,9 @@ const body = html.replace(/__EA_ASSET__(.+?)__EA_END__/g, (_, file) => {
   return `{% endraw %}{{ '${file}' | asset_url }}{% raw %}`;
 });
 if (body.includes('__EA_ASSET__')) throw new Error('Sobrou marcador de asset sem conversão no HTML.');
+
+// Link do blog: resolvido pela seção no Liquid e passado ao snippet (`blog_url`).
+const page = body.replaceAll('__EA_BLOG_URL__', "{% endraw %}{{ blog_url | default: '/blogs/posts' | escape }}{% raw %}");
 if (missing.size) {
   throw new Error(`Assets usados no HTML e ausentes em assets/: ${[...missing].join(', ')}. Rode o build do cliente antes.`);
 }
@@ -42,8 +45,8 @@ if (missing.size) {
 // Sem espaço/quebra de linha fora do HTML: o conteúdo de #enviagora-home tem de
 // bater exatamente com o que o React renderiza, senão a hidratação falha.
 const header =
-  '{%- comment -%}\n  GERADO por `npm run build:theme` (scripts/prerender-theme.mjs) — não edite à mão.\n  HTML pré-renderizado da home; o React hidrata este conteúdo.\n{%- endcomment -%}';
-const out = `${header}{% raw %}${body}{% endraw %}`;
+  '{%- comment -%}\n  GERADO por `npm run build:theme` (scripts/prerender-theme.mjs) — não edite à mão.\n  HTML pré-renderizado da home; o React hidrata este conteúdo.\n  Parâmetro: blog_url (link do blog, resolvido em sections/enviagora-home.liquid).\n{%- endcomment -%}';
+const out = `${header}{% raw %}${page}{% endraw %}`;
 
 const target = at('snippets/enviagora-home-ssr.liquid');
 const prev = existsSync(target) ? readFileSync(target, 'utf8') : '';
