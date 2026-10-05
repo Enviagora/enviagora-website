@@ -1,5 +1,5 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { AnimatePresence, animate, motion, useInView, useMotionValue, useTransform } from 'framer-motion';
+import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
+import { AnimatePresence, animate, motion, useInView, useMotionValue, useTransform, type MotionValue } from 'framer-motion';
 import { Check } from 'lucide-react';
 import { brazilStates } from '@/content/brazilMap';
 import { logAlliance } from '@/content/content';
@@ -69,13 +69,88 @@ const pointAt = (c: { x: number; y: number }, to: { x: number; y: number }, t: n
   y: (1 - t) ** 2 * HUB.y + 2 * (1 - t) * t * c.y + t ** 2 * to.y,
 });
 
-const px = (x: number) => `${(x / VB.w) * 100}%`;
-const py = (y: number) => `${(y / VB.h) * 100}%`;
+/* ---------------------------- Câmera do mapa ---------------------------- */
+type Box = { x: number; y: number; w: number; h: number };
+const FULL: Box = { x: 0, y: 0, w: VB.w, h: VB.h };
+const COMPACT_ASPECT = 1.55; // mobile: faixa baixa e larga (largura / altura)
+
+/** Enquadra a rota (CD → destino, com a curva) na proporção da faixa mobile. */
+function focusBox(d: Dest): Box {
+  const { c } = arcOf(d);
+  // Folga maior em cima (rótulo da cidade) e embaixo (rótulo do CD).
+  const pad = { x: 50, top: 78, bottom: 56 };
+  let x0 = Math.min(HUB.x, d.x, c.x) - pad.x;
+  let y0 = Math.min(HUB.y, d.y, c.y) - pad.top;
+  let w = Math.max(HUB.x, d.x, c.x) + pad.x - x0;
+  let h = Math.max(HUB.y, d.y, c.y) + pad.bottom - y0;
+  // zoom máximo: rotas curtas (ex.: BH) não ficam gigantes
+  if (w < 250) {
+    x0 -= (250 - w) / 2;
+    w = 250;
+  }
+  if (w / h > COMPACT_ASPECT) {
+    const nh = w / COMPACT_ASPECT;
+    y0 -= (nh - h) / 2;
+    h = nh;
+  } else {
+    const nw = h * COMPACT_ASPECT;
+    x0 -= (nw - w) / 2;
+    w = nw;
+  }
+  return { x: x0, y: y0, w, h };
+}
+
+function useCompact() {
+  const [compact, setCompact] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 639px)');
+    const on = () => setCompact(mq.matches);
+    on();
+    mq.addEventListener('change', on);
+    return () => mq.removeEventListener('change', on);
+  }, []);
+  return compact;
+}
+
+type Cam = { x: MotionValue<number>; y: MotionValue<number>; w: MotionValue<number>; h: MotionValue<number> };
+
+/** Tamanho em unidades do mapa que se mantém constante na tela com o zoom. */
+function useScaled(cam: Cam, base: number) {
+  return useTransform(cam.w, (w) => base * (w / VB.w));
+}
+
+/** Rótulo HTML preso a um ponto do mapa (segue a câmera). */
+function Pin({
+  cam,
+  x,
+  y,
+  dx,
+  dy,
+  className,
+  children,
+}: {
+  cam: Cam;
+  x: number;
+  y: number;
+  dx: number;
+  dy: number;
+  className?: string;
+  children: ReactNode;
+}) {
+  const left = useTransform([cam.x, cam.w], ([cx, cw]: number[]) => `calc(${((x - cx) / cw) * 100}% + ${dx}px)`);
+  const top = useTransform([cam.y, cam.h], ([cy, ch]: number[]) => `calc(${((y - cy) / ch) * 100}% + ${dy}px)`);
+  return (
+    <motion.span className={cn('absolute z-10', className)} style={{ left, top }}>
+      {children}
+    </motion.span>
+  );
+}
 
 export function FreightQuoteLive() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { margin: '-15% 0px' });
   const reduce = useReducedMotion();
+  const compact = useCompact();
 
   // Estado inicial (HTML pré-renderizado): um pedido já cotado e entregue.
   const [idx, setIdx] = useState(0);
@@ -127,6 +202,32 @@ export function FreightQuoteLive() {
     return () => c.stop();
   }, [idx, reduce, t]);
 
+  // Câmera: mapa inteiro no desktop; no mobile, zoom na rota do pedido.
+  const box = compact ? focusBox(dest) : FULL;
+  const kT = box.w / VB.w; // escala do destino da câmera (para filtros/ondas)
+  const cam: Cam = {
+    x: useMotionValue(FULL.x),
+    y: useMotionValue(FULL.y),
+    w: useMotionValue(FULL.w),
+    h: useMotionValue(FULL.h),
+  };
+  useEffect(() => {
+    const opts = reduce || !started.current ? { duration: 0 } : { duration: 1.1, ease: EASE_EA };
+    const runs = [animate(cam.x, box.x, opts), animate(cam.y, box.y, opts), animate(cam.w, box.w, opts), animate(cam.h, box.h, opts)];
+    return () => runs.forEach((r) => r.stop());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [box.x, box.y, box.w, box.h, reduce]);
+  const viewBox = useTransform([cam.x, cam.y, cam.w, cam.h], ([x, y, w, h]: number[]) => `${x} ${y} ${w} ${h}`);
+  const glowW = useScaled(cam, 6);
+  const routeW = useScaled(cam, 2.4);
+  const dotR = useScaled(cam, 4.5);
+  const trailR = useScaled(cam, 3);
+  const pkgGlowR = useScaled(cam, 9);
+  const pkgR = useScaled(cam, 4);
+  const hubHalo = useScaled(cam, 14);
+  const hubR = useScaled(cam, 6);
+  const labelLeft = (dest.x - box.x) / box.w > 0.62;
+
   // Linhas da cotação: na ordem de chegada; ao escolher, ordenadas por preço.
   const rows = dest.quotes.map((q, i) => ({ carrier: CARRIERS[i], q, best: i === best }));
   const shown = chosen ? [...rows].sort((a, b) => a.q - b.q) : rows;
@@ -160,32 +261,36 @@ export function FreightQuoteLive() {
       <div className="grid lg:grid-cols-[1.15fr_0.85fr]" aria-hidden>
         {/* ======================= MAPA ======================= */}
         <div
-          className="relative px-4 py-6 sm:px-8"
+          className="relative px-3 py-3 sm:px-8 sm:py-6"
           style={{ backgroundImage: 'radial-gradient(rgba(250,250,245,0.07) 1px, transparent 1.2px)', backgroundSize: '16px 16px' }}
         >
-          <div className="relative mx-auto w-full max-w-[460px]" style={{ aspectRatio: `${VB.w} / ${VB.h}` }}>
-            <svg viewBox={`0 0 ${VB.w} ${VB.h}`} className="absolute inset-0 h-full w-full overflow-visible">
+          <div
+            className={cn('relative mx-auto w-full overflow-hidden sm:max-w-[460px] sm:overflow-visible', compact && 'rounded-ea-sm')}
+            style={{ aspectRatio: compact ? `${COMPACT_ASPECT}` : `${VB.w} / ${VB.h}` }}
+          >
+            <motion.svg viewBox={viewBox} className="absolute inset-0 h-full w-full overflow-visible">
               <defs>
                 <linearGradient id="ea-route" gradientUnits="userSpaceOnUse" x1={HUB.x} y1={HUB.y} x2={dest.x} y2={dest.y}>
                   <stop offset="0%" stopColor="#C4FF57" stopOpacity="0.25" />
                   <stop offset="100%" stopColor="#C4FF57" stopOpacity="1" />
                 </linearGradient>
                 <filter id="ea-glow" x="-50%" y="-50%" width="200%" height="200%">
-                  <feGaussianBlur stdDeviation="4" />
+                  <feGaussianBlur stdDeviation={4 * kT} />
                 </filter>
               </defs>
 
               {/* Estados (o de destino acende) */}
-              {brazilStates.map((s) => (
+              {brazilStates.map((st) => (
                 <motion.path
-                  key={s.id}
-                  d={s.path}
+                  key={st.id}
+                  d={st.path}
                   stroke="#FAFAF5"
-                  strokeOpacity={0.14}
-                  strokeWidth={0.7}
+                  strokeOpacity={compact ? 0.2 : 0.14}
+                  strokeWidth={0.8}
+                  vectorEffect="non-scaling-stroke"
                   fill="#C4FF57"
                   initial={false}
-                  animate={{ fillOpacity: s.id === dest.state && chosen ? 0.16 : 0.025 }}
+                  animate={{ fillOpacity: st.id === dest.state && chosen ? 0.16 : 0.025 }}
                   transition={{ duration: 0.6 }}
                 />
               ))}
@@ -204,7 +309,7 @@ export function FreightQuoteLive() {
                 />
               ))}
               {trail.map((ti) => (
-                <circle key={`tdot-${ti}`} cx={DESTS[ti].x} cy={DESTS[ti].y} r={3} fill="#C4FF57" fillOpacity={0.35} />
+                <motion.circle key={`tdot-${ti}`} cx={DESTS[ti].x} cy={DESTS[ti].y} r={trailR} fill="#C4FF57" fillOpacity={0.35} />
               ))}
 
               {/* Rota atual: brilho + traço que se desenha */}
@@ -214,7 +319,7 @@ export function FreightQuoteLive() {
                 fill="none"
                 stroke="#C4FF57"
                 strokeOpacity={0.35}
-                strokeWidth={6}
+                strokeWidth={glowW}
                 filter="url(#ea-glow)"
                 initial={fresh ? { pathLength: 0 } : false}
                 animate={{ pathLength: 1 }}
@@ -225,7 +330,7 @@ export function FreightQuoteLive() {
                 d={arc.d}
                 fill="none"
                 stroke="url(#ea-route)"
-                strokeWidth={2.4}
+                strokeWidth={routeW}
                 strokeLinecap="round"
                 initial={fresh ? { pathLength: 0 } : false}
                 animate={{ pathLength: 1 }}
@@ -233,7 +338,7 @@ export function FreightQuoteLive() {
               />
 
               {/* Destino: ponto + onda de chegada */}
-              <circle cx={dest.x} cy={dest.y} r={4.5} fill="#C4FF57" />
+              <motion.circle cx={dest.x} cy={dest.y} r={dotR} fill="#C4FF57" />
               {fresh && (
                 <motion.circle
                   key={`ripple-${idx}`}
@@ -243,37 +348,37 @@ export function FreightQuoteLive() {
                   stroke="#C4FF57"
                   strokeWidth={1.5}
                   vectorEffect="non-scaling-stroke"
-                  initial={{ r: 4, opacity: 0 }}
-                  animate={{ r: [4, 26], opacity: [0.9, 0] }}
+                  initial={{ r: 4 * kT, opacity: 0 }}
+                  animate={{ r: [4 * kT, 26 * kT], opacity: [0.9, 0] }}
                   transition={{ delay: TRAVEL.delay + TRAVEL.duration - 0.05, duration: 1.1, ease: 'easeOut' }}
                 />
               )}
 
               {/* Pacote viajando */}
-              <motion.circle cx={cx} cy={cy} r={9} fill="#C4FF57" fillOpacity={0.25} filter="url(#ea-glow)" />
-              <motion.circle cx={cx} cy={cy} r={4} fill="#FAFAF5" stroke="#C4FF57" strokeWidth={2} vectorEffect="non-scaling-stroke" />
+              <motion.circle cx={cx} cy={cy} r={pkgGlowR} fill="#C4FF57" fillOpacity={0.25} filter="url(#ea-glow)" />
+              <motion.circle cx={cx} cy={cy} r={pkgR} fill="#FAFAF5" stroke="#C4FF57" strokeWidth={2} vectorEffect="non-scaling-stroke" />
 
               {/* Hub: CD Extrema/MG */}
-              <circle cx={HUB.x} cy={HUB.y} r={14} fill="#C4FF57" fillOpacity={0.12} />
-              <circle cx={HUB.x} cy={HUB.y} r={6} fill="#C4FF57" />
-            </svg>
+              <motion.circle cx={HUB.x} cy={HUB.y} r={hubHalo} fill="#C4FF57" fillOpacity={0.12} />
+              <motion.circle cx={HUB.x} cy={HUB.y} r={hubR} fill="#C4FF57" />
+            </motion.svg>
 
-            {/* Rótulos em HTML (nítidos em qualquer tamanho) */}
-            <span
-              className="absolute z-10 -translate-x-full -translate-y-1/2 whitespace-nowrap rounded-pill border border-ea-neon/40 bg-ea-petroleo/90 px-2.5 py-1 text-[0.65rem] font-bold text-ea-neon"
-              style={{ left: `calc(${px(HUB.x)} - 12px)`, top: py(HUB.y + 22) }}
-            >
-              CD Extrema/MG
-            </span>
+            {/* Rótulos em HTML (nítidos em qualquer zoom) */}
+            <Pin cam={cam} x={HUB.x} y={HUB.y} dx={-12} dy={16} className="-translate-x-full -translate-y-1/2">
+              <span className="block whitespace-nowrap rounded-pill border border-ea-neon/40 bg-ea-petroleo/90 px-2.5 py-1 text-[0.65rem] font-bold text-ea-neon">
+                {compact ? 'CD Extrema' : 'CD Extrema/MG'}
+              </span>
+            </Pin>
             <AnimatePresence>
               {chosen && (
-                <span
+                <Pin
                   key={`label-${idx}`}
-                  className={cn('absolute z-10 -translate-y-1/2', dest.x > 470 && '-translate-x-full')}
-                  style={{
-                    left: dest.x > 470 ? `calc(${px(dest.x)} - 12px)` : `calc(${px(dest.x)} + 12px)`,
-                    top: py(dest.y - 24),
-                  }}
+                  cam={cam}
+                  x={dest.x}
+                  y={dest.y}
+                  dx={labelLeft ? -12 : 12}
+                  dy={-18}
+                  className={cn('-translate-y-1/2', labelLeft && '-translate-x-full')}
                 >
                   <motion.span
                     className="block whitespace-nowrap rounded-pill bg-ea-cremewm px-2.5 py-1 text-[0.68rem] font-bold text-ea-petroleo"
@@ -284,21 +389,21 @@ export function FreightQuoteLive() {
                   >
                     {dest.city}
                   </motion.span>
-                </span>
+                </Pin>
               )}
             </AnimatePresence>
           </div>
         </div>
 
         {/* ======================= COTAÇÃO ======================= */}
-        <div className="flex flex-col gap-5 border-t border-ea-cremewm/10 p-5 sm:p-7 lg:border-l lg:border-t-0">
-          <div className="flex items-start justify-between gap-3">
+        <div className="flex flex-col gap-4 border-t border-ea-cremewm/10 p-4 sm:gap-5 sm:p-7 lg:border-l lg:border-t-0">
+          <div className="flex items-center justify-between gap-3 sm:items-start">
             <div className="flex flex-col gap-1">
-              <span className="text-[0.65rem] font-bold uppercase tracking-label text-ea-soft-dark">
+              <span className="hidden text-[0.65rem] font-bold uppercase tracking-label text-ea-soft-dark sm:block">
                 Pedido {orderNo(idx)} · {dest.kg}
               </span>
-              <span className="text-base font-bold">
-                Extrema/MG <span className="text-ea-neon">→</span> {dest.city}
+              <span className="text-sm font-bold sm:text-base">
+                Extrema<span className="hidden sm:inline">/MG</span> <span className="text-ea-neon">→</span> {dest.city}
               </span>
             </div>
             <span
@@ -311,14 +416,14 @@ export function FreightQuoteLive() {
             </span>
           </div>
 
-          <ul className="flex flex-col gap-2">
+          <ul className="flex flex-col gap-1.5 sm:gap-2">
             {shown.map((r, i) => (
               <motion.li
                 layout
                 key={`${idx}-${r.carrier}`}
                 transition={{ layout: { duration: 0.55, ease: EASE_EA } }}
                 className={cn(
-                  'grid grid-cols-[5.5rem_1fr_4.6rem] items-center gap-3 rounded-ea-sm px-3 py-2.5 transition-colors duration-300',
+                  'grid grid-cols-[4.6rem_1fr_4.4rem] items-center gap-2.5 rounded-ea-sm px-2.5 py-1.5 transition-colors duration-300 sm:grid-cols-[5.5rem_1fr_4.6rem] sm:gap-3 sm:px-3 sm:py-2.5',
                   chosen && r.best ? 'bg-ea-neon/[0.12] ring-1 ring-ea-neon/50' : 'bg-ea-cremewm/[0.04]',
                   chosen && !r.best && 'opacity-45',
                 )}
@@ -347,7 +452,7 @@ export function FreightQuoteLive() {
             ))}
           </ul>
 
-          <div className="flex items-end justify-between gap-4 border-t border-ea-cremewm/10 pt-4">
+          <div className="flex items-end justify-between gap-4 border-t border-ea-cremewm/10 pt-3 sm:pt-4">
             <div className="flex flex-col gap-1">
               <span className="text-[0.65rem] font-bold uppercase tracking-label text-ea-soft-dark">Frete do pedido</span>
               <span className="text-xs text-ea-soft-dark">
@@ -355,7 +460,7 @@ export function FreightQuoteLive() {
               </span>
             </div>
             <div className="flex flex-col items-end">
-              <span className={cn('ea-metric text-3xl transition-colors duration-300', chosen ? 'text-ea-neon' : 'text-ea-cremewm/30')}>
+              <span className={cn('ea-metric text-2xl transition-colors duration-300 sm:text-3xl', chosen ? 'text-ea-neon' : 'text-ea-cremewm/30')}>
                 {chosen ? brl.format(dest.quotes[best]) : '—'}
               </span>
               <span className={cn('text-xs font-bold transition-opacity duration-300', chosen ? 'opacity-100' : 'opacity-0')}>
@@ -364,8 +469,8 @@ export function FreightQuoteLive() {
             </div>
           </div>
 
-          {/* Últimos envios */}
-          <div className="flex flex-col gap-2">
+          {/* Últimos envios (só em telas maiores) */}
+          <div className="hidden flex-col gap-2 sm:flex">
             <span className="text-[0.65rem] font-bold uppercase tracking-label text-ea-soft-dark">Últimos envios</span>
             <ul className="flex flex-col">
               <AnimatePresence initial={false}>
