@@ -442,8 +442,14 @@ export const footer = {
   contato: {
     email: '',
     telefone: '',
+    razao: 'Enviagora',
     cnpj: '49.933.678/0001-16',
-    endereco: 'Av. Joaquim Lourenço de Lima, 124, Dist. Industrial Vargem do João Pinto, 37644-020, Extrema/MG',
+    endereco: {
+      rua: 'Av. Joaquim Lourenço de Lima, 124',
+      bairro: 'Dist. Industrial Vargem do João Pinto',
+      cidade: 'Extrema/MG',
+      cep: '37644-020',
+    },
   },
   legal: '© 2026 Enviagora. Todos os direitos reservados.',
   legalLinks: [
