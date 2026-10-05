@@ -1,18 +1,19 @@
 import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
-import { Instagram, Linkedin, Mail, MapPin, Phone, Server, ShieldCheck, Warehouse } from 'lucide-react';
+import { ArrowUpRight, Instagram, Linkedin, Mail, MapPin, Phone, Server, ShieldCheck, Warehouse } from 'lucide-react';
 import { BLOG_HREF, footer, hero, site } from '@/content/content';
 import { Logo } from '@/components/brand/Logo';
 import { Arrow } from '@/components/brand/Arrow';
 import { Button } from '@/components/ui/Button';
 import { getSiteConfig } from '@/lib/siteConfig';
 
-// Fatos já publicados no site — selos de confiança para o comprador B2B.
+// Fatos já publicados no site — selos de confiança para o comprador B2B,
+// sempre por extenso (com o que significam para o cliente).
 const TRUST = [
-  { icon: ShieldCheck, title: 'Galpões com ANVISA', short: 'ANVISA' },
-  { icon: Server, title: 'Infraestrutura AWS', short: 'AWS' },
-  { icon: Warehouse, title: `CD de ${site.cd.area} em ${site.cd.local}`, short: site.cd.area },
+  { icon: ShieldCheck, title: 'Galpões com ANVISA', body: 'Prontos para suplementos, cosméticos e nutracêuticos.' },
+  { icon: Server, title: 'Infraestrutura AWS', body: 'Sistema na nuvem da Amazon: estável e seguro.' },
+  { icon: Warehouse, title: `CD de ${site.cd.area} em ${site.cd.local}`, body: 'Na divisa com São Paulo, às margens da Fernão Dias.' },
 ];
 
 // Ícones das redes, exibidos ao lado do link correspondente na coluna "Conteúdo".
@@ -99,24 +100,30 @@ export function Footer() {
           {/* Empresa: razão social, CNPJ e endereço (obrigatórios) */}
           <div className="flex flex-col gap-3.5">
             <span className="ea-kicker text-ea-neon">Empresa</span>
-            <address className="flex flex-col gap-3 text-sm not-italic text-ea-soft-dark">
+            <address className="flex flex-col gap-4 rounded-ea-lg border border-ea-cremewm/10 bg-ea-cremewm/[0.03] p-5 text-sm not-italic leading-relaxed text-ea-soft-dark">
               <span>
                 <span className="font-bold text-ea-cremewm">{razao}</span>
                 <br />
                 CNPJ {cnpj}
               </span>
-              <a href={mapsHref} target="_blank" rel="noopener noreferrer" className="group flex items-start gap-2.5 transition-colors hover:text-ea-cremewm">
-                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-ea-neon" aria-hidden />
+              <span className="flex items-start gap-2.5">
+                <MapPin className="mt-1 h-4 w-4 shrink-0 text-ea-neon" aria-hidden />
                 <span>
                   {endereco.rua}
                   <br />
                   {endereco.bairro}
                   <br />
                   {endereco.cidade} · CEP {endereco.cep}
-                  <span className="mt-1 block text-xs text-ea-cremewm/70 underline decoration-ea-neon/60 underline-offset-4 group-hover:text-ea-cremewm">
-                    Ver no mapa
-                  </span>
                 </span>
+              </span>
+              <a
+                href={mapsHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 self-start rounded-pill border border-ea-cremewm/20 px-3.5 py-2 text-xs font-medium text-ea-cremewm transition-colors hover:border-ea-neon hover:text-ea-neon"
+              >
+                Ver no mapa
+                <ArrowUpRight className="h-3.5 w-3.5" aria-hidden />
               </a>
               {email && (
                 <a href={`mailto:${email}`} className="inline-flex items-center gap-2.5 hover:text-ea-cremewm">
@@ -134,17 +141,16 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Selos de confiança: 3 numa linha (compactos no celular) */}
-        <ul className="mt-12 grid grid-cols-3 gap-px overflow-hidden rounded-ea border border-ea-cremewm/10 bg-ea-cremewm/10">
-          {TRUST.map(({ icon: Icon, title, short }) => (
-            <li
-              key={title}
-              className="flex flex-col items-center gap-2 bg-ea-petroleo px-2 py-4 text-center sm:flex-row sm:gap-3 sm:px-5 sm:text-left"
-            >
-              <Icon className="h-5 w-5 shrink-0 text-ea-neon sm:h-4 sm:w-4" strokeWidth={1.8} aria-hidden />
-              <span className="text-[0.72rem] font-medium leading-tight text-ea-cremewm sm:text-sm">
-                <span className="sm:hidden">{short}</span>
-                <span className="hidden sm:inline">{title}</span>
+        {/* Selos de confiança, por extenso: um por linha no celular, 3 lado a lado a partir do tablet */}
+        <ul className="mt-12 grid gap-px overflow-hidden rounded-ea-lg border border-ea-cremewm/10 bg-ea-cremewm/10 sm:grid-cols-3">
+          {TRUST.map(({ icon: Icon, title, body }) => (
+            <li key={title} className="flex items-start gap-4 bg-ea-petroleo p-4 sm:p-5">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-ea-sm bg-ea-neon/10 text-ea-neon">
+                <Icon className="h-5 w-5" strokeWidth={1.8} aria-hidden />
+              </span>
+              <span className="flex flex-col gap-0.5">
+                <span className="text-sm font-bold text-ea-cremewm">{title}</span>
+                <span className="text-xs leading-relaxed text-ea-soft-dark">{body}</span>
               </span>
             </li>
           ))}

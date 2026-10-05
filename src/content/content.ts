@@ -101,19 +101,25 @@ export const process = {
   cd: {
     kicker: 'CD Enviagora · Extrema/MG',
     metric: '15.000 m²',
-    title: 'de operação própria',
-    body: 'Porta-paletes de alta capacidade, corredores endereçados e controle de lotes e validades — a estrutura que sustenta mais de 1 milhão de pacotes por mês.',
-    facts: ['Galpões com ANVISA', 'Estoque endereçado por corredor', 'Operação de segunda a sexta, 7h30–17h30'],
+    title: 'para sua marca crescer sem travar',
+    body: 'Você foca em vender; a gente garante que cada pedido saia certo e rápido. Campanha, live ou Black Friday: a mesma estrutura que já despacha mais de 1 milhão de pacotes por mês acompanha o seu ritmo.',
+    // O que o cliente ganha (benefício no título, prova já publicada no texto).
+    benefits: [
+      { title: 'Menos troca e reclamação', body: '99,6% de assertividade nos pedidos.' },
+      { title: 'Seu cliente recebe antes', body: '92% dos pedidos enviados em até 24h.' },
+      { title: 'Pico de vendas sem ruptura', body: 'Espaço de sobra e estoque acompanhado ao vivo.' },
+      { title: 'Produto regulado em dia', body: 'Galpões com ANVISA e controle de lote e validade.' },
+    ],
     // Galeria (5 fotos do CD). A primeira é a de destaque.
     photos: [
       {
-        caption: 'Separação e embalagem',
+        caption: 'Cada pedido conferido e embalado com cuidado',
         alt: 'Equipe da Enviagora separando e embalando pedidos no CD, com porta-paletes e banner da marca ao fundo',
       },
-      { caption: 'Empilhadeiras retráteis', alt: 'Empilhadeira retrátil com as cores da Enviagora entre porta-paletes' },
-      { caption: 'Corredores endereçados', alt: 'Corredor entre porta-paletes altos, sinalizado como corredores C e D' },
-      { caption: 'Armazenagem verticalizada', alt: 'Porta-paletes de grande altura com banners da Enviagora e área de expedição' },
-      { caption: 'Estoque paletizado', alt: 'Porta-paletes azuis e verde-limão carregados com paletes, empilhadeira ao fundo' },
+      { caption: 'Estoque à venda mais rápido', alt: 'Empilhadeira retrátil com as cores da Enviagora entre porta-paletes' },
+      { caption: 'Item certo, pedido certo', alt: 'Corredor entre porta-paletes altos, sinalizado como corredores C e D' },
+      { caption: 'Espaço para o seu pico de vendas', alt: 'Porta-paletes de grande altura com banners da Enviagora e área de expedição' },
+      { caption: 'Seu estoque seguro e rastreado', alt: 'Porta-paletes azuis e verde-limão carregados com paletes, empilhadeira ao fundo' },
     ],
   },
   steps: [

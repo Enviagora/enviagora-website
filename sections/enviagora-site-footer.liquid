@@ -24,12 +24,19 @@
   .ea-sf__cta { display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 20px; background: #c4ff57; color: #123336 !important; border-radius: 8px; padding: 14px 18px; font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
   .ea-sf__cta svg { width: .85em; height: .85em; }
   .ea-sf__links { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
-  .ea-sf__company address { font-style: normal; display: grid; gap: 12px; color: #b0c2bf; font-size: 14px; line-height: 1.5; }
+  .ea-sf__company address { font-style: normal; display: grid; gap: 16px; justify-items: start; color: #b0c2bf; font-size: 14px; line-height: 1.6; border: 1px solid rgba(250,250,245,.1); background: rgba(250,250,245,.03); border-radius: 16px; padding: 20px; }
   .ea-sf__company strong { color: #fafaf5; }
-  .ea-sf__map { display: flex; gap: 10px; align-items: flex-start; }
-  .ea-sf__map svg { width: 16px; height: 16px; margin-top: 3px; flex-shrink: 0; color: #c4ff57; }
-  .ea-sf__map em { display: block; margin-top: 4px; font-style: normal; font-size: 12px; color: rgba(250,250,245,.7); text-decoration: underline; text-decoration-color: rgba(196,255,87,.6); text-underline-offset: 4px; }
-  .ea-sf__map:hover { color: #fafaf5; }
+  .ea-sf__addr { display: flex; gap: 10px; align-items: flex-start; }
+  .ea-sf__addr svg { width: 16px; height: 16px; margin-top: 4px; flex-shrink: 0; color: #c4ff57; }
+  .ea-sf__map { display: inline-flex; align-items: center; gap: 6px; border: 1px solid rgba(250,250,245,.2); border-radius: 999px; padding: 8px 14px; color: #fafaf5 !important; font-size: 12px; font-weight: 500; transition: border-color .2s, color .2s; }
+  .ea-sf__map svg { width: 14px; height: 14px; }
+  .ea-sf__map:hover { border-color: #c4ff57; color: #c4ff57 !important; }
+  .ea-sf .ea-sf__trust { margin-top: 48px; display: grid; gap: 1px; border: 1px solid rgba(250,250,245,.1); border-radius: 16px; overflow: hidden; background: rgba(250,250,245,.1); }
+  .ea-sf__trust li { display: flex; gap: 16px; align-items: flex-start; background: #123336; padding: 16px; }
+  .ea-sf__trust-ic { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; flex-shrink: 0; border-radius: 8px; background: rgba(196,255,87,.1); color: #c4ff57; }
+  .ea-sf__trust-ic svg { width: 20px; height: 20px; }
+  .ea-sf__trust strong { display: block; color: #fafaf5; font-size: 14px; }
+  .ea-sf__trust small { display: block; margin-top: 2px; color: #b0c2bf; font-size: 12px; line-height: 1.6; }
   .ea-sf__legal { margin-top: 40px; padding-top: 24px; border-top: 1px solid rgba(250,250,245,.1); display: flex; flex-direction: column; gap: 12px; color: #b0c2bf; font-size: 12px; line-height: 1.5; }
   .ea-sf__legal ul { display: flex; flex-wrap: wrap; gap: 8px 20px; }
   .ea-sf__legal li a { font-size: 12px; }
@@ -38,6 +45,8 @@
     .ea-sf__cta { display: inline-flex; }
     .ea-sf__legal { flex-direction: row; justify-content: space-between; align-items: center; }
     .ea-sf__mark { right: -48px; width: 352px; height: 352px; }
+    .ea-sf .ea-sf__trust { grid-template-columns: repeat(3, 1fr); }
+    .ea-sf__trust li { padding: 20px; }
   }
   @media (min-width: 990px) {
     .ea-sf__grid { grid-template-columns: 1.3fr 1.4fr 1.1fr; gap: 48px; }
@@ -92,18 +101,36 @@
         <span class="ea-sf__title">Empresa</span>
         <address>
           <span><strong>Enviagora</strong><br>CNPJ 49.933.678/0001-16</span>
-          <a class="ea-sf__map" href="https://www.google.com/maps/search/?api=1&query=Av.%20Joaquim%20Louren%C3%A7o%20de%20Lima%2C%20124%2C%20Dist.%20Industrial%20Vargem%20do%20Jo%C3%A3o%20Pinto%2C%20Extrema%2FMG%2C%2037644-020" target="_blank" rel="noopener noreferrer">
+          <span class="ea-sf__addr">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
             <span>
               Av. Joaquim Lourenço de Lima, 124<br>
               Dist. Industrial Vargem do João Pinto<br>
               Extrema/MG · CEP 37644-020
-              <em>Ver no mapa</em>
             </span>
+          </span>
+          <a class="ea-sf__map" href="https://www.google.com/maps/search/?api=1&query=Av.%20Joaquim%20Louren%C3%A7o%20de%20Lima%2C%20124%2C%20Dist.%20Industrial%20Vargem%20do%20Jo%C3%A3o%20Pinto%2C%20Extrema%2FMG%2C%2037644-020" target="_blank" rel="noopener noreferrer">
+            Ver no mapa
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
           </a>
         </address>
       </div>
     </div>
+
+    <ul class="ea-sf__trust">
+      <li>
+        <span class="ea-sf__trust-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg></span>
+        <span><strong>Galpões com ANVISA</strong><small>Prontos para suplementos, cosméticos e nutracêuticos.</small></span>
+      </li>
+      <li>
+        <span class="ea-sf__trust-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="8" x="2" y="2" rx="2" ry="2"/><rect width="20" height="8" x="2" y="14" rx="2" ry="2"/><line x1="6" x2="6.01" y1="6" y2="6"/><line x1="6" x2="6.01" y1="18" y2="18"/></svg></span>
+        <span><strong>Infraestrutura AWS</strong><small>Sistema na nuvem da Amazon: estável e seguro.</small></span>
+      </li>
+      <li>
+        <span class="ea-sf__trust-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 8.35V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8.35A2 2 0 0 1 3.26 6.5l8-3.2a2 2 0 0 1 1.48 0l8 3.2A2 2 0 0 1 22 8.35Z"/><path d="M6 18h12"/><path d="M6 14h12"/><rect width="12" height="12" x="6" y="10"/></svg></span>
+        <span><strong>CD de 15.000 m² em Extrema/MG</strong><small>Na divisa com São Paulo, às margens da Fernão Dias.</small></span>
+      </li>
+    </ul>
 
     <div class="ea-sf__legal">
       <span>© {{ 'now' | date: '%Y' }} Enviagora. Todos os direitos reservados.</span>
