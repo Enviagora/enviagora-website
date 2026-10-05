@@ -22,7 +22,7 @@ const CARRIERS = ['A', 'B', 'C', 'D'] as const;
 
 type Dest = { city: string; state: string; x: number; y: number; kg: string; table: number; quotes: number[] };
 
-// Fretes ilustrativos: o escolhido gira em torno de R$ 9 e a economia sobre a
+// Fretes ilustrativos (não são a tabela da Enviagora): a economia sobre a
 // tabela de balcão fica entre 34% e 40% (a promessa publicada é "até 40%").
 const DESTS: Dest[] = [
   { city: 'Recife/PE', state: 'pe', x: 611, y: 207, kg: '0,8 kg', table: 16.8, quotes: [12.4, 10.15, 11.3, 13.05] },

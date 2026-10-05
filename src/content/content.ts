@@ -164,30 +164,34 @@ export const logAlliance = {
 } as const;
 
 /**
- * Simulador de economia no frete: compara o frete atual da marca com o frete
- * médio da Enviagora (cerca de R$ 9 por pedido para todo o Brasil).
+ * Simulador de economia no frete. A conta usa um frete de referência da rede
+ * (refFreight) que NÃO aparece na página: o cliente vê só a economia estimada,
+ * limitada à promessa publicada ("até 40%").
  */
 export const calculator = {
-  kicker: 'Simulador',
+  kicker: 'Simulador de frete',
   title: 'Quanto você economizaria no frete?',
-  ordersLabel: 'Pedidos por mês',
-  ordersMin: 'mínimo 5.000',
-  freightLabel: 'Seu frete médio por pedido hoje',
-  oursLabel: 'Frete médio Enviagora',
-  oursValue: 9,
-  oursNote: 'para todo o Brasil',
-  todayLabel: 'Seu frete hoje',
-  resultLabel: 'Economia estimada no frete',
-  perOrder: 'por pedido',
+  subtitle: 'Responda 2 perguntas e veja a estimativa na hora.',
+  ordersLabel: 'Quantos pedidos você envia por mês?',
+  ordersMin: 'mínimo',
+  freightLabel: 'Quanto você paga de frete por pedido, em média?',
+  refFreight: 9,
+  maxSaving: 0.4,
+  resultLabel: 'Sua economia estimada',
+  perMonth: 'por mês',
   perYear: 'por ano',
+  todayLabel: 'Seu gasto com frete hoje',
+  savingTag: 'a menos',
   lowNote:
-    'Seu frete já está perto da nossa média. Um especialista pode avaliar prazo de entrega, incentivos fiscais e o custo total da operação.',
+    'Seu frete já é competitivo. Mesmo assim, um especialista pode encontrar ganhos em prazo de entrega, incentivos fiscais e no custo total da operação.',
   disclaimer:
-    'Estimativa com base no frete médio de cerca de R$ 9 por pedido na rede LogAlliance. O valor real depende de peso, dimensões, destinos e mix de pedidos.',
+    'Estimativa com base nos fretes negociados na nossa rede de transportadoras. O valor exato depende do peso, das dimensões e dos destinos dos seus pedidos — o especialista calcula a sua cotação.',
   cta: 'Quero essa economia',
+  ctaLow: 'Falar com um especialista',
   tax: {
+    kicker: 'Além do frete',
     value: 'Até 60%',
-    text: 'de redução de impostos com incentivos fiscais estratégicos de ICMS — avaliados caso a caso pelo especialista.',
+    text: 'de redução de impostos com incentivos fiscais de ICMS, avaliados caso a caso.',
   },
 } as const;
 
