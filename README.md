@@ -26,9 +26,10 @@ O Shopify ignora as pastas que não são de tema, então as duas convivem na mes
   link do **HubSpot Meetings** (opcional) e o **blog** do menu (opcional).
 - **Blog:** o link "Blog" da home é resolvido no Liquid — blog escolhido no setting › item
   de blog dos menus da loja › `/blogs/posts`. As páginas de blog e de artigo
-  (`templates/blog.json`, `templates/article.json`) usam as seções
-  `enviagora-site-header` e `enviagora-site-footer`: header e rodapé da marca em
-  Liquid puro, que também aplicam a identidade (Satoshi, cores) sobre o blog do Dawn.
+  (`templates/blog.json`, `templates/article.json`) são Liquid puro, com seções da
+  marca: `enviagora-site-header` / `enviagora-site-footer` (navegação), `enviagora-blog`
+  (listagem com destaque, cards e paginação) e `enviagora-article` (leitura,
+  compartilhar, CTA para o especialista e "Continue lendo").
 - `snippets/enviagora-tracking.liquid` concentra o **HubSpot tracking** (portal 44097462)
   e o **Meta Pixel** (410733041890285); é usado pelos dois layouts.
 - As **demais páginas** (GemPages, `/pages/plataforma`, contato, políticas…) continuam no
@@ -112,6 +113,11 @@ O HubSpot continua recebendo os leads e o tracking — só deixa de hospedar a p
 ## Pendências (fora do código)
 
 Itens que dependem de dados reais — o site não inventa nenhum deles:
+
+- **Blog › post com acentos quebrados:** "Por que o frete está destruindo a margem da sua
+  marca de wellness" foi salvo com caracteres corrompidos (�) no título, no texto e no
+  endereço. Corrigir no admin (Loja virtual › Blog posts) e, se mudar o endereço, criar um
+  redirecionamento do antigo.
 
 - **Cases com resultado:** preencher `cases.items` em `src/content/content.ts` (marca,
   métrica, depoimento, autor) com dados aprovados pelos clientes. Sem itens, a seção não
