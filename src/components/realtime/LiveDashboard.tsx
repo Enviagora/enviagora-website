@@ -220,9 +220,9 @@ export function LiveDashboard() {
   const ToastIcon = toast !== null ? TOASTS[toast].icon : null;
 
   const kpis = [
-    { k: 'Pedidos recebidos', v: kpi.received, note: 'hoje' },
-    { k: 'Enviados', v: kpi.shipped, note: 'hoje' },
-    { k: 'Em separação', v: kpi.received - kpi.shipped, note: 'agora' },
+    { k: 'Pedidos recebidos', short: 'Recebidos', v: kpi.received, note: 'hoje' },
+    { k: 'Enviados', short: 'Enviados', v: kpi.shipped, note: 'hoje' },
+    { k: 'Em separação', short: 'Separação', v: kpi.received - kpi.shipped, note: 'agora' },
   ];
 
   return (
@@ -256,8 +256,39 @@ export function LiveDashboard() {
         <div className="min-w-0 flex-1">
           {/* Topo */}
           <div className="flex items-center justify-between gap-3 border-b border-ea-petroleo/10 bg-white px-4 py-3 sm:px-6">
-            <div className="flex items-center gap-3">
-              <span className="text-sm font-bold text-ea-petroleo">Visão geral</span>
+            <div className="relative flex min-w-0 flex-1 items-center gap-3 sm:flex-none">
+              {/* Mobile: os avisos aparecem aqui (no lugar do título) para não cobrir o painel */}
+              <span className="relative block h-5 min-w-0 flex-1 overflow-hidden sm:hidden">
+                <AnimatePresence initial={false} mode="popLayout">
+                  {toast !== null && ToastIcon ? (
+                    <motion.span
+                      key={`t-${toast}`}
+                      className="absolute inset-0 flex items-center gap-1.5 truncate text-xs font-bold text-ea-petroleo"
+                      initial={{ y: 18, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      exit={{ y: -18, opacity: 0 }}
+                      transition={{ duration: 0.35, ease: EASE_EA }}
+                    >
+                      <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-ea-neon">
+                        <ToastIcon className="h-3 w-3" strokeWidth={2.2} />
+                      </span>
+                      <span className="truncate">{TOASTS[toast].title}</span>
+                    </motion.span>
+                  ) : (
+                    <motion.span
+                      key="title"
+                      className="absolute inset-0 flex items-center text-sm font-bold text-ea-petroleo"
+                      initial={{ y: 18, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      exit={{ y: -18, opacity: 0 }}
+                      transition={{ duration: 0.35, ease: EASE_EA }}
+                    >
+                      Visão geral
+                    </motion.span>
+                  )}
+                </AnimatePresence>
+              </span>
+              <span className="hidden text-sm font-bold text-ea-petroleo sm:inline">Visão geral</span>
               <span className="hidden items-center gap-2 rounded-pill bg-ea-creme px-3 py-1.5 text-xs text-ea-soft sm:flex">
                 <Search className="h-3.5 w-3.5" /> Buscar pedido, SKU ou lote
               </span>
@@ -277,8 +308,43 @@ export function LiveDashboard() {
           <div className="grid gap-3 p-3 sm:gap-4 sm:p-5 lg:grid-cols-[1fr_340px]">
             {/* ============ Coluna principal ============ */}
             <div className="flex min-w-0 flex-col gap-3 sm:gap-4">
-              {/* KPIs */}
-              <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
+              {/* KPIs — mobile: uma faixa só, com 3 números e a curva do dia */}
+              <div className={cn(card, 'overflow-hidden sm:hidden')}>
+                <div className="grid grid-cols-3 divide-x divide-ea-petroleo/10">
+                  {kpis.map((k) => (
+                    <div key={k.k} className="flex flex-col gap-1 px-3 py-3">
+                      <span className="text-[0.58rem] font-bold uppercase tracking-label text-ea-soft">{k.short}</span>
+                      <Rolling value={k.v} className="ea-metric text-xl text-ea-petroleo" />
+                    </div>
+                  ))}
+                </div>
+                <div className="relative border-t border-ea-petroleo/10 px-3 pb-2 pt-2">
+                  <span className="absolute left-3 top-2 text-[0.58rem] font-bold uppercase tracking-label text-ea-soft">
+                    Pedidos por hora
+                  </span>
+                  <svg viewBox={`0 ${CH.top} ${last.x} ${CH.h - CH.top - CH.bottom}`} preserveAspectRatio="none" className="mt-4 block h-12 w-full overflow-visible">
+                    <defs>
+                      <linearGradient id="ea-area-m" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#C4FF57" stopOpacity="0.6" />
+                        <stop offset="100%" stopColor="#C4FF57" stopOpacity="0" />
+                      </linearGradient>
+                    </defs>
+                    <motion.path d={area} fill="url(#ea-area-m)" initial={false} animate={{ d: area }} transition={{ duration: 0.8, ease: EASE_EA }} />
+                    <motion.path
+                      d={line}
+                      fill="none"
+                      stroke="#123336"
+                      strokeWidth={2}
+                      vectorEffect="non-scaling-stroke"
+                      initial={false}
+                      animate={{ d: line }}
+                      transition={{ duration: 0.8, ease: EASE_EA }}
+                    />
+                  </svg>
+                </div>
+              </div>
+
+              <div className="hidden gap-4 sm:grid sm:grid-cols-4">
                 {kpis.map((k) => (
                   <div key={k.k} className={cn(card, 'flex flex-col gap-1.5 p-3.5 sm:p-4')}>
                     <span className={label}>{k.k}</span>
@@ -342,10 +408,14 @@ export function LiveDashboard() {
               </div>
 
               {/* Rastreio de pedido */}
-              <div className={cn(card, 'p-4')}>
-                <div className="mb-4 flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-3">
-                  <span className={label}>Rastreio · pedido #{nf.format(track.order)}</span>
-                  <span className="text-xs text-ea-soft">Extrema/MG → Curitiba/PR</span>
+              <div className={cn(card, 'p-3.5 sm:p-4')}>
+                <div className="mb-3 flex items-baseline justify-between gap-3 sm:mb-4">
+                  <span className={label}>
+                    Rastreio<span className="hidden sm:inline"> · pedido</span> #{nf.format(track.order)}
+                  </span>
+                  <span className="text-xs text-ea-soft">
+                    <span className="hidden sm:inline">Extrema/MG </span>→ Curitiba/PR
+                  </span>
                 </div>
                 <div className="relative px-2">
                   {/* trilho */}
@@ -399,14 +469,14 @@ export function LiveDashboard() {
             {/* ============ Coluna lateral ============ */}
             <div className="flex min-w-0 flex-col gap-3 sm:gap-4">
               {/* Feed de pedidos */}
-              <div className={cn(card, 'flex flex-col p-4')}>
-                <div className="mb-3 flex items-center justify-between">
+              <div className={cn(card, 'flex flex-col p-3.5 sm:p-4')}>
+                <div className="mb-2 flex items-center justify-between sm:mb-3">
                   <span className={label}>Pedidos agora</span>
                   <span className="text-[0.62rem] text-ea-soft">todos os canais</span>
                 </div>
                 <ul className="relative flex flex-col">
                   <AnimatePresence initial={false}>
-                    {feed.slice(0, 5).map((o) => (
+                    {feed.slice(0, 5).map((o, i) => (
                       <motion.li
                         key={o.id}
                         layout
@@ -414,7 +484,11 @@ export function LiveDashboard() {
                         animate={{ opacity: 1, y: 0, backgroundColor: 'rgba(196,255,87,0)' }}
                         exit={{ opacity: 0, transition: { duration: 0.2 } }}
                         transition={{ duration: 0.5, ease: EASE_EA, backgroundColor: { duration: 1.4 } }}
-                        className="flex items-center gap-3 rounded-ea-sm border-b border-ea-petroleo/[0.07] px-1.5 py-2.5"
+                        className={cn(
+                          'items-center gap-3 rounded-ea-sm border-b border-ea-petroleo/[0.07] px-1.5 py-2 sm:py-2.5',
+                          // mobile: só os 3 pedidos mais recentes
+                          i >= 3 ? 'hidden sm:flex' : 'flex',
+                        )}
                       >
                         <div className="flex min-w-0 flex-1 flex-col">
                           <span className="truncate text-xs font-bold text-ea-petroleo">{PRODUCTS[o.product]}</span>
@@ -476,7 +550,7 @@ export function LiveDashboard() {
           {toast !== null && ToastIcon && (
             <motion.div
               key={toast}
-              className="absolute bottom-4 right-4 z-20 flex w-[min(300px,calc(100%-2rem))] items-start gap-3 rounded-ea bg-ea-petroleo p-3.5 text-ea-cremewm shadow-ea-lg"
+              className="absolute bottom-4 right-4 z-20 hidden w-[min(300px,calc(100%-2rem))] items-start gap-3 rounded-ea bg-ea-petroleo p-3.5 text-ea-cremewm shadow-ea-lg sm:flex"
               initial={{ opacity: 0, y: 24, scale: 0.96 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 12, scale: 0.98 }}

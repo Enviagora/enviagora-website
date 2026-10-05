@@ -53,7 +53,7 @@ export function TikTokShop() {
     <Section id="tiktok-shop" tone="creme">
       <Reveal>
         <div
-          className="relative isolate overflow-hidden rounded-ea-lg p-8 sm:p-12 lg:p-16"
+          className="relative isolate overflow-hidden rounded-ea-lg p-6 sm:p-12 lg:p-16"
           style={{ background: BLOCK_BG }}
         >
           {/* Curva de crescimento viral — bem sutil, como marca-d'água atrás do texto */}
@@ -61,7 +61,7 @@ export function TikTokShop() {
             aria-hidden
             viewBox="0 0 400 160"
             preserveAspectRatio="none"
-            className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-[62%] w-full"
+            className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 hidden h-[62%] w-full sm:block"
           >
             <defs>
               <linearGradient id="tt-area" x1="0" y1="0" x2="0" y2="1">
@@ -93,7 +93,8 @@ export function TikTokShop() {
           </svg>
 
           {/* Partículas de engajamento subindo (energia viral do TikTok) */}
-          <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+          {/* No mobile o card é estreito e as partículas passariam por cima do texto. */}
+          <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 hidden overflow-hidden sm:block">
             {PARTICLES.map((p, i) => {
               const Icon = p.Icon;
               return (
@@ -123,10 +124,9 @@ export function TikTokShop() {
 
           {/* Topo: seta + ícone do TikTok Shop (nota branca sobre fundo escuro) */}
           <div className="flex items-start justify-between gap-4">
-            <Arrow className="h-8 w-8 text-ea-petroleo sm:h-10 sm:w-10" />
+            <Arrow className="h-7 w-7 text-ea-petroleo sm:h-10 sm:w-10" />
             <motion.span
-              style={{ width: 56, height: 56 }}
-              className="flex shrink-0 items-center justify-center overflow-hidden rounded-[24%] bg-[#010101] p-3 shadow-ea ring-1 ring-black/10"
+              className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-[24%] bg-[#010101] p-2.5 shadow-ea ring-1 ring-black/10 sm:h-14 sm:w-14 sm:p-3"
               animate={{ y: [0, -6, 0], rotate: [0, -4, 0] }}
               transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
             >
@@ -135,8 +135,8 @@ export function TikTokShop() {
           </div>
 
           {/* Selo de autoridade */}
-          <div className="mt-8">
-            <span className="inline-flex items-center gap-2 rounded-pill bg-ea-petroleo px-4 py-2 text-[0.75rem] font-bold uppercase tracking-label text-ea-neon">
+          <div className="mt-6 sm:mt-8">
+            <span className="inline-flex items-center gap-2 rounded-pill bg-ea-petroleo px-3.5 py-1.5 text-[0.68rem] font-bold uppercase tracking-label text-ea-neon sm:px-4 sm:py-2 sm:text-[0.75rem]">
               <span className="relative flex h-2 w-2">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-ea-neon opacity-70" />
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-ea-neon" />
@@ -146,18 +146,21 @@ export function TikTokShop() {
           </div>
 
           {/* Headline */}
-          <h2 className="ea-display mt-5 max-w-[20ch] text-display-md text-ea-petroleo">{tiktokShop.title}</h2>
-          <p className="mt-5 max-w-xl text-base leading-relaxed text-ea-petroleo/75 sm:text-lg">{tiktokShop.lead}</p>
+          <h2 className="ea-display mt-4 max-w-[20ch] text-[1.75rem] leading-[1.08] text-ea-petroleo sm:mt-5 sm:text-display-md">
+            {tiktokShop.title}
+          </h2>
+          <p className="mt-4 max-w-xl text-[0.95rem] leading-relaxed text-ea-petroleo/75 sm:mt-5 sm:text-lg">{tiktokShop.lead}</p>
 
           {/* Stat gigante + provas + CTA */}
-          <div className="mt-10 grid gap-8 lg:mt-12 lg:grid-cols-[auto_1fr] lg:items-center lg:gap-14">
-            <div className="flex flex-col">
+          <div className="mt-6 grid gap-6 sm:mt-10 sm:gap-8 lg:mt-12 lg:grid-cols-[auto_1fr] lg:items-center lg:gap-14">
+            {/* Mobile: número em cartão escuro (contraste máximo); desktop: solto no neon */}
+            <div className="flex flex-col rounded-ea bg-ea-petroleo px-5 py-4 sm:rounded-none sm:bg-transparent sm:p-0">
               <span className="relative inline-flex w-fit">
-                <span className="ea-metric text-[clamp(3.25rem,9vw,6.5rem)] text-ea-petroleo">
+                <span className="ea-metric text-[clamp(2.6rem,12vw,6.5rem)] text-ea-neon sm:text-ea-petroleo">
                   <CountUp value={tiktokShop.stat.value} suffix={tiktokShop.stat.suffix} />
                 </span>
               </span>
-              <span className="mt-1 text-sm font-semibold uppercase tracking-label text-ea-petroleo/70">
+              <span className="mt-1 text-xs font-semibold uppercase tracking-label text-ea-cremewm/80 sm:text-sm sm:text-ea-petroleo/70">
                 {tiktokShop.stat.label}
               </span>
             </div>
@@ -174,7 +177,7 @@ export function TikTokShop() {
                 ))}
               </ul>
               <div>
-                <Button href="#contato" variant="secondary" size="lg">
+                <Button href="#contato" variant="secondary" size="lg" className="w-full sm:w-auto">
                   {tiktokShop.cta}
                 </Button>
               </div>
@@ -182,7 +185,7 @@ export function TikTokShop() {
           </div>
 
           {/* Wordmark no rodapé do card */}
-          <div className="mt-12 flex items-end justify-end">
+          <div className="mt-12 hidden items-end justify-end sm:flex">
             <Logo on="neon" className="h-5 sm:h-6" />
           </div>
         </div>
