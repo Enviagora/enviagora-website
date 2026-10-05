@@ -57,17 +57,14 @@ export function Packages({ mobile }: { mobile: boolean }) {
   const color = useMemo(() => new THREE.Color(), []);
   const geom = useMemo(() => new RoundedBoxGeometry(1, 1, 1, 3, 0.045), []);
 
-  const { map, normalMap, roughnessMap } = useBoxTextures();
+  const { map, normalMap, roughnessMap } = useBoxTextures(mobile ? 256 : 512);
   const labelTex = useLabelTexture();
   const tapeTex = useTapeTexture();
   const shadowTex = useContactShadowTexture();
 
-  // Materiais criados à mão: só os mapas de COR vão para sRGB (normal e
-  // roughness são dados lineares — converter distorce o relevo).
+  // Só os mapas de COR estão em sRGB (definido em textures.ts); normal e
+  // roughness são dados lineares.
   const mats = useMemo(() => {
-    map.colorSpace = THREE.SRGBColorSpace;
-    labelTex.colorSpace = THREE.SRGBColorSpace;
-    tapeTex.colorSpace = THREE.SRGBColorSpace;
     return {
       box: new THREE.MeshStandardMaterial({
         map,

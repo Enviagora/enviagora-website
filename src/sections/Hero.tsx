@@ -16,17 +16,32 @@ const delay = (s: number): CSSProperties => ({ animationDelay: `${s}s` });
 export function Hero() {
   const reduce = useReducedMotion();
   const [enable3d, setEnable3d] = useState(false);
+  const [sceneReady, setSceneReady] = useState(false);
 
-  // A cena 3D só entra quando o navegador estiver ocioso — o texto do hero
-  // (pré-renderizado) pinta primeiro.
+  // A foto da cena (no HTML) pinta junto com o texto. O 3D ao vivo só começa
+  // depois que a página terminou de carregar e o navegador ficou ocioso, para
+  // não disputar com o carregamento; ao ficar pronto, entra por cima com fade.
   useEffect(() => {
-    const w = window as Window & { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number };
-    if (w.requestIdleCallback) {
-      const id = w.requestIdleCallback(() => setEnable3d(true), { timeout: 1200 });
-      return () => (window as Window & { cancelIdleCallback?: (id: number) => void }).cancelIdleCallback?.(id);
-    }
-    const t = window.setTimeout(() => setEnable3d(true), 300);
-    return () => window.clearTimeout(t);
+    let cancelled = false;
+    let idle = 0;
+    let timer = 0;
+    const w = window as Window & {
+      requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number;
+      cancelIdleCallback?: (id: number) => void;
+    };
+    const start = () => {
+      if (cancelled) return;
+      if (w.requestIdleCallback) idle = w.requestIdleCallback(() => setEnable3d(true), { timeout: 1500 });
+      else timer = window.setTimeout(() => setEnable3d(true), 500);
+    };
+    if (document.readyState === 'complete') start();
+    else window.addEventListener('load', start, { once: true });
+    return () => {
+      cancelled = true;
+      window.removeEventListener('load', start);
+      if (idle) w.cancelIdleCallback?.(idle);
+      window.clearTimeout(timer);
+    };
   }, []);
 
   return (
@@ -34,16 +49,20 @@ export function Hero() {
       id="top"
       className="ea-on-dark relative -mt-16 flex min-h-[100svh] items-start overflow-hidden bg-ea-petroleo pt-16 text-ea-cremewm sm:-mt-[70px] sm:pt-[70px]"
     >
-      {/* Cena 3D (esteira) / fallback estático */}
+      {/* Foto da cena (sempre por baixo) + cena 3D ao vivo entrando com fade */}
       <div className="absolute inset-0">
-        {enable3d ? (
-          <SceneErrorBoundary fallback={<StaticBackdrop />}>
-            <Suspense fallback={<StaticBackdrop />}>
-              <PackageScene />
-            </Suspense>
-          </SceneErrorBoundary>
-        ) : (
-          <StaticBackdrop />
+        <StaticBackdrop />
+        {enable3d && (
+          <div
+            className="absolute inset-0 transition-opacity duration-1000 ease-out"
+            style={{ opacity: sceneReady ? 1 : 0 }}
+          >
+            <SceneErrorBoundary fallback={null}>
+              <Suspense fallback={null}>
+                <PackageScene onReady={() => setSceneReady(true)} />
+              </Suspense>
+            </SceneErrorBoundary>
+          </div>
         )}
       </div>
 

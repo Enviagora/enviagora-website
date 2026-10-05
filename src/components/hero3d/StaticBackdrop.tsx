@@ -1,27 +1,26 @@
-import { Arrow } from '@/components/brand/Arrow';
+import posterDesktop1000 from '@/assets/hero/poster-desktop-1000.webp';
+import posterDesktop1600 from '@/assets/hero/poster-desktop-1600.webp';
+import posterMobile from '@/assets/hero/poster-mobile-780.webp';
 
 /**
- * Fundo estático do hero — usado como fallback enquanto a cena 3D carrega,
- * quando não há WebGL, e com prefers-reduced-motion. Puro CSS/SVG (leve).
+ * Fundo do hero antes (e no lugar) da cena 3D: um quadro renderizado da
+ * própria cena. Vem no HTML pré-renderizado → aparece junto com o texto, e o
+ * 3D ao vivo entra por cima com fade quando estiver pronto. Também é o
+ * fallback sem WebGL.
  */
 export function StaticBackdrop() {
   return (
-    <div className="absolute inset-0 overflow-hidden bg-ea-petroleo" aria-hidden>
-      {/* Glow neon central */}
-      <div
-        className="absolute left-1/2 top-1/2 h-[80vh] w-[80vh] -translate-x-1/2 -translate-y-1/2 rounded-full"
-        style={{ background: 'radial-gradient(circle, rgba(196,255,87,0.16), transparent 62%)' }}
+    <picture className="absolute inset-0 block bg-ea-petroleo" aria-hidden>
+      <source media="(max-width: 767px)" srcSet={posterMobile} />
+      <source srcSet={`${posterDesktop1000} 1000w, ${posterDesktop1600} 1600w`} sizes="100vw" />
+      <img
+        src={posterDesktop1600}
+        alt=""
+        width={1600}
+        height={969}
+        decoding="async"
+        className="h-full w-full object-cover"
       />
-      {/* Grade de pontos */}
-      <div
-        className="absolute inset-0 opacity-60"
-        style={{
-          backgroundImage: 'radial-gradient(rgba(250,250,245,0.10) 1px, transparent 1.4px)',
-          backgroundSize: '26px 26px',
-        }}
-      />
-      {/* Seta gigante */}
-      <Arrow className="absolute -right-24 -bottom-24 h-[36rem] w-[36rem] text-ea-neon/[0.05]" />
-    </div>
+    </picture>
   );
 }

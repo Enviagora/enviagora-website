@@ -72,6 +72,11 @@ renderiza o app no Node e grava o snippet (imagens viram `{{ '…' | asset_url }
 que só existe no navegador (`window`, config do tema) deve rodar em `useEffect`, para o
 primeiro render bater com o HTML pré-renderizado.
 
+**Hero 3D:** a cena (`src/components/hero3d/`) entra com fade por cima de uma foto dela
+mesma (`src/assets/hero/poster-*.webp`), que vem no HTML e aparece junto com o texto. Se a
+cena mudar bastante, gere fotos novas (capturas da cena sem o texto por cima) para o fade
+continuar imperceptível.
+
 Onde mexer:
 - **Textos:** `src/content/content.ts` (inclui `cases`, que só aparece quando tiver itens)
 - **Cores, tipografia, raios:** `tailwind.config.js` + `src/index.css` (resumo em `docs/BRANDING.md`)

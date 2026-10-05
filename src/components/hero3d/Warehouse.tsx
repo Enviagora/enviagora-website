@@ -23,7 +23,10 @@ import { useBeamTexture, useCartonTexture, useConcreteTextures, useGlowTexture }
 const RACK_Z0 = Z_FAR - 8;
 const RACK_Z1 = Z_NEAR - 2;
 
-/** Aplica uma lista de matrizes a um InstancedMesh (uma vez). */
+/**
+ * Aplica as matrizes a um InstancedMesh. Roda a cada render (é barato): se o
+ * objeto for recriado (ex.: troca para a versão leve), as posições voltam.
+ */
 function useInstances(ref: React.RefObject<THREE.InstancedMesh>, mats: THREE.Matrix4[]) {
   useLayoutEffect(() => {
     const m = ref.current;
@@ -31,7 +34,7 @@ function useInstances(ref: React.RefObject<THREE.InstancedMesh>, mats: THREE.Mat
     mats.forEach((mat, i) => m.setMatrixAt(i, mat));
     m.instanceMatrix.needsUpdate = true;
     m.computeBoundingSphere();
-  }, [ref, mats]);
+  });
 }
 
 const tmp = new THREE.Object3D();
@@ -43,34 +46,56 @@ function matrix(x: number, y: number, z: number, sx: number, sy: number, sz: num
   return tmp.matrix.clone();
 }
 
-function Floor() {
+function Floor({ lite }: { lite: boolean }) {
   const W = 40;
   const D = Z_NEAR - Z_FAR + 30;
-  const { map, roughnessMap } = useConcreteTextures(W / 6, D / 6);
+  // Celular: textura menor e sem roughness map → reaproveita o programa de
+  // shader das cargas/etiquetas (menos compilação ao abrir a página).
+  const { map, roughnessMap } = useConcreteTextures(W / 6, D / 6, lite ? 256 : 512, !lite);
   const mat = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
         map,
         roughnessMap,
-        roughness: 1,
+        roughness: lite ? 0.55 : 1,
         metalness: 0,
         envMapIntensity: 0.9,
       }),
-    [map, roughnessMap],
+    [map, roughnessMap, lite],
   );
   const lineMat = useMemo(() => new THREE.MeshStandardMaterial({ color: '#e5c21d', roughness: 0.6 }), []);
   const zc = (Z_NEAR + Z_FAR) / 2 - 8;
+  const floorRef = useRef<THREE.InstancedMesh>(null);
+  const lineRef = useRef<THREE.InstancedMesh>(null);
+  const floorMats = useMemo(() => {
+    tmp.position.set(0, FLOOR_Y, zc);
+    tmp.rotation.set(-Math.PI / 2, 0, 0);
+    tmp.scale.set(W, D, 1);
+    tmp.updateMatrix();
+    return [tmp.matrix.clone()];
+  }, [zc, D]);
+  const lineMats = useMemo(
+    () =>
+      [-6.55, 6.55, -RACK_X + RACK_DEPTH / 2 + 0.55, RACK_X - RACK_DEPTH / 2 - 0.55].map((x) => {
+        tmp.position.set(x, FLOOR_Y + 0.004, zc);
+        tmp.rotation.set(-Math.PI / 2, 0, 0);
+        tmp.scale.set(0.1, D, 1);
+        tmp.updateMatrix();
+        return tmp.matrix.clone();
+      }),
+    [zc, D],
+  );
+  useInstances(floorRef, floorMats);
+  useInstances(lineRef, lineMats);
   return (
     <group>
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, FLOOR_Y, zc]} receiveShadow material={mat}>
-        <planeGeometry args={[W, D]} />
-      </mesh>
+      <instancedMesh ref={floorRef} args={[undefined, undefined, 1]} material={mat} receiveShadow frustumCulled={false}>
+        <planeGeometry args={[1, 1]} />
+      </instancedMesh>
       {/* Faixas amarelas de corredor (como no CD) */}
-      {[-6.55, 6.55, -RACK_X + RACK_DEPTH / 2 + 0.55, RACK_X - RACK_DEPTH / 2 - 0.55].map((x) => (
-        <mesh key={x} rotation={[-Math.PI / 2, 0, 0]} position={[x, FLOOR_Y + 0.004, zc]} material={lineMat} receiveShadow>
-          <planeGeometry args={[0.1, D]} />
-        </mesh>
-      ))}
+      <instancedMesh ref={lineRef} args={[undefined, lineMat, lineMats.length]} receiveShadow frustumCulled={false}>
+        <planeGeometry args={[1, 1]} />
+      </instancedMesh>
     </group>
   );
 }
@@ -156,6 +181,9 @@ function Lamps({ lite }: { lite: boolean }) {
   const beamTex = useBeamTexture();
   const housingRef = useRef<THREE.InstancedMesh>(null);
   const diskRef = useRef<THREE.InstancedMesh>(null);
+  const glowRef = useRef<THREE.InstancedMesh>(null);
+  const beamRef = useRef<THREE.InstancedMesh>(null);
+  const BEAM_H = LAMP_Y - FLOOR_Y - 0.4;
 
   const spots = useMemo(() => {
     const list: { x: number; z: number }[] = [];
@@ -166,25 +194,44 @@ function Lamps({ lite }: { lite: boolean }) {
     return list;
   }, [lite]);
 
-  const housings = useMemo(() => spots.map((s) => matrix(s.x, LAMP_Y + 0.12, s.z, 1, 1, 1)), [spots]);
-  const disks = useMemo(() => {
-    tmp.rotation.set(Math.PI / 2, 0, 0);
-    return spots.map((s) => {
-      tmp.position.set(s.x, LAMP_Y - 0.002, s.z);
+  const place = (fn: (s: { x: number; z: number }) => void) =>
+    spots.map((s) => {
+      tmp.rotation.set(0, 0, 0);
       tmp.scale.set(1, 1, 1);
+      fn(s);
       tmp.updateMatrix();
       return tmp.matrix.clone();
     });
-  }, [spots]);
+  const housings = useMemo(() => place((s) => tmp.position.set(s.x, LAMP_Y + 0.12, s.z)), [spots]); // eslint-disable-line react-hooks/exhaustive-deps
+  const disks = useMemo(
+    () =>
+      place((s) => {
+        tmp.position.set(s.x, LAMP_Y - 0.002, s.z);
+        tmp.rotation.set(Math.PI / 2, 0, 0);
+      }),
+    [spots], // eslint-disable-line react-hooks/exhaustive-deps
+  );
+  // Halo: quad virado para a câmera (a câmera olha sempre para o fundo do galpão).
+  const glows = useMemo(
+    () =>
+      place((s) => {
+        tmp.position.set(s.x, LAMP_Y - 0.08, s.z);
+        tmp.scale.set(3.2, 3.2, 1);
+      }),
+    [spots], // eslint-disable-line react-hooks/exhaustive-deps
+  );
+  const beamMats = useMemo(() => place((s) => tmp.position.set(s.x, LAMP_Y - BEAM_H / 2, s.z)), [spots, BEAM_H]); // eslint-disable-line react-hooks/exhaustive-deps
   useInstances(housingRef, housings);
   useInstances(diskRef, disks);
+  useInstances(glowRef, glows);
+  useInstances(beamRef, beamMats);
 
   const mats = useMemo(
     () => ({
       housing: new THREE.MeshStandardMaterial({ color: '#2a3234', roughness: 0.5, metalness: 0.7 }),
       // > 1 com toneMapped=false: "estoura" como lâmpada real (e alimenta o bloom no desktop)
       disk: new THREE.MeshBasicMaterial({ color: new THREE.Color('#fff6e6').multiplyScalar(3.2), toneMapped: false }),
-      glow: new THREE.SpriteMaterial({
+      glow: new THREE.MeshBasicMaterial({
         map: glow,
         color: '#fff3dc',
         transparent: true,
@@ -205,26 +252,23 @@ function Lamps({ lite }: { lite: boolean }) {
     [glow, beamTex],
   );
 
-  const BEAM_H = LAMP_Y - FLOOR_Y - 0.4;
-
   return (
     <group>
-      <instancedMesh ref={housingRef} args={[undefined, mats.housing, spots.length]}>
+      <instancedMesh ref={housingRef} args={[undefined, mats.housing, spots.length]} frustumCulled={false}>
         <cylinderGeometry args={[0.36, 0.42, 0.24, 20, 1, true]} />
       </instancedMesh>
-      <instancedMesh ref={diskRef} args={[undefined, mats.disk, spots.length]}>
+      <instancedMesh ref={diskRef} args={[undefined, mats.disk, spots.length]} frustumCulled={false}>
         <circleGeometry args={[0.34, 24]} />
       </instancedMesh>
-      {spots.map((s, i) => (
-        <sprite key={`g${i}`} material={mats.glow} position={[s.x, LAMP_Y - 0.08, s.z]} scale={[3.2, 3.2, 1]} />
-      ))}
+      <instancedMesh ref={glowRef} args={[undefined, mats.glow, spots.length]} frustumCulled={false} renderOrder={2}>
+        <planeGeometry args={[1, 1]} />
+      </instancedMesh>
       {/* Feixes de luz no ar: transparência em tela cheia é cara → só na versão completa */}
-      {!lite &&
-        spots.map((s, i) => (
-          <mesh key={`b${i}`} material={mats.beam} position={[s.x, LAMP_Y - BEAM_H / 2, s.z]}>
-            <cylinderGeometry args={[0.36, 2.6, BEAM_H, 24, 1, true]} />
-          </mesh>
-        ))}
+      {!lite && (
+        <instancedMesh ref={beamRef} args={[undefined, mats.beam, spots.length]} frustumCulled={false} renderOrder={2}>
+          <cylinderGeometry args={[0.36, 2.6, BEAM_H, 24, 1, true]} />
+        </instancedMesh>
+      )}
     </group>
   );
 }
@@ -232,7 +276,7 @@ function Lamps({ lite }: { lite: boolean }) {
 export function Warehouse({ lite }: { lite: boolean }) {
   return (
     <group>
-      <Floor />
+      <Floor lite={lite} />
       <Racks />
       <Lamps lite={lite} />
     </group>

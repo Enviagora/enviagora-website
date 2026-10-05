@@ -14,6 +14,9 @@ export function Conveyors({ mobile }: { mobile: boolean }) {
   const rollerRef = useRef<THREE.InstancedMesh>(null);
   const legRef = useRef<THREE.InstancedMesh>(null);
   const crossRef = useRef<THREE.InstancedMesh>(null);
+  const frameRef = useRef<THREE.InstancedMesh>(null);
+  const guideRef = useRef<THREE.InstancedMesh>(null);
+  const ledRef = useRef<THREE.InstancedMesh>(null);
 
   const pitch = mobile ? 0.32 : 0.24; // distância entre roletes
   const perLane = Math.floor(LEN / pitch);
@@ -21,38 +24,43 @@ export function Conveyors({ mobile }: { mobile: boolean }) {
   const legsPerLane = Math.floor(LEN / LEG_STEP) + 1;
   const LEG_H = -FLOOR_Y - 0.12;
 
+  // Tudo instanciado: peças com o mesmo material compartilham o mesmo programa
+  // de shader (menos compilação ao abrir a página, sobretudo no iPhone).
   useLayoutEffect(() => {
     const rollers = rollerRef.current;
     const legs = legRef.current;
     const cross = crossRef.current;
-    if (!rollers || !legs || !cross) return;
+    const frames = frameRef.current;
+    const guides = guideRef.current;
+    const leds = ledRef.current;
+    if (!rollers || !legs || !cross || !frames || !guides || !leds) return;
     let r = 0;
     let l = 0;
     let c = 0;
-    for (const x of LANES) {
-      for (let k = 0; k < perLane; k++) {
-        tmp.position.set(x, -ROLLER_R, Z_FAR + k * pitch + pitch / 2);
-        tmp.rotation.set(0, 0, Math.PI / 2);
-        tmp.scale.set(1, 1, 1);
-        tmp.updateMatrix();
-        rollers.setMatrixAt(r++, tmp.matrix);
-      }
+    let f = 0;
+    let g = 0;
+    let e = 0;
+    const put = (m: THREE.InstancedMesh, i: number, px: number, py: number, pz: number, sx: number, sy: number, sz: number, rx = 0, rz = 0) => {
+      tmp.position.set(px, py, pz);
+      tmp.rotation.set(rx, 0, rz);
+      tmp.scale.set(sx, sy, sz);
+      tmp.updateMatrix();
+      m.setMatrixAt(i, tmp.matrix);
+    };
+    LANES.forEach((x, li) => {
+      for (let k = 0; k < perLane; k++) put(rollers, r++, x, -ROLLER_R, Z_FAR + k * pitch + pitch / 2, 1, 1, 1, 0, Math.PI / 2);
       for (let k = 0; k < legsPerLane; k++) {
         const z = Z_FAR + k * LEG_STEP + 0.4;
-        for (const s of [-1, 1]) {
-          tmp.position.set(x + s * (BELT_W / 2 - 0.02), FLOOR_Y + LEG_H / 2, z);
-          tmp.rotation.set(0, 0, 0);
-          tmp.scale.set(0.07, LEG_H, 0.07);
-          tmp.updateMatrix();
-          legs.setMatrixAt(l++, tmp.matrix);
-        }
-        tmp.position.set(x, FLOOR_Y + 0.32, z);
-        tmp.scale.set(BELT_W - 0.05, 0.05, 0.05);
-        tmp.updateMatrix();
-        cross.setMatrixAt(c++, tmp.matrix);
+        for (const s of [-1, 1]) put(legs, l++, x + s * (BELT_W / 2 - 0.02), FLOOR_Y + LEG_H / 2, z, 0.07, LEG_H, 0.07);
+        put(cross, c++, x, FLOOR_Y + 0.32, z, BELT_W - 0.05, 0.05, 0.05);
       }
-    }
-    for (const m of [rollers, legs, cross]) {
+      for (const s of [-1, 1]) {
+        put(frames, f++, x + s * (BELT_W / 2 + 0.04), -0.07, Z_MID, 0.07, 0.2, LEN); // perfil lateral (C)
+        put(guides, g++, x + s * (BELT_W / 2 + 0.02), 0.13, Z_MID, 1, LEN, 1, Math.PI / 2); // guia (tubo)
+        if (li === ACCENT_LANE) put(leds, e++, x + s * (BELT_W / 2 + 0.078), -0.05, Z_MID, 0.012, 0.03, LEN);
+      }
+    });
+    for (const m of [rollers, legs, cross, frames, guides, leds]) {
       m.instanceMatrix.needsUpdate = true;
       m.computeBoundingSphere();
     }
@@ -81,28 +89,15 @@ export function Conveyors({ mobile }: { mobile: boolean }) {
       <instancedMesh ref={crossRef} args={[undefined, mats.leg, LANES.length * legsPerLane]}>
         <boxGeometry args={[1, 1, 1]} />
       </instancedMesh>
-
-      {LANES.map((x, i) => (
-        <group key={x} position={[x, 0, Z_MID]}>
-          {[-1, 1].map((s) => (
-            <group key={s}>
-              {/* perfil lateral (C) */}
-              <mesh material={mats.frame} position={[s * (BELT_W / 2 + 0.04), -0.07, 0]} castShadow={!mobile} receiveShadow>
-                <boxGeometry args={[0.07, 0.2, LEN]} />
-              </mesh>
-              {/* guia lateral (tubo) */}
-              <mesh material={mats.guide} position={[s * (BELT_W / 2 + 0.02), 0.13, 0]} rotation={[Math.PI / 2, 0, 0]}>
-                <cylinderGeometry args={[0.022, 0.022, LEN, 10]} />
-              </mesh>
-              {i === ACCENT_LANE && (
-                <mesh material={mats.led} position={[s * (BELT_W / 2 + 0.078), -0.05, 0]}>
-                  <boxGeometry args={[0.012, 0.03, LEN]} />
-                </mesh>
-              )}
-            </group>
-          ))}
-        </group>
-      ))}
+      <instancedMesh ref={frameRef} args={[undefined, mats.frame, LANES.length * 2]} castShadow={!mobile} receiveShadow>
+        <boxGeometry args={[1, 1, 1]} />
+      </instancedMesh>
+      <instancedMesh ref={guideRef} args={[undefined, mats.guide, LANES.length * 2]}>
+        <cylinderGeometry args={[0.022, 0.022, 1, 10]} />
+      </instancedMesh>
+      <instancedMesh ref={ledRef} args={[undefined, mats.led, 2]}>
+        <boxGeometry args={[1, 1, 1]} />
+      </instancedMesh>
     </group>
   );
 }

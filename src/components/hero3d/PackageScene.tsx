@@ -1,4 +1,4 @@
-import { Suspense, lazy, useMemo, useState, type MutableRefObject } from 'react';
+import { Suspense, lazy, useMemo, useRef, useState, type MutableRefObject } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Environment, Lightformer, PerformanceMonitor } from '@react-three/drei';
 import * as THREE from 'three';
@@ -39,14 +39,24 @@ function Rig({ tiltRef }: { tiltRef: MutableRefObject<Tilt> }) {
   return null;
 }
 
-export default function PackageScene() {
+/** Avisa (uma vez) quando os primeiros quadros já foram desenhados → fade-in. */
+function ReadySignal({ onReady }: { onReady?: () => void }) {
+  const frames = useRef(0);
+  useFrame(() => {
+    frames.current++;
+    if (frames.current === 3) onReady?.();
+  });
+  return null;
+}
+
+export default function PackageScene({ onReady }: { onReady?: () => void }) {
   const mobile = isMobile();
   const tilt = useDeviceTilt(mobile);
   // Qualidade adaptativa: se o aparelho não sustenta a taxa de quadros, a cena
   // tira o pós-processamento e os feixes de luz e baixa a resolução.
   const [degraded, setDegraded] = useState(false);
   const lite = mobile || degraded;
-  const maxDpr = degraded ? 1 : mobile ? 1.75 : 1.5;
+  const maxDpr = degraded ? 1 : 1.5;
 
   return (
     <Canvas
@@ -57,6 +67,8 @@ export default function PackageScene() {
       onCreated={({ gl }) => {
         gl.toneMapping = THREE.AgXToneMapping;
         gl.toneMappingExposure = 1.05;
+        // Em produção não consulta o log de cada shader (evita esperas síncronas).
+        if (import.meta.env.PROD) gl.debug.checkShaderErrors = false;
       }}
     >
       <color attach="background" args={[HAZE]} />
@@ -86,7 +98,7 @@ export default function PackageScene() {
       <directionalLight position={[0, 3, 16]} color="#ffe2bd" intensity={0.35} />
 
       {/* Reflexos: as mesmas fileiras de luminárias + paredes claras ao longe */}
-      <Environment resolution={mobile ? 128 : 256} frames={1}>
+      <Environment resolution={mobile ? 64 : 256} frames={1}>
         {LAMP_ROWS_X.slice(0, 2).map((x) =>
           [-24, -12, 0, 12].map((z) => (
             <Lightformer
@@ -113,6 +125,7 @@ export default function PackageScene() {
       <Packages mobile={mobile} />
 
       <Rig tiltRef={tilt} />
+      <ReadySignal onReady={onReady} />
 
       {!lite && (
         <Suspense fallback={null}>
