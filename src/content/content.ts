@@ -104,9 +104,16 @@ export const process = {
     title: 'de operação própria',
     body: 'Porta-paletes de alta capacidade, corredores endereçados e controle de lotes e validades — a estrutura que sustenta mais de 1 milhão de pacotes por mês.',
     facts: ['Galpões com ANVISA', 'Estoque endereçado por corredor', 'Operação de segunda a sexta, 7h30–17h30'],
+    // Galeria (5 fotos do CD). A primeira é a de destaque.
     photos: [
-      { caption: 'Porta-paletes', alt: 'Porta-paletes de vários níveis no CD da Enviagora em Extrema/MG, com banners da marca' },
-      { caption: 'Corredores endereçados', alt: 'Corredor entre porta-paletes no CD da Enviagora, com sinalização de corredores C e D' },
+      {
+        caption: 'Separação e embalagem',
+        alt: 'Equipe da Enviagora separando e embalando pedidos no CD, com porta-paletes e banner da marca ao fundo',
+      },
+      { caption: 'Empilhadeiras retráteis', alt: 'Empilhadeira retrátil com as cores da Enviagora entre porta-paletes' },
+      { caption: 'Corredores endereçados', alt: 'Corredor entre porta-paletes altos, sinalizado como corredores C e D' },
+      { caption: 'Armazenagem verticalizada', alt: 'Porta-paletes de grande altura com banners da Enviagora e área de expedição' },
+      { caption: 'Estoque paletizado', alt: 'Porta-paletes azuis e verde-limão carregados com paletes, empilhadeira ao fundo' },
     ],
   },
   steps: [
