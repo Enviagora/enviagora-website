@@ -1,0 +1,100 @@
+{%- comment -%}
+  Listagem do blog com a identidade Enviagora: cabeçalho, artigo em destaque
+  (1º da página 1), grade de cards uniformes e paginação.
+{%- endcomment -%}
+{%- render 'enviagora-blog-styles' -%}
+<style>
+  .ea-blog { padding: clamp(40px, 7vw, 88px) 0 clamp(56px, 8vw, 104px); }
+  .ea-blog__head { display: flex; flex-direction: column; gap: 14px; max-width: 760px; margin-bottom: clamp(28px, 4vw, 48px); }
+  .ea-blog__title { margin: 0; font-family: var(--font-heading-family); font-weight: 500; text-transform: uppercase; letter-spacing: .02em; line-height: 1.08; font-size: clamp(32px, 5.2vw, 60px); color: #123336; }
+  .ea-blog__sub { margin: 0; font-size: 17px; line-height: 1.6; color: #2a5b5f; max-width: 620px; }
+  .ea-blog__empty { padding: 48px 0; color: #2a5b5f; }
+  .ea-pag { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; margin-top: 48px; }
+  .ea-pag a, .ea-pag span { min-width: 44px; height: 44px; padding: 0 12px; display: inline-flex; align-items: center; justify-content: center; border-radius: 8px; font-size: 14px; font-weight: 700; color: #123336; text-decoration: none; border: 1px solid rgba(18,51,54,.15); background: #fff; }
+  .ea-pag a:hover { border-color: #123336; }
+  .ea-pag [aria-current="page"] { background: #123336; border-color: #123336; color: #fafaf5; }
+  .ea-pag .ea-pag__gap { border: 0; background: transparent; min-width: 20px; padding: 0; }
+</style>
+
+{%- paginate blog.articles by 9 -%}
+  <div class="ea-blog-page">
+    <section class="ea-blog">
+      <div class="ea-wrap">
+        <header class="ea-blog__head">
+          <span class="ea-kicker-l">
+            {%- render 'enviagora-arrow' -%}
+            {{ section.settings.kicker | default: blog.title }}
+          </span>
+          <h1 class="ea-blog__title">{{ section.settings.heading | default: blog.title }}</h1>
+          {%- if section.settings.subheading != blank -%}
+            <p class="ea-blog__sub">{{ section.settings.subheading }}</p>
+          {%- endif -%}
+        </header>
+
+        {%- if blog.articles.size > 0 -%}
+          <div class="ea-grid">
+            {%- for article in blog.articles -%}
+              {%- liquid
+                assign ea_featured = false
+                if forloop.first and paginate.current_page == 1
+                  assign ea_featured = true
+                endif
+              -%}
+              {%- render 'enviagora-article-card', article: article, featured: ea_featured -%}
+            {%- endfor -%}
+          </div>
+        {%- else -%}
+          <p class="ea-blog__empty">Nenhum artigo publicado ainda.</p>
+        {%- endif -%}
+
+        {%- if paginate.pages > 1 -%}
+          <nav class="ea-pag" aria-label="Paginação do blog">
+            {%- if paginate.previous -%}
+              <a href="{{ paginate.previous.url }}" aria-label="Página anterior">←</a>
+            {%- endif -%}
+            {%- for part in paginate.parts -%}
+              {%- if part.is_link -%}
+                <a href="{{ part.url }}">{{ part.title }}</a>
+              {%- elsif part.title == paginate.current_page -%}
+                <span aria-current="page">{{ part.title }}</span>
+              {%- else -%}
+                <span class="ea-pag__gap">{{ part.title }}</span>
+              {%- endif -%}
+            {%- endfor -%}
+            {%- if paginate.next -%}
+              <a href="{{ paginate.next.url }}" aria-label="Próxima página">→</a>
+            {%- endif -%}
+          </nav>
+        {%- endif -%}
+      </div>
+    </section>
+  </div>
+{%- endpaginate -%}
+
+{% schema %}
+{
+  "name": "Blog Enviagora",
+  "tag": "div",
+  "class": "enviagora-blog-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "kicker",
+      "label": "Rótulo",
+      "default": "Blog Enviagora"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Título",
+      "default": "Logística para marcas em escala"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subtítulo",
+      "default": "Fulfillment, frete e operação de e-commerce na prática — para quem envia milhares de pedidos por mês."
+    }
+  ]
+}
+{% endschema %}

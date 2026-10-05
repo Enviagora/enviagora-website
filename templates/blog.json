@@ -1,1 +1,1 @@
-{"sections":{"main":{"type":"main-blog","settings":{"layout":"grid","show_image":true,"image_height":"small","show_date":false,"show_author":false,"padding_top":36,"padding_bottom":36}},"ea_header":{"type":"enviagora-site-header","settings":{}},"ea_footer":{"type":"enviagora-site-footer","settings":{}}},"order":["ea_header","main","ea_footer"]}
+{"sections":{"ea_header":{"type":"enviagora-site-header","settings":{}},"main":{"type":"enviagora-blog","settings":{}},"ea_footer":{"type":"enviagora-site-footer","settings":{}}},"order":["ea_header","main","ea_footer"]}
