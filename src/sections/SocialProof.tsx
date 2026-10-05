@@ -3,6 +3,7 @@ import { clientLogo } from '@/content/clientLogos';
 import { Arrow } from '@/components/brand/Arrow';
 import { Marquee } from '@/components/ui/Marquee';
 
+// Logos menores no celular (--logo-scale) para caberem ~3 por vez na tela.
 function ClientLogo({ name, slug }: { name: string; slug: string }) {
   const logo = clientLogo(slug);
   const mask = `url("${logo.src}") center / contain no-repeat`;
@@ -11,8 +12,13 @@ function ClientLogo({ name, slug }: { name: string; slug: string }) {
       role="img"
       aria-label={name}
       title={name}
-      className="block bg-ea-petroleo opacity-55 transition-opacity duration-300 [@media(hover:hover)]:hover:opacity-100"
-      style={{ width: logo.width, height: logo.height, WebkitMask: mask, mask }}
+      className="block bg-ea-petroleo opacity-55 transition-opacity duration-300 [--logo-scale:0.74] sm:[--logo-scale:1] [@media(hover:hover)]:hover:opacity-100"
+      style={{
+        width: `calc(${logo.width}px * var(--logo-scale))`,
+        height: `calc(${logo.height}px * var(--logo-scale))`,
+        WebkitMask: mask,
+        mask,
+      }}
     />
   );
 }
@@ -28,12 +34,14 @@ export function SocialProof() {
           </span>
         </p>
 
+        {/* Uma volta mais curta no celular (logos menores e mais juntos) → um pouco mais rápido. */}
         <Marquee
           duration={socialProof.brands.length * 4.5}
+          className="[--marquee-duration:36s] sm:[--marquee-duration:72s]"
           items={socialProof.brands.map((b) => (
             <ClientLogo key={b.logo} name={b.name} slug={b.logo} />
           ))}
-          itemClassName="px-8 sm:px-10"
+          itemClassName="px-5 sm:px-10"
         />
       </div>
     </section>

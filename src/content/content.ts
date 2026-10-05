@@ -64,7 +64,7 @@ export const hero = {
 export const reassurance = 'Sem compromisso · um especialista retorna para entender sua operação';
 
 export const socialProof = {
-  title: 'Marcas de sucesso que confiam na',
+  title: 'Marcas que confiam na',
   titleBrand: 'Enviagora',
   // Clientes do carrossel (logos oficiais vetorizados em src/assets/clientes).
   // Ordem intercalando estilos (pesado/fino, largo/compacto).

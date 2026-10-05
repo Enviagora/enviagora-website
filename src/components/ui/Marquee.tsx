@@ -6,7 +6,11 @@ type MarqueeProps = {
   items: ReactNode[];
   className?: string;
   itemClassName?: string;
-  /** Segundos por volta (quanto maior, mais lento). */
+  /**
+   * Segundos por volta (quanto maior, mais lento). A variável CSS
+   * --marquee-duration, se definida via className, tem prioridade (permite
+   * velocidades diferentes por breakpoint).
+   */
   duration?: number;
 };
 
@@ -36,7 +40,7 @@ export function Marquee({ items, className, itemClassName, duration = 32 }: Marq
     <div className={cn('ea-edge-fade relative overflow-hidden', className)}>
       <div
         className="flex w-max animate-marquee items-center"
-        style={{ animationDuration: `${duration}s` }}
+        style={{ animationDuration: `var(--marquee-duration, ${duration}s)` }}
       >
         {[0, 1].map((copy) => (
           <div key={copy} className="flex shrink-0 items-center" aria-hidden={copy === 1}>

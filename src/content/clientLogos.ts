@@ -1,4 +1,4 @@
-// Logos dos clientes do carrossel "Marcas de sucesso". Vieram coloridos dos
+// Logos dos clientes do carrossel "Marcas que confiam". Vieram coloridos dos
 // arquivos oficiais e foram vetorizados como silhueta de uma cor só (SVG), então
 // viram máscara CSS e ganham a cor da marca (verde profundo), uniformes entre si
 // e nítidos em qualquer tela.
