@@ -88,13 +88,15 @@ export const socialProof = {
   ],
 } as const;
 
-/** Canais de venda: tudo sai do mesmo estoque no CD (pedido do CEO: não parecer só TikTok). */
+/**
+ * Canais de venda: tudo sai do mesmo estoque no CD (pedido do CEO: não parecer
+ * só TikTok). Dor tratada no texto: pedido que demora para sair.
+ */
 export const channels = {
-  pain: 'Meus pedidos demoram para sair.',
   kicker: 'Todos os seus canais',
   title: 'Todos os seus canais, uma operação só.',
   subtitle:
-    'Loja própria e marketplaces saem do mesmo estoque no nosso CD, 7 dias por semana — no prazo de cada canal e com o melhor frete da nossa rede.',
+    'Loja própria e marketplaces saem do mesmo estoque no nosso CD, 7 dias por semana: nenhum pedido fica parado esperando, e cada canal recebe no prazo — com o melhor frete da nossa rede.',
   items: [
     { logo: 'mercadolivre', name: 'Mercado Livre', tag: 'Normal e Full' },
     { logo: 'shopee', name: 'Shopee' },
@@ -133,13 +135,11 @@ export const niches = {
 } as const;
 
 export const process = {
-  pain: 'Todo dia tem pedido errado, troca e cliente reclamando.',
   title: 'Cuidamos de todo o processo, do armazenamento ao envio.',
-  subtitle: '99,6% de assertividade: cada pedido conferido antes de sair do CD.',
+  subtitle: 'Cada pedido é conferido antes de sair: 99,6% de assertividade e muito menos troca e reclamação.',
   local: 'CD ENVIAGORA · EXTREMA/MG',
   // Bloco com as fotos reais do CD.
   cd: {
-    pain: 'Na Black Friday (ou quando um vídeo viraliza), a operação trava.',
     kicker: 'CD Enviagora · Extrema/MG',
     metric: '15.000 m²',
     title: 'para sua marca crescer sem travar',
@@ -181,10 +181,9 @@ export const process = {
 } as const;
 
 export const logAlliance = {
-  pain: 'O frete e os impostos estão comendo a minha margem.',
   kicker: 'Economia no frete',
   title: 'Tenha acesso às melhores transportadoras',
-  subtitle: 'Uma rede exclusiva de transportadoras selecionadas.',
+  subtitle: 'Uma rede exclusiva de transportadoras selecionadas, para o frete deixar de pesar na sua margem.',
   brand: 'LogAlliance',
   intro:
     'Para cada envio, cotamos o frete em várias transportadoras da rede e usamos sempre a mais barata da região. Sem taxas escondidas.',
@@ -243,9 +242,8 @@ export const tiktokShop = {
 } as const;
 
 export const realTime = {
-  pain: 'Não sei direito o que tenho em estoque.',
   title: 'Acompanhamento em tempo real da sua operação',
-  body: 'Tenha visibilidade total da sua operação com atualizações em tempo real sobre pedidos. Acompanhe o andamento de cada envio, monitore o estoque dos seus produtos no nosso centro de distribuição e identifique pontos de atenção com facilidade. Tudo isso em um painel claro e intuitivo!',
+  body: 'Saiba exatamente o que tem em estoque, o que já saiu e onde está cada pedido — em tempo real. Acompanhe lotes e validades no nosso centro de distribuição e veja os pontos de atenção antes que virem problema, tudo em um painel claro e intuitivo.',
   features: [
     { title: 'Sistema WMS', body: 'Gestão da operação automatizada e eficiente.' },
     { title: 'Notificações inteligentes', body: 'Avisos de estoque e chegada de mercadoria.' },

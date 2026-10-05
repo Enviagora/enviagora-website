@@ -2,7 +2,6 @@ import { BadgeCheck, ShieldCheck, TrendingUp, Zap } from 'lucide-react';
 import { process } from '@/content/content';
 import { Reveal } from '@/components/motion/Reveal';
 import { Arrow } from '@/components/brand/Arrow';
-import { PainLead } from '@/components/ui/PainLead';
 import { cn } from '@/lib/cn';
 import equipe640 from '@/assets/operacao/cd-equipe-640.webp';
 import equipe960 from '@/assets/operacao/cd-equipe-960.webp';
@@ -41,9 +40,6 @@ export function CdShowcase() {
       {/* Cabeçalho: número + título à esquerda, texto à direita */}
       <div className="grid gap-8 lg:grid-cols-[1fr_1fr] lg:items-end lg:gap-16">
         <div className="flex flex-col gap-4">
-          <Reveal>
-            <PainLead text={cd.pain} theme="dark" className="mb-2" />
-          </Reveal>
           <Reveal>
             <span className="ea-kicker inline-flex items-center gap-2 text-ea-neon">
               <Arrow className="h-3.5 w-3.5" />

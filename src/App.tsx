@@ -37,8 +37,8 @@ export default function App() {
 
       {/* Narrativa: promessa + prova → todos os canais → para quem → como
           funciona → economia → tecnologia → TikTok Shop → integrações →
-          resultados → contato → objeções. As dores do cliente abrem as seções
-          que as resolvem (PainLead), ao longo da página. */}
+          resultados → contato → objeções. As dores do cliente são resolvidas
+          no próprio texto de cada seção, ao longo da página. */}
       <main id="conteudo">
         <Hero />
         <SocialProof />
