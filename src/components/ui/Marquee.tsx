@@ -11,9 +11,11 @@ type MarqueeProps = {
 };
 
 /**
- * Faixa infinita horizontal (logos). Duplica os itens para loop contínuo,
- * pausa no hover e usa máscara de fade nas bordas. Com prefers-reduced-motion,
- * vira uma grade estática que quebra linha (fallback acessível).
+ * Faixa infinita horizontal (logos). Duplica os itens para loop contínuo e
+ * usa máscara de fade nas bordas. Não pausa no hover: no celular o "hover"
+ * gruda depois de um toque/arraste por cima e o carrossel parava. Com
+ * prefers-reduced-motion, vira uma grade estática que quebra linha
+ * (fallback acessível).
  */
 export function Marquee({ items, className, itemClassName, duration = 32 }: MarqueeProps) {
   const reduce = useReducedMotion();
@@ -31,9 +33,9 @@ export function Marquee({ items, className, itemClassName, duration = 32 }: Marq
   }
 
   return (
-    <div className={cn('ea-edge-fade group relative overflow-hidden', className)}>
+    <div className={cn('ea-edge-fade relative overflow-hidden', className)}>
       <div
-        className="flex w-max animate-marquee items-center group-hover:[animation-play-state:paused]"
+        className="flex w-max animate-marquee items-center"
         style={{ animationDuration: `${duration}s` }}
       >
         {[0, 1].map((copy) => (

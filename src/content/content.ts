@@ -66,15 +66,25 @@ export const reassurance = 'Sem compromisso · um especialista retorna para ente
 export const socialProof = {
   title: 'Marcas de sucesso que confiam na',
   titleBrand: 'Enviagora',
-  // Clientes do carrossel do site atual (logos em src/assets/clientes).
+  // Clientes do carrossel (logos oficiais vetorizados em src/assets/clientes).
+  // Ordem intercalando estilos (pesado/fino, largo/compacto).
   brands: [
     { name: 'Gummy Original', logo: 'gummy' },
-    { name: 'Envy Hair', logo: 'envy-hair' },
-    { name: 'maxfem', logo: 'maxfem' },
     { name: 'AlwaysFit', logo: 'alwaysfit' },
+    { name: 'Anasol', logo: 'anasol' },
+    { name: 'maxfem', logo: 'maxfem' },
+    { name: 'Blessy', logo: 'blessy' },
+    { name: 'Hidrabene', logo: 'hidrabene' },
+    { name: 'Bloom Body', logo: 'bloom' },
+    { name: 'Renova Be', logo: 'renovabe' },
+    { name: 'Guday', logo: 'guday' },
+    { name: 'Cicatribem', logo: 'cicatribem' },
+    { name: 'Aura Beauty', logo: 'aura' },
+    { name: 'DermaSec', logo: 'dermasec' },
     { name: 'Popozuda', logo: 'popozuda' },
-    { name: 'ADEUS', logo: 'adeus' },
-    { name: 'BLOOM', logo: 'bloom' },
+    { name: 'Zencial', logo: 'zencial' },
+    { name: 'BigBoom', logo: 'bigboom' },
+    { name: 'Hiven', logo: 'hiven' },
   ],
 } as const;
 

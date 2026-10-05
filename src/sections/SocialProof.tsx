@@ -11,7 +11,7 @@ function ClientLogo({ name, slug }: { name: string; slug: string }) {
       role="img"
       aria-label={name}
       title={name}
-      className="block bg-ea-petroleo opacity-55 transition-opacity duration-300 hover:opacity-100"
+      className="block bg-ea-petroleo opacity-55 transition-opacity duration-300 [@media(hover:hover)]:hover:opacity-100"
       style={{ width: logo.width, height: logo.height, WebkitMask: mask, mask }}
     />
   );
@@ -29,7 +29,7 @@ export function SocialProof() {
         </p>
 
         <Marquee
-          duration={30}
+          duration={socialProof.brands.length * 4.5}
           items={socialProof.brands.map((b) => (
             <ClientLogo key={b.logo} name={b.name} slug={b.logo} />
           ))}
